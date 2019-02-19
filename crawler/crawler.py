@@ -3,6 +3,7 @@ import sys
 from time import sleep
 
 from crawler.providers.aws_ec2 import AmazonEC2
+from crawler.providers.aws_ec2_spot import AmazonEC2Spot
 
 logger = logging.getLogger('contrail.crawler')
 
@@ -24,8 +25,17 @@ def load_providers() -> int:
     :return: The number of providers loaded.
     """
     # TODO Make this dynamically load all modules in providers/
+    provider_count = 0
+
     register_provider(AmazonEC2())
-    return 1
+    provider_count += 1
+
+    spot_rgns = AmazonEC2Spot.create_providers()
+    for p in spot_rgns:
+        register_provider(p)
+    provider_count += len(spot_rgns)
+
+    return provider_count
 
 
 def crawl(period: int = DEFAULT_CRAWL_PERIOD_S):

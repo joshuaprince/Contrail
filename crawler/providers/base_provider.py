@@ -1,7 +1,7 @@
 from abc import abstractmethod
 import datetime
 
-from crawler.s3upload import upload_file_from_url
+from crawler.s3upload import upload_file_from_url, upload_file_from_variable
 
 
 class BaseProvider:
@@ -21,6 +21,12 @@ class BaseProvider:
     def crawl(self):
         pass
 
-    def upload_provider_data(self, region: str, url: str):
-        return upload_file_from_url(url, self.provider_name() + "/" + region + "/" +
-                                    datetime.datetime.utcnow().isoformat() + ".json")
+    def upload_provider_data(self, region: str, url: str = None, data=None):
+        if url is not None:
+            return upload_file_from_url(url, self.provider_name() + "/" + region + "/" +
+                                        datetime.datetime.utcnow().isoformat() + ".json")
+        if data is not None:
+            return upload_file_from_variable(data, self.provider_name() + "/" + region + "/" +
+                                             datetime.datetime.utcnow().isoformat() + ".json")
+
+        raise ValueError("Must specify either a URL or data dictionary to upload.")

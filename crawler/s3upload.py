@@ -1,4 +1,5 @@
 import gzip
+import json
 import logging
 import shutil
 import urllib.request
@@ -35,5 +36,24 @@ def upload_file_from_url(url: str, destination: str):
     with open(tmpfile, 'rb') as f_in:
         with gzip.open(zipfile, 'wb') as f_out:
             shutil.copyfileobj(f_in, f_out)
+
+    _client.upload_file(zipfile, AWS_BUCKET_NAME, destination + ".gz")
+
+
+def upload_file_from_variable(data: dict, destination: str):
+    """
+    Takes data formatted as a Python dictionary, serializes it to JSON,
+    compresses this JSON file, and uploads it to S3.
+    :param data: The dictionary to serialize to JSON.
+    :param destination: Path within S3 to store data.
+    """
+    logger.info("Uploading raw data to {}".format(destination))
+
+    tmpfile = "tmp-rawdata.json"
+    zipfile = tmpfile + ".gz"
+
+    # source: https://stackoverflow.com/questions/49534901/is-there-a-way-to-use-json-dump-with-gzip
+    with gzip.open(zipfile, 'wt', encoding='ascii') as f_out:
+        json.dump(data, f_out)
 
     _client.upload_file(zipfile, AWS_BUCKET_NAME, destination + ".gz")
