@@ -7,6 +7,8 @@ import boto3
 
 from secret import AWS_ACCESS_KEY_ID, AWS_SECRET, AWS_BUCKET_NAME
 
+logger = logging.getLogger('contrail.crawler')
+
 _session = boto3.Session(
     aws_access_key_id=AWS_ACCESS_KEY_ID,
     aws_secret_access_key=AWS_SECRET
@@ -22,7 +24,7 @@ def upload_file_from_url(url: str, destination: str):
     :param destination: Path within S3 to store data
     :return:
     """
-    logging.info("Uploading file {} to {}".format(url, destination))
+    logger.info("Uploading file {} to {}".format(url, destination))
 
     tmpfile = "tmp.json"
     zipfile = tmpfile + ".gz"

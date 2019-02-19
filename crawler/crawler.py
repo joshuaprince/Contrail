@@ -1,7 +1,10 @@
 import logging
+import sys
 from time import sleep
 
 from crawler.providers.aws_ec2 import AmazonEC2
+
+logger = logging.getLogger('contrail.crawler')
 
 DEFAULT_CRAWL_PERIOD_S = 5
 
@@ -30,9 +33,16 @@ def crawl(period: int = DEFAULT_CRAWL_PERIOD_S):
     Runs the crawler until an interrupt is received.
     :param period: Number of seconds to wait between data requests.
     """
-    logging.info("Starting crawler.")
+    logging.basicConfig(
+        level=logging.INFO,
+        handlers=[
+            logging.StreamHandler(sys.stdout)
+        ]
+    )
+
+    logger.info("Starting crawler.")
     num_providers = load_providers()
-    logging.info("Loaded {} providers.".format(num_providers))
+    logger.info("Loaded {} providers.".format(num_providers))
 
     # Loop crawler until interrupted
     # TODO Ensure fairness between providers in this loop
