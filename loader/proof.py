@@ -1,7 +1,10 @@
 import json
+import sys
+
 
 fil = open('../tmp.json')
 d = json.load(fil)
+sys.stdout = open('output.txt','wt')
 
 output = {}
 
