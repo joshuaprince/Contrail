@@ -4,6 +4,8 @@ import urllib.request
 
 from crawler.providers.base_provider import BaseProvider
 
+logger = logging.getLogger('contrail.crawler.aws_ec2')
+
 URL_REGION_INDEX = 'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/region_index.json'
 """
 URL for the region index json, which lists all regions and the URLs to use for each
@@ -40,7 +42,7 @@ class AmazonEC2(BaseProvider):
                                   url=URL_REGION_VERSION.format(currentVersionUrl=region['currentVersionUrl']))
 
     def load_regions(self):
-        logging.info("Getting AWS region list")
+        logger.info("Getting AWS region list")
 
         region_request = urllib.request.urlopen(URL_REGION_INDEX)
         region_data = region_request.read().decode('utf-8')
@@ -48,4 +50,4 @@ class AmazonEC2(BaseProvider):
 
         self.regions = region_json['regions']
 
-        logging.info("Got {} AWS regions".format(len(self.regions)))
+        logger.info("Got {} AWS regions".format(len(self.regions)))
