@@ -1,6 +1,8 @@
-body {
-  /* font-family: 'Poppins', sans-serif; */
+/* :root {
+  --main: #054269;
 }
+
+
 
 div#header {
   height: 100vh;
@@ -17,9 +19,9 @@ h1.header {
 }
 
 div.main {
-  background-color: #1414EA;
+  background-color: var(--main);;
 }
 
 div.about {
   padding-top: 150px;
-}
+} */

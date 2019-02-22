@@ -1,17 +1,14 @@
-body {
-  /* font-family: 'Poppins', sans-serif; */
+/* :root {
+  --main: #054269;
 }
+
+
 
 div#header {
   height: 100vh;
   background: url("http://127.0.0.1:8000/static/images/contrail_splash.jpg")no-repeat center center fixed;
   background-size: 100% 100%;
   background-attachment: scroll;
-
-  /* -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover; */
 }
 
 h1.header {
@@ -20,3 +17,11 @@ h1.header {
   text-align: center;
   padding-top: 120px;
 }
+
+div.main {
+  background-color: var(--main);;
+}
+
+div.about {
+  padding-top: 150px;
+} */

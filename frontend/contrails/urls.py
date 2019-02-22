@@ -23,4 +23,6 @@ from .views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomeView.as_view(), name='home'),
+    path('price/', PriceView.as_view(), name='price'),
+    path('compare/', CompareView.as_view(), name='compare'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

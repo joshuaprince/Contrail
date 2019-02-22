@@ -2,28 +2,83 @@
 {% load staticfiles %}
 
 {% block content %}
-<div id="header">
-  <h1 class="header">CONTRAIL</h1>
-</div>
 
-<div class="container-fluid main">
-    <div class="row about">
-      <div class="col-2"></div>
-      <div class="col-8">
-        <h1>ABOUT</h1>
-        <br>
-        <p>Explain what contrail is for. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      </div>
-      <div class="col-2"></div>
-
-    </div>
-
-    <div class="row">
-      <div class="col">
+  <!-- Header -->
+  <header class="masthead">
+    <div class="container d-flex h-100 align-items-center">
+      <div class="mx-auto text-center">
+        <h1 class="mx-auto my-0 text-uppercase">Contrail</h1>
+        <h2 class="text-white-50 mx-auto mt-2 mb-5">Find prices.</h2>
+        <a href="{% url "price" %}" class="btn btn-primary js-scroll-trigger">Get prices</a>
       </div>
     </div>
+  </header>
 
-</div>
+  <!-- About Section -->
+  <section id="about" class="about-section text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          <h2 class="text-white mb-4">What is Contrail?</h2>
+          <p class="text-white-50">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+        </div>
+      </div>
+      <img src="img/ipad.png" class="img-fluid" alt="">
+    </div>
+  </section>
 
 
+
+  <!-- Projects Section -->
+  <section id="projects" class="projects-section bg-light">
+    <div class="container">
+
+      <!-- Project One Row -->
+      <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
+        <div class="col-lg-6">
+          <img class="img-fluid" src="{% static "img/demo-image-01.jpg" %}" alt="">
+        </div>
+        <div class="col-lg-6">
+          <div class="bg-black text-center h-100 project">
+            <div class="d-flex h-100">
+              <div class="project-text w-100 my-auto text-center text-lg-left">
+                <h4 class="text-white">Find Prices</h4>
+                <p class="mb-0 text-white-50">Find prices for instances.</p>
+                <hr class="d-none d-lg-block mb-0 ml-0">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Two Row -->
+      <div class="row justify-content-center no-gutters">
+        <div class="col-lg-6">
+          <img class="img-fluid" src="{% static "img/demo-image-02.jpg" %}" alt="">
+        </div>
+        <div class="col-lg-6 order-lg-first">
+          <div class="bg-black text-center h-100 project">
+            <div class="d-flex h-100">
+              <div class="project-text w-100 my-auto text-center text-lg-right">
+                <h4 class="text-white">Compare Prices</h4>
+                <p class="mb-0 text-white-50">Compare cloud prices.</p>
+                <hr class="d-none d-lg-block mb-0 mr-0">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+{% endblock %}
+
+
+
+{% block script %}
+  <!-- Custom scripts for this template -->
+  <script src="{% static "js/grayscale.min.js" %}"></script>
 {% endblock %}
