@@ -30,6 +30,7 @@ def load_providers() -> int:
     register_provider(AmazonEC2())
     provider_count += 1
 
+    AmazonEC2Spot.load_instance_type_details()
     spot_rgns = AmazonEC2Spot.create_providers()
     for p in spot_rgns:
         register_provider(p)
