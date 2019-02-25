@@ -45,7 +45,7 @@ class AmazonEC2Spot(BaseProvider):
         self.next_token = ''
         """Token given to AWS to continue building instance_list."""
 
-    def crawl(self):
+    def crawl(self) -> datetime.timedelta:
         """
         Collects the next set of instances in this region and appends them to the current `instance_list`.
 
@@ -55,7 +55,7 @@ class AmazonEC2Spot(BaseProvider):
             self.logger.info("Got all instances in this batch. Finalizing batch for upload.")
             self.upload_provider_data(region=self.region, data=self.instance_list)
             self.instance_list.clear()
-            return
+            return datetime.timedelta(minutes=10)
 
         response = self.client.describe_spot_price_history(
             NextToken=self.next_token,
@@ -80,6 +80,7 @@ class AmazonEC2Spot(BaseProvider):
 
         self.logger.info("Retrieved {count} instances".format(region=self.region,
                                                               count=len(response['SpotPriceHistory'])))
+        return datetime.timedelta(seconds=3)
 
     @classmethod
     def create_providers(cls):

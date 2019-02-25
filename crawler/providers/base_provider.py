@@ -18,7 +18,11 @@ class BaseProvider:
         return cls.__name__
 
     @abstractmethod
-    def crawl(self):
+    def crawl(self) -> datetime.timedelta:
+        """
+        This function will be called every x amount of time. It should return a timedelta that indicates how long it
+        would like the program to wait before calling it again.
+        """
         pass
 
     def upload_provider_data(self, region: str, url: str = None, data=None):

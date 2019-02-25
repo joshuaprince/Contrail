@@ -1,3 +1,4 @@
+import datetime
 import json
 import logging
 import urllib.request
@@ -26,7 +27,7 @@ class AmazonEC2(BaseProvider):
 
         self.load_regions()
 
-    def crawl(self):
+    def crawl(self) -> datetime.timedelta:
         """
         Pulls data from the first region in `self.regions` and removes it from the list. If the region list is empty,
         this will load new regions instead.
@@ -34,12 +35,14 @@ class AmazonEC2(BaseProvider):
         """
         if len(self.regions) == 0:
             self.load_regions()
-            return
+            return datetime.timedelta(hours=12)
 
         region = self.regions.pop(next(iter(self.regions)))
 
         self.upload_provider_data(region=region['regionCode'],
                                   url=URL_REGION_VERSION.format(currentVersionUrl=region['currentVersionUrl']))
+
+        return datetime.timedelta(seconds=10)
 
     def load_regions(self):
         logger.info("Getting AWS region list")
