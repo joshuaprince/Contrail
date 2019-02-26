@@ -1,25 +1,46 @@
 import json
+import os
 from infi.clickhouse_orm.database import Database
 from infi.clickhouse_orm import models, fields, engines
-
-
+from clickhouse_driver import Client
 
 class InstanceData(models.Model):
-	service = fields.NullableField(fields.StringField(default="None"))
+	serviceCode = fields.NullableField(fields.StringField(default="None"))
+	location = fields.NullableField(fields.StringField(default="None"))
+	locationType = fields.NullableField(fields.StringField(default="None"))
 	instanceType = fields.NullableField(fields.StringField(default="None"))
+	currentGeneration = fields.NullableField(fields.StringField(default="None"))
+	instanceFamily = fields.NullableField(fields.StringField(default="None"))
 	vcpu = fields.NullableField(fields.StringField(default="None"))
 	processor = fields.NullableField(fields.StringField(default="None"))
-	location = fields.NullableField(fields.StringField(default="None"))
 	clockSpeed = fields.NullableField(fields.StringField(default="None"))
 	memory = fields.NullableField(fields.StringField(default="None"))
 	storage = fields.NullableField(fields.StringField(default="None"))
 	networkPerformance = fields.NullableField(fields.StringField(default="None"))
 	processorArchitecture = fields.NullableField(fields.StringField(default="None"))
+	tenancy = fields.NullableField(fields.StringField(default="None"))
 	operatingSystem = fields.NullableField(fields.StringField(default="None"))
+	licenseModel = fields.NullableField(fields.StringField(default="None"))
+	usageType = fields.NullableField(fields.StringField(default="None"))
+	operation = fields.NullableField(fields.StringField(default="None"))
+	capacityStatus = fields.NullableField(fields.StringField(default="None"))
+	dedicatedEbsThroughput = fields.NullableField(fields.StringField(default="None"))
+	ecu = fields.NullableField(fields.StringField(default="None"))
+	enhancedNetworkingSupported = fields.NullableField(fields.StringField(default="None"))
+	instanceSKU = fields.NullableField(fields.StringField(default="None"))
+	normalizationSizeFactor = fields.NullableField(fields.StringField(default="None"))
+	preInstalledSw = fields.NullableField(fields.StringField(default="None"))
+	processorFeatures = fields.NullableField(fields.StringField(default="None"))
 	termType = fields.NullableField(fields.StringField(default="None"))
+	effectiveDate = fields.NullableField(fields.StringField(default="None"))
+	rateCode = fields.NullableField(fields.StringField(default="None"))
+	description = fields.NullableField(fields.StringField(default="None"))
+	endRange = fields.NullableField(fields.StringField(default="None"))
 	unit = fields.NullableField(fields.StringField(default="None"))
+	currency = fields.NullableField(fields.StringField(default="None"))
 	pricePerUnit = fields.NullableField(fields.StringField(default="None"))
-	engine = engines.Memory()
+
+	engine = engines.MergeTree('effectiveDate', ('instanceType', 'termType', 'effectiveDate'))
 
 db = Database('my_test_db')
 db.create_table(InstanceData)
@@ -61,12 +82,6 @@ for sku, product in d['products'].items():
 	except KeyError:
 		output[sku] = [sku, instanceType, vcpu, processor, location, clockSpeed, memory, storage, networkPerformance, processorArchitecture, operatingSystem, unit, pricePerUnit]
 
-
-
-print(db.count(InstanceData))
-qs = InstanceData.objects_in(db)
-for instance in qs:
-	print(instance)
 
 # for size, lst in output.items():
 # 	instance = InstanceData(
