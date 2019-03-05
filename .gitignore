@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 # Gitignore template source: https://github.com/github/gitignore/blob/master/Python.gitignore
->>>>>>> db07c504d65da152d645da995264d947f8d15cf9
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -95,17 +92,9 @@ celerybeat-schedule
 # Environments
 .env
 .venv
-<<<<<<< HEAD
-.VENV
 env/
 venv/
 ENV/
-VENV/
-=======
-env/
-venv/
-ENV/
->>>>>>> db07c504d65da152d645da995264d947f8d15cf9
 env.bak/
 venv.bak/
 
@@ -127,11 +116,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-<<<<<<< HEAD
-secret.py
-=======
 # --------------------------------------------------------------- #
 
 .idea
 secret.py
->>>>>>> db07c504d65da152d645da995264d947f8d15cf9
+.DS_Store

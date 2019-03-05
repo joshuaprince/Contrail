@@ -1,18 +1,12 @@
-<<<<<<< HEAD
 import datetime
-=======
->>>>>>> db07c504d65da152d645da995264d947f8d15cf9
 import json
 import logging
 import urllib.request
 
 from crawler.providers.base_provider import BaseProvider
 
-<<<<<<< HEAD
 logger = logging.getLogger('contrail.crawler.aws_ec2')
 
-=======
->>>>>>> db07c504d65da152d645da995264d947f8d15cf9
 URL_REGION_INDEX = 'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/region_index.json'
 """
 URL for the region index json, which lists all regions and the URLs to use for each
@@ -33,11 +27,7 @@ class AmazonEC2(BaseProvider):
 
         self.load_regions()
 
-<<<<<<< HEAD
     def crawl(self) -> datetime.timedelta:
-=======
-    def crawl(self):
->>>>>>> db07c504d65da152d645da995264d947f8d15cf9
         """
         Pulls data from the first region in `self.regions` and removes it from the list. If the region list is empty,
         this will load new regions instead.
@@ -45,26 +35,17 @@ class AmazonEC2(BaseProvider):
         """
         if len(self.regions) == 0:
             self.load_regions()
-<<<<<<< HEAD
             return datetime.timedelta(hours=12)
-=======
-            return
->>>>>>> db07c504d65da152d645da995264d947f8d15cf9
 
         region = self.regions.pop(next(iter(self.regions)))
 
         self.upload_provider_data(region=region['regionCode'],
                                   url=URL_REGION_VERSION.format(currentVersionUrl=region['currentVersionUrl']))
 
-<<<<<<< HEAD
         return datetime.timedelta(seconds=10)
 
     def load_regions(self):
         logger.info("Getting AWS region list")
-=======
-    def load_regions(self):
-        logging.info("Getting AWS region list")
->>>>>>> db07c504d65da152d645da995264d947f8d15cf9
 
         region_request = urllib.request.urlopen(URL_REGION_INDEX)
         region_data = region_request.read().decode('utf-8')
@@ -72,8 +53,4 @@ class AmazonEC2(BaseProvider):
 
         self.regions = region_json['regions']
 
-<<<<<<< HEAD
         logger.info("Got {} AWS regions".format(len(self.regions)))
-=======
-        logging.info("Got {} AWS regions".format(len(self.regions)))
->>>>>>> db07c504d65da152d645da995264d947f8d15cf9
