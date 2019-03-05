@@ -5,6 +5,7 @@ import sys
 
 from crawler.providers.aws_ec2 import AmazonEC2
 from crawler.providers.aws_ec2_spot import AmazonEC2Spot
+from crawler.providers.azure import Azure
 
 logger = logging.getLogger('contrail.crawler')
 
@@ -34,6 +35,9 @@ def load_providers() -> int:
     for p in spot_rgns:
         register_provider(p)
     provider_count += len(spot_rgns)
+
+    register_provider(Azure())
+    provider_count += 1
 
     return provider_count
 
