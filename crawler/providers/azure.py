@@ -6,7 +6,7 @@ import time
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from providers.base_provider import BaseProvider
+from crawler.providers.base_provider import BaseProvider
 from secret import AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID
 
 logger = logging.getLogger('contrail.crawler.azure')
