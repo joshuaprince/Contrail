@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import asyncio
 import datetime
 import logging
@@ -7,6 +8,14 @@ from crawler.providers.aws_ec2 import AmazonEC2
 from crawler.providers.aws_ec2_spot import AmazonEC2Spot
 
 logger = logging.getLogger('contrail.crawler')
+=======
+import logging
+from time import sleep
+
+from crawler.providers.aws_ec2 import AmazonEC2
+
+DEFAULT_CRAWL_PERIOD_S = 5
+>>>>>>> db07c504d65da152d645da995264d947f8d15cf9
 
 providers = []
 
@@ -24,6 +33,7 @@ def load_providers() -> int:
     :return: The number of providers loaded.
     """
     # TODO Make this dynamically load all modules in providers/
+<<<<<<< HEAD
     provider_count = 0
 
     register_provider(AmazonEC2())
@@ -82,3 +92,31 @@ def crawl():
 
 if __name__ == '__main__':
     crawl()
+=======
+    register_provider(AmazonEC2())
+    return 1
+
+
+def crawl(period: int = DEFAULT_CRAWL_PERIOD_S):
+    """
+    Runs the crawler until an interrupt is received.
+    :param period: Number of seconds to wait between data requests.
+    """
+    logging.info("Starting crawler.")
+    num_providers = load_providers()
+    logging.info("Loaded {} providers.".format(num_providers))
+
+    # Loop crawler until interrupted
+    # TODO Ensure fairness between providers in this loop
+    try:
+        while True:
+            for p in providers:
+                p.crawl()
+                sleep(period)
+    except KeyboardInterrupt:
+        pass
+
+
+if __name__ == '__main__':
+    crawl()
+>>>>>>> db07c504d65da152d645da995264d947f8d15cf9
