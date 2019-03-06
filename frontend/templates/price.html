@@ -14,16 +14,55 @@
           <div class="form-group">
             <label for="exampleFormControlSelect1">Operating System</label>
             <select class="form-control" id="exampleFormControlSelect1">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
+              <option>Linux</option>
+              <option>RHEL</option>
+              <option>SLES</option>
+              <option>Windows</option>
+              <option>Windows with SQL Standard</option>
+              <option>Windows with SQL Web</option>
+              <option>Windows with SQL Enterprise</option>
+              <option>Linux with SQL Standard</option>
+              <option>Linux with SQL Web</option>
+              <option>Linux with SQL Enterprise</option>
             </select>
           </div>
+          <div class="filter-group">
+            <h4 class="cloudProvider">Cloud Provider </h4>
+            <label class="checkbox-container"> All
+              <input type="checkbox" checked="checked">
+              <span class="checkmark"></span>
+            </label>
+            <label class="checkbox-container"> AWS
+              <input type="checkbox">
+              <span class="checkmark"></span>
+            </label>
+            <label class="checkbox-container"> MS Azure
+              <input type="checkbox">
+              <span class="checkmark"></span>
+            </label>
+          </div>
           <div class="form-group">
-            <label for="gpus">GPUs</label>
-            <input type="gpus" class="form-control" id="gpus" aria-describedby="emailHelp" placeholder="">
+            <label for="region">Region</label>
+            <select class="form-control" id="region">
+              <option>US East (N. Virgina)</option>
+              <option>US East (Ohio)</option>
+              <option>US West (Norther California)</option>
+              <option>US West (Oregon)</option>
+              <option>Asia Pacific (Mumbai)</option>
+              <option>Asia Pacific (Seoul)</option>
+              <option>Asia Pacific (Singapore)</option>
+              <option>Asia Pacific (Sydney)</option>
+              <option>Asia Pacific (Tokyo)</option>
+              <option>Canada (Central)</option>
+              <option>EU (Frankfurt)</option>
+              <option>EU (Ireland)</option>
+              <option>EU (London)</option>
+              <option>EU (Paris)</option>
+              <option>EU (Stockholm)</option>
+              <option>South America (Sao Paulo)</option>
+              <option>AWS GovCloud (US-East)</option>
+              <option>AWS GovCloud (US-West)</option>
+            </select>
           </div>
           <div class="form-group">
             <label for="vcpus">vCPUs</label>
@@ -34,14 +73,8 @@
             <input type="memory" class="form-control" id="memory" placeholder="">
           </div>
           <div class="form-group">
-            <label for="exampleFormControlSelect1">Example select</label>
-            <select class="form-control" id="exampleFormControlSelect1">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
+            <label for="ecu">ECU</label>
+            <input type="ecu" class="form-control" id="ecu" placeholder="">
           </div>
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
@@ -59,6 +92,9 @@
         <nav id="subnav" class="navbar navbar-expand-lg navbar-light bg-light">
               <ul id="subnav" class="navbar-nav">
                     <li class="nav-item active">
+                      <a class="nav-link" href="#">All</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="#">On Demand</a>
                     </li>
                     <li class="nav-item">
