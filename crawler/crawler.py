@@ -2,17 +2,19 @@ import asyncio
 import datetime
 import logging
 import sys
+from typing import List
 
 from crawler.providers.aws_ec2 import AmazonEC2
 from crawler.providers.aws_ec2_spot import AmazonEC2Spot
 from crawler.providers.azure import Azure
+from crawler.providers.base_provider import BaseProvider
 
 logger = logging.getLogger('contrail.crawler')
 
-providers = []
+providers: List[BaseProvider] = []
 
 
-def register_provider(instance):
+def register_provider(instance: BaseProvider):
     """
     Register a provider class with the crawler to ensure this provider is crawled.
     """
@@ -42,9 +44,17 @@ def load_providers() -> int:
     return provider_count
 
 
-async def _crawl_loop(provider):
+async def _crawl_loop(provider: BaseProvider):
     while True:
-        time_wait: datetime.timedelta = provider.crawl() or datetime.timedelta(minutes=1)
+        # noinspection PyBroadException
+        try:
+            time_wait: datetime.timedelta = provider.crawl()
+        except Exception:
+            # If a crawl attempt had an error, print error and try again in 2 minutes
+            logger.exception("Caught exception while crawling {provider}".format(provider=provider.provider_name()))
+            logger.info("Cooling down for 2 minutes before retry.")
+            time_wait = datetime.timedelta(minutes=2)
+
         await asyncio.sleep(time_wait.total_seconds())
 
 
