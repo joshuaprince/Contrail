@@ -9,101 +9,100 @@ from infi.clickhouse_orm import models, fields, engines
 from clickhouse_driver import Client
 
 class InstanceData(models.Model):
-	capacityStatus = fields.NullableField(fields.StringField(default="None"))
-	clockSpeed = fields.NullableField(fields.StringField(default="None"))
-	currentGeneration = fields.NullableField(fields.StringField(default="None"))
-	dedicatedEbsThroughput = fields.NullableField(fields.StringField(default="None"))
-	ebsOptimized = fields.NullableField(fields.StringField(default="None"))
-	ecu = fields.NullableField(fields.StringField(default="None"))
-	elasticGraphicsType = fields.NullableField(fields.StringField(default="None"))
-	enhancedNetworkingSupported = fields.NullableField(fields.StringField(default="None"))
-	fromLocation = fields.NullableField(fields.StringField(default="None"))
-	fromLocationType = fields.NullableField(fields.StringField(default="None"))
-	gpu = fields.NullableField(fields.StringField(default="None"))
-	gpuMemory = fields.NullableField(fields.StringField(default="None"))
-	group = fields.NullableField(fields.StringField(default="None"))
-	groupDescription = fields.NullableField(fields.StringField(default="None"))
-	instance = fields.NullableField(fields.StringField(default="None"))
-	instanceCapacity10xlarge = fields.NullableField(fields.StringField(default="None"))
-	instanceCapacity12xlarge = fields.NullableField(fields.StringField(default="None"))
-	instanceCapacity16xlarge = fields.NullableField(fields.StringField(default="None"))
-	instanceCapacity18xlarge = fields.NullableField(fields.StringField(default="None"))
-	instanceCapacity24xlarge = fields.NullableField(fields.StringField(default="None"))
-	instanceCapacity2xlarge = fields.NullableField(fields.StringField(default="None"))
-	instanceCapacity32xlarge = fields.NullableField(fields.StringField(default="None"))
-	instanceCapacity4xlarge = fields.NullableField(fields.StringField(default="None"))
-	instanceCapacity8xlarge = fields.NullableField(fields.StringField(default="None"))
-	instanceCapacity9xlarge = fields.NullableField(fields.StringField(default="None"))
-	instanceCapacityLarge = fields.NullableField(fields.StringField(default="None"))
-	instanceCapacityMedium = fields.NullableField(fields.StringField(default="None"))
-	instanceCapacityXlarge = fields.NullableField(fields.StringField(default="None"))
-	instanceFamily = fields.NullableField(fields.StringField(default="None"))
-	instanceType = fields.NullableField(fields.StringField(default="None"))
-	instanceSKU = fields.NullableField(fields.StringField(default="None"))
-	intelAvx2Available = fields.NullableField(fields.StringField(default="None"))
-	intelAvxAvailable = fields.NullableField(fields.StringField(default="None"))
-	intelTurboAvailable = fields.NullableField(fields.StringField(default="None"))
-	licenseModel = fields.NullableField(fields.StringField(default="None"))
-	location = fields.NullableField(fields.StringField(default="None"))
-	locationType = fields.NullableField(fields.StringField(default="None"))
-	maxIopsBurstPerformance = fields.NullableField(fields.StringField(default="None"))
-	maxIopsVolume = fields.NullableField(fields.StringField(default="None"))
-	maxThroughputVolume = fields.NullableField(fields.StringField(default="None"))
-	maxVolumeSize = fields.NullableField(fields.StringField(default="None"))
-	memory = fields.NullableField(fields.StringField(default="None"))
-	networkPerformance = fields.NullableField(fields.StringField(default="None"))
-	normalizationSizeFactor = fields.NullableField(fields.StringField(default="None"))
-	operatingSystem = fields.NullableField(fields.StringField(default="None"))
-	operation = fields.NullableField(fields.StringField(default="None"))
-	physicalCores = fields.NullableField(fields.StringField(default="None"))
-	physicalProcessor = fields.NullableField(fields.StringField(default="None"))
-	preInstalledSw = fields.NullableField(fields.StringField(default="None"))
-	processorArchitecture = fields.NullableField(fields.StringField(default="None"))
-	processorFeatures = fields.NullableField(fields.StringField(default="None"))
-	productFamily = fields.NullableField(fields.StringField(default="None"))
-	provisioned = fields.NullableField(fields.StringField(default="None"))
-	serviceCode = fields.NullableField(fields.StringField(default="None"))
-	serviceName = fields.NullableField(fields.StringField(default="None"))
-	storage = fields.NullableField(fields.StringField(default="None"))
-	storageMedia = fields.NullableField(fields.StringField(default="None"))
-	tenancy = fields.NullableField(fields.StringField(default="None"))
-	toLocation = fields.NullableField(fields.StringField(default="None"))
-	toLocationType = fields.NullableField(fields.StringField(default="None"))
-	transferType = fields.NullableField(fields.StringField(default="None"))
-	usageType = fields.NullableField(fields.StringField(default="None"))
-	vcpu = fields.NullableField(fields.StringField(default="None"))
-	volumeType = fields.NullableField(fields.StringField(default="None"))
+	capacityStatus = fields.NullableField(fields.StringField())
+	clockSpeed = fields.NullableField(fields.StringField())
+	currentGeneration = fields.NullableField(fields.StringField())
+	dedicatedEbsThroughput = fields.NullableField(fields.StringField())
+	ebsOptimized = fields.NullableField(fields.StringField())
+	ecu = fields.NullableField(fields.StringField())
+	elasticGraphicsType = fields.NullableField(fields.StringField())
+	enhancedNetworkingSupported = fields.NullableField(fields.StringField())
+	fromLocation = fields.NullableField(fields.StringField())
+	fromLocationType = fields.NullableField(fields.StringField())
+	gpu = fields.NullableField(fields.StringField())
+	gpuMemory = fields.NullableField(fields.StringField())
+	group = fields.NullableField(fields.StringField())
+	groupDescription = fields.NullableField(fields.StringField())
+	instance = fields.NullableField(fields.StringField())
+	instanceCapacity10xlarge = fields.NullableField(fields.StringField())
+	instanceCapacity12xlarge = fields.NullableField(fields.StringField())
+	instanceCapacity16xlarge = fields.NullableField(fields.StringField())
+	instanceCapacity18xlarge = fields.NullableField(fields.StringField())
+	instanceCapacity24xlarge = fields.NullableField(fields.StringField())
+	instanceCapacity2xlarge = fields.NullableField(fields.StringField())
+	instanceCapacity32xlarge = fields.NullableField(fields.StringField())
+	instanceCapacity4xlarge = fields.NullableField(fields.StringField())
+	instanceCapacity8xlarge = fields.NullableField(fields.StringField())
+	instanceCapacity9xlarge = fields.NullableField(fields.StringField())
+	instanceCapacityLarge = fields.NullableField(fields.StringField())
+	instanceCapacityMedium = fields.NullableField(fields.StringField())
+	instanceCapacityXlarge = fields.NullableField(fields.StringField())
+	instanceFamily = fields.NullableField(fields.StringField())
+	instanceType = fields.NullableField(fields.StringField())
+	instanceSKU = fields.NullableField(fields.StringField())
+	intelAvx2Available = fields.NullableField(fields.StringField())
+	intelAvxAvailable = fields.NullableField(fields.StringField())
+	intelTurboAvailable = fields.NullableField(fields.StringField())
+	licenseModel = fields.NullableField(fields.StringField())
+	location = fields.NullableField(fields.StringField())
+	locationType = fields.NullableField(fields.StringField())
+	maxIopsBurstPerformance = fields.NullableField(fields.StringField())
+	maxIopsVolume = fields.NullableField(fields.StringField())
+	maxThroughputVolume = fields.NullableField(fields.StringField())
+	maxVolumeSize = fields.NullableField(fields.StringField())
+	memory = fields.NullableField(fields.StringField())
+	networkPerformance = fields.NullableField(fields.StringField())
+	normalizationSizeFactor = fields.NullableField(fields.StringField())
+	operatingSystem = fields.NullableField(fields.StringField())
+	operation = fields.NullableField(fields.StringField())
+	physicalCores = fields.NullableField(fields.StringField())
+	physicalProcessor = fields.NullableField(fields.StringField())
+	preInstalledSw = fields.NullableField(fields.StringField())
+	processorArchitecture = fields.NullableField(fields.StringField())
+	processorFeatures = fields.NullableField(fields.StringField())
+	productFamily = fields.NullableField(fields.StringField())
+	provisioned = fields.NullableField(fields.StringField())
+	serviceCode = fields.NullableField(fields.StringField())
+	serviceName = fields.NullableField(fields.StringField())
+	storage = fields.NullableField(fields.StringField())
+	storageMedia = fields.NullableField(fields.StringField())
+	tenancy = fields.NullableField(fields.StringField())
+	toLocation = fields.NullableField(fields.StringField())
+	toLocationType = fields.NullableField(fields.StringField())
+	transferType = fields.NullableField(fields.StringField())
+	usageType = fields.NullableField(fields.StringField())
+	vcpu = fields.NullableField(fields.StringField())
+	volumeType = fields.NullableField(fields.StringField())
 	
-	onDemandAppliesTo = fields.NullableField(fields.StringField(default="None"))
-	onDemandBeginRange = fields.NullableField(fields.StringField(default="None"))
-	onDemandCurrency = fields.NullableField(fields.StringField(default="None"))
-	onDemandDescription = fields.NullableField(fields.StringField(default="None"))
-	onDemandEffectiveDate = fields.NullableField(fields.StringField(default="None"))
-	onDemandEndRange = fields.NullableField(fields.StringField(default="None"))
-	onDemandOfferTermCode = fields.NullableField(fields.StringField(default="None"))
-	onDemandRateCode = fields.NullableField(fields.StringField(default="None"))
-	onDemandPricePerUnit = fields.NullableField(fields.StringField(default="None"))
-	onDemandPriceUnit = fields.NullableField(fields.StringField(default="None"))
+	onDemandAppliesTo = fields.NullableField(fields.StringField())
+	onDemandBeginRange = fields.NullableField(fields.StringField())
+	onDemandCurrency = fields.NullableField(fields.StringField())
+	onDemandDescription = fields.NullableField(fields.StringField())
+	onDemandEffectiveDate = fields.NullableField(fields.StringField())
+	onDemandEndRange = fields.NullableField(fields.StringField())
+	onDemandOfferTermCode = fields.NullableField(fields.StringField())
+	onDemandRateCode = fields.NullableField(fields.StringField())
+	onDemandPricePerUnit = fields.NullableField(fields.StringField())
+	onDemandPriceUnit = fields.NullableField(fields.StringField())
 
-	reservedAppliesTo = fields.NullableField(fields.StringField(default="None"))
-	reservedBeginRange= fields.NullableField(fields.StringField(default="None"))
-	reservedCurrency = fields.NullableField(fields.StringField(default="None"))
-	reservedDescription = fields.NullableField(fields.StringField(default="None"))
-	reservedEffectiveDate = fields.NullableField(fields.StringField(default="None"))
-	reservedEndRange = fields.NullableField(fields.StringField(default="None"))
-	reservedLeaseContractLength = fields.NullableField(fields.StringField(default="None"))
-	reservedOfferTermCode = fields.NullableField(fields.StringField(default="None"))
-	reservedOfferingClass = fields.NullableField(fields.StringField(default="None"))
-	reservedPurchaseOption = fields.NullableField(fields.StringField(default="None"))
-	reservedRateCode = fields.NullableField(fields.StringField(default="None"))
-	reservedPricePerUnit = fields.NullableField(fields.StringField(default="None"))
-	reservedPriceUnit = fields.NullableField(fields.StringField(default="None"))
+	reservedAppliesTo = fields.NullableField(fields.StringField())
+	reservedBeginRange= fields.NullableField(fields.StringField())
+	reservedCurrency = fields.NullableField(fields.StringField())
+	reservedDescription = fields.NullableField(fields.StringField())
+	reservedEffectiveDate = fields.NullableField(fields.StringField())
+	reservedEndRange = fields.NullableField(fields.StringField())
+	reservedLeaseContractLength = fields.NullableField(fields.StringField())
+	reservedOfferTermCode = fields.NullableField(fields.StringField())
+	reservedOfferingClass = fields.NullableField(fields.StringField())
+	reservedPurchaseOption = fields.NullableField(fields.StringField())
+	reservedRateCode = fields.NullableField(fields.StringField())
+	reservedPricePerUnit = fields.NullableField(fields.StringField())
+	reservedPriceUnit = fields.NullableField(fields.StringField())
 
-	spotPrice = fields.NullableField(fields.StringField(default="None"))
-	spotInstanceType = fields.NullableField(fields.StringField(default="None"))
-	spotProductDescription = fields.NullableField(fields.StringField(default="None"))
-	spotTimeStamp = fields.NullableField(fields.StringField(default="None"))
-	spotAvailabilityZone = fields.NullableField(fields.StringField(default="None"))
+	SpotPrice = fields.NullableField(fields.StringField())
+	Timestamp = fields.NullableField(fields.StringField())
+	InstanceType = fields.NullableField(fields.StringField())
+	AvailabilityZone = fields.NullableField(fields.StringField())
 
 	engine = engines.Memory()
 
@@ -182,9 +181,9 @@ def getData(d, mylist):
 		a = d.get(sku)
 		for i in mylist:
 			try:
-				values.append(a[i])
+				values.append((i, a[i]))
 			except(KeyError, AttributeError):
-				values.append(None)
+				pass
 		try:
 			data[sku].append(values)
 		except KeyError:
@@ -203,9 +202,9 @@ def getSpotData(d, keys):
 		values = []
 		for i in attributes:
 			try:
-				values.append(instance[i])
+				values.append((i, instance[i]))
 			except(KeyError, AttributeError):
-				values.append(None)
+				pass
 		data.append(values)
 	return data
 
@@ -225,106 +224,14 @@ def load():
 	product_attribute_data = getData(product_dict, product_keys)
 	on_demand_data = getData(on_demand_dict, on_demand_keys)
 	reserved_data = getData(reserved_dict, reserved_keys)
-	data = {key: product_attribute_data[key.split('.')[0]] + on_demand_data[key.split('.')[0]] + value + [None]*5 for key, value in reserved_data.items()}
+	data = {key: product_attribute_data[key.split('.')[0]] + on_demand_data[key.split('.')[0]] + value for key, value in reserved_data.items()}
 	items = list(data.values()) + spot_data
-	for lst in items:
-		i = InstanceData(
-			capacityStatus=lst[0],
-			clockSpeed=lst[1],
-			currentGeneration=lst[2],
-			dedicatedEbsThroughput=lst[3],
-			ebsOptimized=lst[4],
-			ecu=lst[5],
-			elasticGraphicsType=lst[6],
-			enhancedNetworkingSupported=lst[7],
-			fromLocation=lst[8],
-			fromLocationType=lst[9],
-			gpu=lst[10],
-			gpuMemory=lst[11],
-			group=lst[12],
-			groupDescription=lst[13],
-			instance=lst[14],
-			instanceCapacity10xlarge=lst[15],
-			instanceCapacity12xlarge=lst[16],
-			instanceCapacity16xlarge=lst[17],
-			instanceCapacity18xlarge=lst[18],
-			instanceCapacity24xlarge=lst[19],
-			instanceCapacity2xlarge=lst[20],
-			instanceCapacity32xlarge=lst[21],
-			instanceCapacity4xlarge=lst[22],
-			instanceCapacity8xlarge=lst[23],
-			instanceCapacity9xlarge=lst[24],
-			instanceCapacityLarge=lst[25],
-			instanceCapacityMedium=lst[26],
-			instanceCapacityXlarge=lst[27],
-			instanceFamily=lst[28],
-			instanceType=lst[29],
-			instanceSKU=lst[30],
-			intelAvx2Available=lst[31],
-			intelAvxAvailable=lst[32],
-			intelTurboAvailable=lst[33],
-			licenseModel=lst[34],
-			location=lst[35],
-			locationType=lst[36],
-			maxIopsBurstPerformance=lst[37],
-			maxIopsVolume=lst[38],
-			maxThroughputVolume=lst[39],
-			maxVolumeSize=lst[40],
-			memory=lst[41],
-			networkPerformance=lst[42],
-			normalizationSizeFactor=lst[43],
-			operatingSystem=lst[44],
-			operation=lst[45],
-			physicalCores=lst[46],
-			physicalProcessor=lst[47],
-			preInstalledSw=lst[48],
-			processorArchitecture=lst[49],
-			processorFeatures=lst[50],
-			productFamily=lst[51],
-			provisioned=lst[52],
-			serviceCode=lst[53],
-			serviceName=lst[54],
-			storage=lst[56],
-			storageMedia=lst[57],
-			tenancy=lst[58],
-			toLocation=lst[59],
-			toLocationType=lst[60],
-			transferType=lst[61],
-			usageType=lst[62],
-			vcpu=lst[63],
-			volumeType=lst[64],
 
-			onDemandAppliesTo=str(lst[65]),
-			onDemandBeginRange=lst[66],
-			onDemandCurrency='USD',
-			onDemandDescription=lst[67],
-			onDemandEffectiveDate=lst[68],
-			onDemandEndRange=lst[69],
-			onDemandOfferTermCode=lst[70],
-			onDemandRateCode=lst[71],
-			onDemandPricePerUnit=lst[73],
-			onDemandPriceUnit=lst[74],
+	for item in items:
+		instance = InstanceData()
+		for i in item:
+			setattr(instance, i[0], str(i[1]))
+		db.insert([instance])
 
-			reservedAppliesTo=str(lst[75]),
-			reservedBeginRange=lst[76],
-			reservedDescription=lst[77],
-			reservedEffectiveDate=lst[78],
-			reservedEndRange=lst[79],
-			reservedLeaseContractLength=lst[80],
-			reservedOfferTermCode=lst[81],
-			reservedOfferingClass=lst[82],
-			reservedPurchaseOption=lst[83],
-			reservedRateCode=lst[84],
-			reservedPricePerUnit=lst[86],
-			reservedPriceUnit=lst[87],
-
-			spotAvailabilityZone = lst[88],
-			spotInstanceType = lst[89],
-			spotProductDescription = lst[90],
-			spotPrice = lst[91],
-			spotTimeStamp = lst[92]
-
-		)
-		db.insert([i])
-
-load()
+if __name__ == '__main__':
+	load()
