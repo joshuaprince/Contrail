@@ -1,6 +1,7 @@
 from django.core import serializers
 from django.shortcuts import render
 from rest_framework import status, viewsets, generics
+from rest_framework.decorators import api_view, action
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.status import (
@@ -14,8 +15,15 @@ from .serializers import *
 
 import json
 
-class DataViewSet(APIView):
+class DataViewSet(viewsets.ModelViewSet):
+    # queryset =
+    # serializer_class = 
 
-    def post(self, request):
+    @action(detail=False)
+    def getinstances(self, request):
+        '''
+        Given atributes, return instances and their prices
+        '''
+
 
         return Response({}, status=HTTP_200_OK)
