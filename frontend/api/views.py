@@ -15,15 +15,26 @@ from .serializers import *
 
 import json
 
-class DataViewSet(viewsets.ModelViewSet):
-    # queryset =
-    # serializer_class = 
 
-    @action(detail=False)
-    def getinstances(self, request):
+class GetInstances(APIView):
         '''
         Given atributes, return instances and their prices
+        @Josh
+        Return (you can alter if need be)
+        {
+            "instance":
+            "operating_system":
+            "provider":
+            "region":
+            "vcpus":
+            "memory":
+            "ecu":
+            "pricing_method":
+            "cost":
+        }
         '''
+        def post(self, request):
+            data = json.loads(request.body)
 
 
-        return Response({}, status=HTTP_200_OK)
+            return Response({}, status=HTTP_200_OK)

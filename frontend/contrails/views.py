@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
@@ -32,7 +33,7 @@ class PriceView(FormView):
         print(data)
 
         # call rest api
-        url = 'https://api.github.com/some/endpoint'
+        url = settings.URL + '/api/data/'
         headers = {'content-type': 'application/json'}
 
         r = requests.post(url, data=json.dumps(data), headers=headers)

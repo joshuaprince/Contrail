@@ -17,8 +17,24 @@ class PriceForm(forms.Form):
 
     REGION_CHOICES = (
         ("US East (N. Virgina)", "US East (N. Virgina)"),
-        ("RHEL", "RHEL"),
-        ("SLES", "SLES"),
+        ("US East (Ohio)", "US East (Ohio)"),
+        ("US West (Norther California)", "US West (Norther California)"),
+        ("US West (Oregon)", "US West (Oregon)"),
+        ("Asia Pacific (Mumbai)", "Asia Pacific (Mumbai)"),
+        ("Asia Pacific (Seoul)", "SLAsia Pacific (Seoul)ES"),
+        ("Asia Pacific (Singapore)", "Asia Pacific (Singapore)"),
+        ("Asia Pacific (Sydney)", "Asia Pacific (Sydney)"),
+        ("Asia Pacific (Tokyo)", "Asia Pacific (Tokyo)"),
+        ("Canada (Central)", "Canada (Central)"),
+        ("EU (Frankfurt)", "EU (Frankfurt)"),
+        ("EU (Ireland)", "EU (Ireland)"),
+        ("EU (London)", "EU (London)"),
+        ("EU (Paris)", "EU (Paris)"),
+        ("EU (Stockholm)", "EU (Stockholm)"),
+        ("South America (Sao Paulo)", "South America (Sao Paulo)"),
+        ("AWS GovCloud (US-East)", "AWS GovCloud (US-East)"),
+        ("AWS GovCloud (US-West)", "AWS GovCloud (US-West)"),
+
     )
 
     operating_system = forms.ChoiceField(choices=OPSYS_CHOICES, required=False)

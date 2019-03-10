@@ -48,3 +48,8 @@ python manage.py migrate
 username: admin\
 password: pw
 
+
+
+## API
+`/api/getinstances/`
+Given attributes, return instances that match and their prices
