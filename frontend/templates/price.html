@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <form>
+          <div class="form-group">
+            <label for="exampleFormControlSelect1">Operating System</label>
+            <select class="form-control" id="exampleFormControlSelect1">
+              <option>Linux</option>
+              <option>RHEL</option>
+              <option>SLES</option>
+              <option>Windows</option>
+              <option>Windows with SQL Standard</option>
+              <option>Windows with SQL Web</option>
+              <option>Windows with SQL Enterprise</option>
+              <option>Linux with SQL Standard</option>
+              <option>Linux with SQL Web</option>
+              <option>Linux with SQL Enterprise</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <h4 class="cloudProvider">Cloud Provider </h4>
+            <label class="checkbox-container"> All
+              <input type="checkbox" checked="checked">
+              <span class="checkmark"></span>
+            </label>
+            <label class="checkbox-container"> AWS
+              <input type="checkbox">
+              <span class="checkmark"></span>
+            </label>
+            <label class="checkbox-container"> MS Azure
+              <input type="checkbox">
+              <span class="checkmark"></span>
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="region">Region</label>
+            <select class="form-control" id="region">
+              <option>US East (N. Virgina)</option>
+              <option>US East (Ohio)</option>
+              <option>US West (Norther California)</option>
+              <option>US West (Oregon)</option>
+              <option>Asia Pacific (Mumbai)</option>
+              <option>Asia Pacific (Seoul)</option>
+              <option>Asia Pacific (Singapore)</option>
+              <option>Asia Pacific (Sydney)</option>
+              <option>Asia Pacific (Tokyo)</option>
+              <option>Canada (Central)</option>
+              <option>EU (Frankfurt)</option>
+              <option>EU (Ireland)</option>
+              <option>EU (London)</option>
+              <option>EU (Paris)</option>
+              <option>EU (Stockholm)</option>
+              <option>South America (Sao Paulo)</option>
+              <option>AWS GovCloud (US-East)</option>
+              <option>AWS GovCloud (US-West)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="vcpus">vCPUs</label>
+            <input type="vcpus" class="form-control" id="vcpus" placeholder="">
+          </div>
+          <div class="form-group">
+            <label for="memory">Memory</label>
+            <input type="memory" class="form-control" id="memory" placeholder="">
+          </div>
+          <div class="form-group">
+            <label for="ecu">ECU</label>
+            <input type="ecu" class="form-control" id="ecu" placeholder="">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </nav>
+
+    <!-- Page Content  -->
+    <div id="content">
+        <br><br>
+        <button type="button" id="sidebarCollapse" class="btn btn-info">
+            <i class="fas fa-align-left"></i>
+            <span>Set Attributes</span>
+        </button>
+        <br>
+
+        <nav id="subnav" class="navbar navbar-expand-lg navbar-light bg-light">
+              <ul id="subnav" class="navbar-nav">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="#">All</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">On Demand</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Reserved</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Spot</a>
+                    </li>
+
+              </ul>
+        </nav>
+
+        <br><br>
+
+        <h2>Collapsible Sidebar Using Bootstrap 4</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+        <div class="line"></div>
+
+        <h2>Lorem Ipsum Dolor</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+        <div class="line"></div>
+
+        <h2>Lorem Ipsum Dolor</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+        <div class="line"></div>
+
+        <h3>Lorem Ipsum Dolor</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <canvas id="myChart"></canvas>
+
+    </div>
+
+</div>
+
+
+
+{% endblock %}
+
+
+{% block script %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#sidebar").mCustomScrollbar({
+            theme: "minimal"
+        });
+
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar, #content').toggleClass('active');
+            $('.collapse.in').toggleClass('in');
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        });
+    });
+</script>
+
+<script type="text/javascript">
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var chart = new Chart(ctx, {
+      // The type of chart we want to create
+      type: 'line',
+
+      // The data for our dataset
+      data: {
+          labels: ["January", "February", "March", "April", "May", "June", "July"],
+          datasets: [{
+              label: "My First dataset",
+              backgroundColor: 'rgb(255, 99, 132)',
+              borderColor: 'rgb(255, 99, 132)',
+              data: [0, 10, 5, 2, 20, 30, 45],
+          }]
+      },
+
+      // Configuration options go here
+      options: {}
+  });
+</script>
+
+{% endblock %}
