@@ -122,3 +122,4 @@ dmypy.json
 secret.py
 .DS_Store
 *.json
+*.pem
