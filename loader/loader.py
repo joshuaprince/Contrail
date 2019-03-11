@@ -324,7 +324,7 @@ def load():
 	'''
 	db = Database('contrail')
 	db.create_table(InstanceData)
-	fil = open('tmp.json')
+	fil = open('sample_data.json')
 	fil2 = open('spot_data.json')
 	d = json.load(fil)
 	d2 = json.load(fil2)
