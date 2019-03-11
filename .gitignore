@@ -121,3 +121,5 @@ dmypy.json
 .idea
 secret.py
 .DS_Store
+*.json
+*.pem
