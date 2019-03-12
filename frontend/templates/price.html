@@ -163,8 +163,17 @@
   $(document).ready(function() {
     $('#instances').DataTable( {
         // "paging":   false,
-        // "ordering": false,
+        "ordering": true,
         // "info":     false,
+        "columns": [
+            {"type": "string"},
+            {"type": "string"},
+            {"type": "string"},
+            {"type": "string"},
+            {"type": "num"},
+            {"type": "num"},
+            {"type": "string"},
+        ]
     } );
   } );
 

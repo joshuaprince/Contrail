@@ -33,7 +33,7 @@ class InstanceDataSerializer(serializers.Serializer):
             return 'spot'
 
     def get_price(self, obj):
-        return 1.23
+        price = obj.onDemandPricePerUnit or obj.reservedPricePerUnit
 
     def get_vcpus(self, obj):
         return 8
