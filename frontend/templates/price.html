@@ -40,24 +40,6 @@
               {% for x,y in form.fields.region.choices %}
                   <option value="{{ x }}"{% if form.fields.region.value == x %}selected{% endif %}>{{ y }}</option>
               {% endfor %}
-              <!-- <option>US East (N. Virgina)</option>
-              <option>US East (Ohio)</option>
-              <option>US West (Norther California)</option>
-              <option>US West (Oregon)</option>
-              <option>Asia Pacific (Mumbai)</option>
-              <option>Asia Pacific (Seoul)</option>
-              <option>Asia Pacific (Singapore)</option>
-              <option>Asia Pacific (Sydney)</option>
-              <option>Asia Pacific (Tokyo)</option>
-              <option>Canada (Central)</option>
-              <option>EU (Frankfurt)</option>
-              <option>EU (Ireland)</option>
-              <option>EU (London)</option>
-              <option>EU (Paris)</option>
-              <option>EU (Stockholm)</option>
-              <option>South America (Sao Paulo)</option>
-              <option>AWS GovCloud (US-East)</option>
-              <option>AWS GovCloud (US-West)</option> -->
             </select>
             <span class="help-block">{{ form.region.errors }}</span>
           </div>
@@ -113,127 +95,35 @@
                     <tr>
                         <th>Instance</th>
                         <th>Provider</th>
+                        <th>Region</th>
                         <th>Operating System</th>
-                        <th>Age</th>
-                        <th>Start date</th>
-                        <th>Salary</th>
+                        <th>VCPUs</th>
+                        <th>Memory</th>
+                        <th>ECU</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- {% for instance in instances %}
+                    {% for instance in instances %}
                     <tr>
-                      <td>{{ instance. }}</td>
-                      <td>{{ instance. }}</td>
-                      <td>{{ instance. }}</td>
-                      <td>{{ instance. }}</td>
-                      <td>{{ instance. }}</td>
+                      <td>{{ instance.instance_type }}</td>
+                      <td>{{ instance.provider }}</td>
+                      <td>{{ instance.region }}</td>
+                      <td>{{ instance.operating_system }}</td>
+                      <td>{{ instance.vcpus }}</td>
+                      <td>{{ instance.memory }}</td>
+                      <td>{{ instance.ecu }}</td>
                     </tr>
-                    {% endfor %} -->
-                    <tr>
-                        <td>Tiger Nixon</td>
-                        <td>System Architect</td>
-                        <td>Edinburgh</td>
-                        <td>61</td>
-                        <td>2011/04/25</td>
-                        <td>$320,800</td>
-                    </tr>
-                    <tr>
-                        <td>Finn Camacho</td>
-                        <td>Support Engineer</td>
-                        <td>San Francisco</td>
-                        <td>47</td>
-                        <td>2009/07/07</td>
-                        <td>$87,500</td>
-                    </tr>
-                    <tr>
-                        <td>Donna Snider</td>
-                        <td>Customer Support</td>
-                        <td>New York</td>
-                        <td>27</td>
-                        <td>2011/01/25</td>
-                        <td>$112,000</td>
-                    </tr>
-                    <tr>
-                        <td>Haley Kennedy</td>
-                        <td>Senior Marketing Designer</td>
-                        <td>London</td>
-                        <td>43</td>
-                        <td>2012/12/18</td>
-                        <td>$313,500</td>
-                    </tr>
-                    <tr>
-                        <td>Tatyana Fitzpatrick</td>
-                        <td>Regional Director</td>
-                        <td>London</td>
-                        <td>19</td>
-                        <td>2010/03/17</td>
-                        <td>$385,750</td>
-                    </tr>
-                    <tr>
-                        <td>Michael Silva</td>
-                        <td>Marketing Designer</td>
-                        <td>London</td>
-                        <td>66</td>
-                        <td>2012/11/27</td>
-                        <td>$198,500</td>
-                    </tr>
-                    <tr>
-                        <td>Brielle Williamson</td>
-                        <td>Integration Specialist</td>
-                        <td>New York</td>
-                        <td>61</td>
-                        <td>2012/12/02</td>
-                        <td>$372,000</td>
-                    </tr>
-                    <tr>
-                        <td>Herrod Chandler</td>
-                        <td>Sales Assistant</td>
-                        <td>San Francisco</td>
-                        <td>59</td>
-                        <td>2012/08/06</td>
-                        <td>$137,500</td>
-                    </tr>
-                    <tr>
-                        <td>Rhona Davidson</td>
-                        <td>Integration Specialist</td>
-                        <td>Tokyo</td>
-                        <td>55</td>
-                        <td>2010/10/14</td>
-                        <td>$327,900</td>
-                    </tr>
-                    <tr>
-                        <td>Colleen Hurst</td>
-                        <td>Javascript Developer</td>
-                        <td>San Francisco</td>
-                        <td>39</td>
-                        <td>2009/09/15</td>
-                        <td>$205,500</td>
-                    </tr>
-                    <tr>
-                        <td>Sonya Frost</td>
-                        <td>Software Engineer</td>
-                        <td>Edinburgh</td>
-                        <td>23</td>
-                        <td>2008/12/13</td>
-                        <td>$103,600</td>
-                    </tr>
-                    <tr>
-                        <td>Jena Gaines</td>
-                        <td>Office Manager</td>
-                        <td>London</td>
-                        <td>30</td>
-                        <td>2008/12/19</td>
-                        <td>$90,560</td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th>Name</th>
-                        <th>Position</th>
-                        <th>Office</th>
-                        <th>Age</th>
-                        <th>Start date</th>
-                        <th>Salary</th>
+                      <th>Instance</th>
+                      <th>Provider</th>
+                      <th>Region</th>
+                      <th>Operating System</th>
+                      <th>VCPUs</th>
+                      <th>Memory</th>
+                      <th>ECU</th>
                     </tr>
                 </tfoot>
             </table>
@@ -295,7 +185,7 @@
       data: {
           labels: ["January", "February", "March", "April", "May", "June", "July"],
           datasets: [{
-              label: "My First dataset",
+              label: "Sample Instance Chart",
               backgroundColor: 'rgb(255, 99, 132)',
               borderColor: 'rgb(255, 99, 132)',
               data: [0, 10, 5, 2, 20, 30, 45],

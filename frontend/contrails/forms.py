@@ -21,7 +21,7 @@ class PriceForm(forms.Form):
         ("US West (Norther California)", "US West (Norther California)"),
         ("US West (Oregon)", "US West (Oregon)"),
         ("Asia Pacific (Mumbai)", "Asia Pacific (Mumbai)"),
-        ("Asia Pacific (Seoul)", "SLAsia Pacific (Seoul)ES"),
+        ("Asia Pacific (Seoul)", "Asia Pacific (Seoul)"),
         ("Asia Pacific (Singapore)", "Asia Pacific (Singapore)"),
         ("Asia Pacific (Sydney)", "Asia Pacific (Sydney)"),
         ("Asia Pacific (Tokyo)", "Asia Pacific (Tokyo)"),
