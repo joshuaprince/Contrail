@@ -248,6 +248,30 @@ def usagetypeNormalizer(key, value):
 	else:
 		pass
 
+def onDemandUnit(key, value):
+	if key == 'onDemandUnit':
+		return ('onDemandPriceUnit', value)
+	else:
+		pass
+
+def onDemandUSD(key, value):
+	if key == 'onDemandUSD':
+		return ('onDemandPricePerUnit', value)
+	else:
+		pass
+
+def reservedUnit(key, value):
+	if key == 'reservedUnit':
+		return ('reservedPriceUnit', value)
+	else:
+		pass
+
+def reservedUSD(key, value):
+	if key == 'reservedUSD':
+		return ('reservedPricePerUnit', value)
+	else:
+		pass
+
 def normalizeData(key, value):
 	switcher = {
 	'capacitystatus': capacityStatusNormalizer(key, value),
@@ -262,7 +286,11 @@ def normalizeData(key, value):
 	'servicecode': servicecodeNormalizer(key, value),
 	'servicename': servicenameNormalizer(key, value),
 	'storage': storageNormalizer(key, value),
-	'usagetype': usagetypeNormalizer(key, value)
+	'usagetype': usagetypeNormalizer(key, value),
+	'onDemandUnit': onDemandUnit(key, value),
+	'onDemandUSD': onDemandUSD(key, value),
+	'reservedUnit': reservedUnit(key, value),
+	'reservedUSD': reservedUSD(key, value)
 	}
 	func = switcher.get(key, lambda: (key, str(value)))
 

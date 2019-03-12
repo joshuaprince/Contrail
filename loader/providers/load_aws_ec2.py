@@ -3,25 +3,25 @@ import itertools
 import re
 
 def nested_dict_iter(nested):
-    for key, value in nested.items():
-        if isinstance(value, collections.abc.Mapping):
-            yield from nested_dict_iter(value)
-        else:
-            yield key, value
+	for key, value in nested.items():
+		if isinstance(value, collections.abc.Mapping):
+			yield from nested_dict_iter(value)
+		else:
+			yield key, value
 
 def reserved_nested_dict_iter(nested):
-    for key, value in nested.items():
-        if isinstance(value, collections.abc.Mapping):
-            yield from reserved_nested_dict_iter(value)
-        else:
-            yield 'reserved' + re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), key, 1), value
+	for key, value in nested.items():
+		if isinstance(value, collections.abc.Mapping):
+			yield from reserved_nested_dict_iter(value)
+		else:
+			yield 'reserved' + re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), key, 1), value
 
 def on_demand_nested_dict_iter(nested):
-    for key, value in nested.items():
-        if isinstance(value, collections.abc.Mapping):
-            yield from on_demand_nested_dict_iter(value)
-        else:
-            yield 'onDemand' + re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), key, 1), value
+	for key, value in nested.items():
+		if isinstance(value, collections.abc.Mapping):
+			yield from on_demand_nested_dict_iter(value)
+		else:
+			yield 'onDemand' + re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), key, 1), value
 
 def getAllAttributes(d):
 	product_dict = {}
