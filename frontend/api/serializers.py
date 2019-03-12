@@ -11,6 +11,11 @@ class InstanceDataSerializer(serializers.Serializer):
     retrieved_date = serializers.SerializerMethodField()
     pricing_type = serializers.SerializerMethodField()
 
+    # TODO temporary dummy fields
+    price = serializers.SerializerMethodField()
+    vcpus = serializers.SerializerMethodField()
+    operating_system = serializers.SerializerMethodField()
+
     def get_retrieved_date(self, obj):
         date = obj.onDemandEffectiveDate or obj.reservedEffectiveDate or obj.spotTimestamp
         if type(date) == str:
@@ -26,3 +31,12 @@ class InstanceDataSerializer(serializers.Serializer):
 
         if obj.spotTimestamp:
             return 'spot'
+
+    def get_price(self, obj):
+        return 1.23
+
+    def get_vcpus(self, obj):
+        return 8
+
+    def get_operating_system(self, obj):
+        return "Linux"
