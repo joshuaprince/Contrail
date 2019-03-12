@@ -2,6 +2,7 @@ from django.core import serializers
 from django.shortcuts import render
 from rest_framework import status, viewsets, generics
 from rest_framework.decorators import api_view, action
+from rest_framework.request import Request
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.status import (
@@ -10,10 +11,15 @@ from rest_framework.status import (
     HTTP_200_OK
 )
 
+from infi.clickhouse_orm.database import Database
+
+from loader.loader import InstanceData
 from .models import *
 from .serializers import *
 
 import json
+
+db = Database('contrail', db_url='http://54.153.73.138:8123', readonly=True)
 
 
 class GetInstances(APIView):
@@ -22,19 +28,35 @@ class GetInstances(APIView):
         @Josh
         Return (you can alter if need be)
         {
-            "instance":
-            "operating_system":
+            "retrieved_date":
+            "instance_type":
+            TODO "operating_system":
             "provider":
             "region":
-            "vcpus":
+            TODO "vcpus":
             "memory":
-            "ecu":
-            "pricing_method":
-            "cost":
+            TODO "ecu":
+            "pricing_method": "on_demand", "reserved", "spot"
+            TODO "price":
         }
         '''
-        def post(self, request):
+        def post(self, request: Request):
             data = json.loads(request.body)
+            
+            instances = InstanceData.objects_in(db).\
+                only('location', 'instanceType', 'clockSpeed', 'memory',
+                     'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp').\
+                distinct()#.paginate(page_num=1, page_size=100)
 
+            # if request has a value, filter original query
 
-            return Response({}, status=HTTP_200_OK)
+            # if data['operating_system']: instances = instances.filter(operating_system=data['operating_system'])
+            # if data['aws']: instances = instances.filter()
+            # if data['gcp']: instances = instances.filter()
+            # if data['azure']: instances = instances.filter()
+            if data['region']: instances = instances.filter(location=data['region'])
+            # if data['vcpus']: instances = instances.filter(=data['vcpus'])
+            if data['memory']: instances = instances.filter(memory=data['memory'])
+            # if data['ecu']: instances = instances.filter(=data['ecu'])
+
+            return Response({'instances': [InstanceDataSerializer(obj).data for obj in instances]}, status=HTTP_200_OK)
