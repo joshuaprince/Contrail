@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load crispy_forms_tags %}
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
@@ -12,52 +13,7 @@
     <nav id="sidebar">
         <form method="POST">
           {% csrf_token %}
-          {{ form.non_field_errors }}
-          <!-- {{form}} -->
-
-          <div class="form-group">
-            <label for="{{ form.operating_system.id_for_label }}">Operating System</label>
-            <select name="{{ form.operating_system.name }}" class="form-control" id="{{ form.operating_system.id_for_label }}">
-              {% for x,y in form.fields.operating_system.choices %}
-                  <option value="{{ x }}"{% if form.fields.operating_system.value == x %}selected{% endif %}>{{ y }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="filter-group">
-            <h4 class="cloudProvider">Cloud Provider </h4>
-            <input type="checkbox" id="{{ form.aws.id_for_label }}" name="{{ form.aws.name }}">
-            <label for="{{ form.aws.id_for_label }}" class="checkbox-container">AWS</label>
-
-            <input type="checkbox" id="{{ form.gcp.id_for_label }}" name="{{ form.gcp.name }}" type="checkbox">
-            <label for="{{ form.gcp.id_for_label }}" class="checkbox-container">GCP</label>
-
-            <input type="checkbox" id="{{ form.azure.id_for_label }}" name="{{ form.azure.name }}">
-            <label for="{{ form.azure.id_for_label }}" class="checkbox-container">MS Azure</label>
-          </div>
-          <div class="form-group">
-            <label for="{{ form.region.id_for_label }}">Region</label>
-            <select name="{{ form.region.name }}" class="form-control" id="{{ form.region.id_for_label }}">
-              {% for x,y in form.fields.region.choices %}
-                  <option value="{{ x }}"{% if form.fields.region.value == x %}selected{% endif %}>{{ y }}</option>
-              {% endfor %}
-            </select>
-            <span class="help-block">{{ form.region.errors }}</span>
-          </div>
-          <div class="form-group">
-            <label for="{{ form.vcpus.id_for_label }}">vCPUs</label>
-            <input name="{{ form.vcpus.name }}" type="number" class="form-control" id="{{ form.vcpus.id_for_label }}" placeholder="">
-            <span class="help-block">{{ form.aws.errors }}</span>
-          </div>
-          <div class="form-group">
-            <label for="{{ form.memory.id_for_label }}">Memory</label>
-            <input name="{{ form.memory.name }}" type="number" class="form-control" id="{{ form.memory.id_for_label }}" placeholder="">
-            <span class="help-block">{{ form.memory.errors }}</span>
-          </div>
-          <div class="form-group">
-            <label for="{{ form.ecu.id_for_label }}">ECU</label>
-            <input name="{{ form.ecu.name }}" type="number" class="form-control" id="{{ form.ecu.id_for_label }}" placeholder="">
-            <span class="help-block">{{ form.ecu.errors }}</span>
-          </div>
+          {{ form | crispy }}
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </nav>
@@ -94,36 +50,45 @@
                 <thead>
                     <tr>
                         <th>Instance</th>
-                        <th>Provider</th>
+                        <!-- <th>Provider</th> -->
                         <th>Region</th>
                         <th>Operating System</th>
                         <th>VCPUs</th>
                         <th>Memory</th>
-                        <th>ECU</th>
+                        <!-- <th>ECU</th> -->
+                        <th>Price Type</th>
+                        <th>Price</th>
+                        <th>Price Unit</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for instance in instances %}
                     <tr>
                       <td>{{ instance.instance_type }}</td>
-                      <td>{{ instance.provider }}</td>
+                      <!-- <td>{{ instance.provider }}</td> -->
                       <td>{{ instance.region }}</td>
                       <td>{{ instance.operating_system }}</td>
                       <td>{{ instance.vcpus }}</td>
                       <td>{{ instance.memory }}</td>
-                      <td>{{ instance.ecu }}</td>
+                      <!-- <td>{{ instance.ecu }}</td> -->
+                      <td>{{ instance.price_type }}</td>
+                      <td>{{ instance.price }}</td>
+                      <td>{{ instance.price_unit }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
                 <tfoot>
                     <tr>
                       <th>Instance</th>
-                      <th>Provider</th>
+                      <!-- <th>Provider</th> -->
                       <th>Region</th>
                       <th>Operating System</th>
                       <th>VCPUs</th>
                       <th>Memory</th>
-                      <th>ECU</th>
+                      <!-- <th>ECU</th> -->
+                      <th>Price Type</th>
+                      <th>Price</th>
+                      <th>Price Unit</th>
                     </tr>
                 </tfoot>
             </table>

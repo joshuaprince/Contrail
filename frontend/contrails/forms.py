@@ -3,6 +3,7 @@ from django import forms
 
 class PriceForm(forms.Form):
     OPSYS_CHOICES = (
+        ('', 'All'),
         ("Linux", "Linux"),
         ("RHEL", "RHEL"),
         ("SLES", "SLES"),
@@ -16,6 +17,7 @@ class PriceForm(forms.Form):
     )
 
     REGION_CHOICES = (
+        ('', 'All'),
         ("US East (N. Virgina)", "US East (N. Virgina)"),
         ("US East (Ohio)", "US East (Ohio)"),
         ("US West (Norther California)", "US West (Norther California)"),
@@ -38,9 +40,9 @@ class PriceForm(forms.Form):
     )
 
     operating_system = forms.ChoiceField(choices=OPSYS_CHOICES, required=False)
-    aws = forms.BooleanField(required=False)
-    gcp = forms.BooleanField(required=False)
-    azure = forms.BooleanField(required=False)
+    aws = forms.BooleanField(required=False, initial=True)
+    gcp = forms.BooleanField(required=False, initial=True)
+    azure = forms.BooleanField(required=False, initial=True)
     region = forms.ChoiceField(choices=REGION_CHOICES, required=False)
     vcpus = forms.IntegerField(required=False)
     memory = forms.FloatField(required=False)

@@ -29,6 +29,8 @@ ALLOWED_HOSTS = []
 
 URL = "http://127.0.0.1:8000"
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 
 # Application definition
 
@@ -41,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api.apps.ApiConfig',
     'rest_framework',
+    'crispy_forms'
+
 ]
 
 MIDDLEWARE = [
