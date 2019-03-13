@@ -41,9 +41,9 @@ class PriceForm(forms.Form):
 
     operating_system = forms.ChoiceField(choices=OPSYS_CHOICES, required=False)
     aws = forms.BooleanField(required=False, initial=True)
-    gcp = forms.BooleanField(required=False, initial=True)
-    azure = forms.BooleanField(required=False, initial=True)
+    gcp = forms.BooleanField(required=False, disabled=True)#, initial=True)
+    azure = forms.BooleanField(required=False, disabled=True)#, initial=True)
     region = forms.ChoiceField(choices=REGION_CHOICES, required=False)
     vcpus = forms.IntegerField(required=False)
     memory = forms.FloatField(required=False)
-    ecu = forms.IntegerField(required=False)
+    # ecu = forms.IntegerField(required=False)
