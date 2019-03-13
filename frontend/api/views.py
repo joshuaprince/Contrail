@@ -46,8 +46,8 @@ class GetInstances(APIView):
 
             instances = InstanceData.objects_in(db).filter(onDemandPricePerUnit__ne=None).distinct()\
                 .only('location', 'instanceType', 'clockSpeed', 'memory',
-                      'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
-                      'onDemandPricePerUnit', 'reservedPricePerUnit', 'onDemandPriceUnit', 'reservedPriceUnit')\
+                      # 'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
+                      'onDemandPricePerUnit', 'onDemandPriceUnit')\
 
             # print(type(instances))
             # if request has a value, filter original query

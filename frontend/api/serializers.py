@@ -20,6 +20,8 @@ class InstanceDataSerializer(serializers.Serializer):
 
     def get_retrieved_date(self, obj):
         date = obj.onDemandEffectiveDate or obj.reservedEffectiveDate or obj.spotTimestamp
+        if date is None:
+            return None
         if type(date) == str:
             return date
         return date.isoformat()
