@@ -9,13 +9,13 @@ class InstanceDataSerializer(serializers.Serializer):
     clockSpeed = serializers.FloatField()
     memory = serializers.FloatField()
     retrieved_date = serializers.SerializerMethodField()
+    vcpus = serializers.IntegerField(source='vcpu')
 
     price = serializers.SerializerMethodField()
     price_type = serializers.SerializerMethodField()
     price_unit = serializers.SerializerMethodField()
 
     # TODO temporary dummy fields
-    vcpus = serializers.SerializerMethodField()
     operating_system = serializers.SerializerMethodField()
 
     def get_retrieved_date(self, obj):

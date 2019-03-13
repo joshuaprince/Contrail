@@ -45,7 +45,8 @@ class GetInstances(APIView):
             # print(data)
 
             instances = InstanceData.objects_in(db).filter(onDemandPricePerUnit__ne=None).distinct()\
-                .only('location', 'instanceType', 'clockSpeed', 'memory',
+                .filter(instanceType__ne=None, onDemandPricePerUnit__ne='0.0000000000')\
+                .only('location', 'instanceType', 'clockSpeed', 'memory', 'vcpu',
                       # 'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
                       'onDemandPricePerUnit', 'onDemandPriceUnit')\
 
