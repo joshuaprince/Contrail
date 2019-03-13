@@ -62,21 +62,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for instance in instances %}
-                    <tr>
-                      <td>{{ instance.instance_type }}</td>
-                      <!-- <td>{{ instance.provider }}</td> -->
-                      <td>{{ instance.region }}</td>
-                      <td>{{ instance.operating_system }}</td>
-                      <td>{{ instance.vcpus }}</td>
-                      <td>{{ instance.memory }}</td>
-                      <!-- <td>{{ instance.ecu }}</td> -->
-                      <td>{{ instance.price_type }}</td>
-                      <td>${{ instance.price | floatformat:3 }}</td>
-                      <td>{{ instance.price_unit }}</td>
-                    </tr>
-                    {% endfor %}
 
+                {% for instance in instances %}
+                  <tr>
+                    <td>{{ instance.instance_type }}</td>
+                    <!-- <td>{{ instance.provider }}</td> -->
+                    <td>{{ instance.region }}</td>
+                    <td>{{ instance.operating_system }}</td>
+                    <td>{{ instance.vcpus }}</td>
+                    <td>{{ instance.memory }}</td>
+                    <!-- <td>{{ instance.ecu }}</td> -->
+                    <td>{% if instance.price_type == 'on_demand' %}on demand{% endif %}</td>
+                    <td>${{ instance.price | floatformat:3 }}</td>
+                    <td>{{ instance.price_unit }}</td>
+                  </tr>
+                  {% endfor %}
 
                 </tbody>
                 <tfoot>
@@ -133,7 +133,6 @@
         "ordering": true,
         // "info":     false,
         "columns": [
-            {"type": "string"},
             {"type": "string"},
             {"type": "string"},
             {"type": "string"},

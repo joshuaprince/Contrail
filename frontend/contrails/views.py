@@ -38,7 +38,7 @@ def priceview(request):
             url = settings.URL + '/api/getinstances/'
             headers = {'content-type': 'application/json'}
             r = requests.post(url, data=json.dumps(data), headers=headers)
-
+            text = r.text
             context['instances'] = json.loads(r.text)['instances']
 
     return render(request, 'price.html', context)
