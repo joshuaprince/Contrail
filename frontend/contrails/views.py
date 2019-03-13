@@ -31,7 +31,7 @@ def priceview(request):
                 'region': form.cleaned_data['region'],
                 'vcpus': form.cleaned_data['vcpus'],
                 'memory': form.cleaned_data['memory'],
-                'ecu': form.cleaned_data['ecu']
+                # 'ecu': form.cleaned_data['ecu']
             }
 
             # call rest api
