@@ -72,7 +72,7 @@
                       <td>{{ instance.memory }}</td>
                       <!-- <td>{{ instance.ecu }}</td> -->
                       <td>{{ instance.price_type }}</td>
-                      <td>{{ instance.price }}</td>
+                      <td>${{ instance.price | floatformat:3 }}</td>
                       <td>{{ instance.price_unit }}</td>
                     </tr>
                     {% endfor %}
@@ -138,6 +138,8 @@
             {"type": "string"},
             {"type": "string"},
             {"type": "num"},
+            {"type": "num"},
+            {"type": "string"},
             {"type": "num"},
             {"type": "string"},
         ]

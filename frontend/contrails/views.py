@@ -25,9 +25,9 @@ def priceview(request):
 
             data = {
                 'operating_system': form.cleaned_data['operating_system'],
-                'aws': form.cleaned_data['aws'],
-                'gcp': form.cleaned_data['gcp'],
-                'azure': form.cleaned_data['azure'],
+                'aws': form.cleaned_data['amazon_web_services'],
+                'gcp': form.cleaned_data['google_cloud_platform'],
+                'azure': form.cleaned_data['microsoft_azure'],
                 'region': form.cleaned_data['region'],
                 'vcpus': form.cleaned_data['vcpus'],
                 'memory': form.cleaned_data['memory'],
