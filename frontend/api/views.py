@@ -43,9 +43,10 @@ class GetInstances(APIView):
         def post(self, request: Request):
             data = json.loads(request.body)
             
-            instances = InstanceData.objects_in(db).distinct()
-                # only('location', 'instanceType', 'clockSpeed', 'memory',
-                #      'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp').\
+            instances = InstanceData.objects_in(db).filter(onDemandPricePerUnit__ne=None).distinct()\
+                .only('location', 'instanceType', 'clockSpeed', 'memory',
+                      'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
+                      'onDemandPricePerUnit', 'reservedPricePerUnit', 'onDemandPriceUnit', 'reservedPriceUnit')
                 # distinct()#.paginate(page_num=1, page_size=100)
 
             # if request has a value, filter original query

@@ -17,3 +17,4 @@ boto3 >= 1.9.86
 Django==2.1.7
 pytz==2018.9
 djangorestframework==3.9.2
+django-crispy-forms
