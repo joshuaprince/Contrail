@@ -42,13 +42,14 @@ class GetInstances(APIView):
         '''
         def post(self, request: Request):
             data = json.loads(request.body)
+            # print(data)
 
             instances = InstanceData.objects_in(db).filter(onDemandPricePerUnit__ne=None).distinct()\
                 .only('location', 'instanceType', 'clockSpeed', 'memory',
                       'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
                       'onDemandPricePerUnit', 'reservedPricePerUnit', 'onDemandPriceUnit', 'reservedPriceUnit')\
-                .paginate(page_num=1, page_size=100).objects
 
+            # print(type(instances))
             # if request has a value, filter original query
 
             # if data['operating_system']: instances = instances.filter(operating_system=data['operating_system'])
@@ -59,5 +60,8 @@ class GetInstances(APIView):
             # if data['vcpus']: instances = instances.filter(=data['vcpus'])
             if data['memory']: instances = instances.filter(memory=data['memory'])
             # if data['ecu']: instances = instances.filter(=data['ecu'])
+
+            # truncate query
+            instances = instances.paginate(page_num=1, page_size=100).objects
 
             return Response({'instances': [InstanceDataSerializer(obj).data for obj in instances]}, status=HTTP_200_OK)
