@@ -235,6 +235,9 @@ a.article:hover {
   transform: rotate(45deg);
 }
 
+#sidebarCollapse {
+  background-color: #71aaa7;
+}
 
 /* ---------------------------------------------------
     CONTENT STYLE

@@ -20,7 +20,7 @@ a.paginate_button:hover {
 
 #instances_previous,
 #instances_next {
-  background-color: Crimson;
+  background-color: #71aaa7;
   border-radius: 5px;
   color: white;
   padding: .5em;
