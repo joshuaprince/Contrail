@@ -1,9 +1,9 @@
 # Contrail
 
-## Public Cloud Market Price Tracker
+### Public Cloud Market Price Tracker
 
 ### UC Davis ECS 193, 2019
-
+Contrail is a public cloud market price tracker that allows you to easily access and compare the prices and characteristics of VMs over various locations and cloud providers.
 
 ## Development
 ### virtual env
@@ -51,5 +51,32 @@ password: pw
 
 
 ## API
-`/api/getinstances/`
+`/api/getinstances/`\
 Given attributes, return instances that match and their prices
+request:
+```
+{
+    'operating_system': "Linux",
+    'aws': "True",
+    'gcp': "True"],
+    'azure': "False",
+    'region': None,
+    'vcpus': None,
+    'memory': 8,
+}
+```
+response:
+```
+{
+    "instance_type": "c4"
+    "operating_system": "Linux",
+    "provider": "AWS",
+    "region": "US East",
+    "vcpus": 8,
+    "memory": 8,
+    "reserved", "spot",
+    "price_type": "on_demand",
+    "price": 0.233,
+    "price_unit": "per hour"
+}
+```
