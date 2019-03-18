@@ -14,7 +14,6 @@ from rest_framework.status import (
 from infi.clickhouse_orm.database import Database
 
 from loader.loader import InstanceData
-from .models import *
 from .serializers import *
 
 import json
@@ -25,24 +24,22 @@ db = Database('contrail', db_url='http://54.153.73.138:8123', readonly=True)
 class GetInstances(APIView):
         '''
         Given atributes, return instances and their prices
-        @Josh
-        Return (you can alter if need be)
+        Return
         {
-            "retrieved_date":
-            "instance_type":
-            TODO "operating_system":
-            "provider":
-            "region":
-            TODO "vcpus":
-            "memory":
-            TODO "ecu":
-            "pricing_method": "on_demand", "reserved", "spot"
-            TODO "price":
+            "instance_type": "c4"
+            "operating_system": "Linux",
+            "provider": "AWS",
+            "region": "US East",
+            "vcpus": 8,
+            "memory": 8,
+            "reserved", "spot",
+            "price_type": "on_demand",
+            "price": 0.233,
+            "price_unit": "per hour"
         }
         '''
         def post(self, request: Request):
             data = json.loads(request.body)
-            # print(data)
 
             instances = InstanceData.objects_in(db).filter(onDemandPricePerUnit__ne=None).distinct()\
                 .filter(instanceType__ne=None, onDemandPricePerUnit__ne='0.0000000000')\
@@ -50,9 +47,8 @@ class GetInstances(APIView):
                       # 'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
                       'onDemandPricePerUnit', 'onDemandPriceUnit')\
 
-            # print(type(instances))
             # if request has a value, filter original query
-
+            # TODO
             # if data['operating_system']: instances = instances.filter(operating_system=data['operating_system'])
             # if data['aws']: instances = instances.filter()
             # if data['gcp']: instances = instances.filter()

@@ -1,7 +1,5 @@
 from rest_framework import serializers
 
-from .models import *
-
 
 class InstanceDataSerializer(serializers.Serializer):
     region = serializers.CharField(source='location', allow_blank=True, max_length=127)

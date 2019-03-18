@@ -34,10 +34,16 @@ deactivate
 
 
 ### start Django
+Make sure you are in the frontend folder
 ```
 python manage.py runserver
 ```
 open [127.0.0.1:8000](127.0.0.1:8000)
+
+collect static files
+```
+python manage.py collectstatic
+```
 
 set up database (do this whenever changes made to model)
 ```
@@ -49,7 +55,7 @@ username: admin\
 password: pw
 
 ## To set up backend
-Click the links to go visit documentation\
+Click the links to visit documentation\
 [Crawler](/crawler/README.md)
 
 

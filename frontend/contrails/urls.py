@@ -23,7 +23,6 @@ from .views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomeView.as_view(), name='home'),
-    # path('price/', PriceView.as_view(), name='price'),
     path('price/', priceview, name='price'),
     path('compare/', CompareView.as_view(), name='compare'),
     path('api/', include('api.urls')),
