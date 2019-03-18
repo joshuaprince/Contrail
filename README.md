@@ -5,7 +5,7 @@
 ### UC Davis ECS 193, 2019
 Contrail is a public cloud market price tracker that allows you to easily access and compare the prices and characteristics of VMs over various locations and cloud providers.
 
-## Development
+## Quick Start
 ### virtual env
 create virtual environment
 ```
@@ -48,11 +48,14 @@ python manage.py migrate
 username: admin\
 password: pw
 
+## To set up backend
+Click the links to go visit documentation\
+[Crawler](/crawler/README.md)
 
 
 ## API
 `/api/getinstances/`\
-Given attributes, return instances that match and their prices
+Given attributes, return instances that match and their prices\
 request:
 ```
 {
