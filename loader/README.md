@@ -1,6 +1,6 @@
 # Contrail Loader
 
-This module loads data from S3 buckets and inserts it into the ClickHouse database. 
+This module loads data from S3 bucket and inserts it into the ClickHouse database. 
 
 ## Setup
 
