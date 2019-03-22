@@ -28,7 +28,7 @@ root `contrail` directory. **All credentials in `config.py` are required.**
 
 #### Amazon Web Services (AWS)
 
-The crawler needs an Amazon S3 bucket to store the raw data it pulls from various providers, as well as an IAM user to
+The crawler uses an Amazon S3 bucket to store the raw data it pulls from various providers, as well as an IAM user to
 access that bucket and pull spot instance pricing data.
 
 1. Create an account at [AWS](https://aws.amazon.com/) if you do not already have one.
@@ -83,6 +83,43 @@ access that bucket and pull spot instance pricing data.
    Attach the policy you just created directly.
    
    ![Add Directly](img/9-adddirectly.png)
+
+#### Microsoft Azure
+
+Retrieving Microsoft Azure pricing data also requires credentials. A free trial account is sufficient.
+
+1. From "All Services" on the left, navigate to the "Subscriptions" service to obtain your subscription ID. Save this
+   in `config.py` as **AZURE_SUBSCRIPTION_ID**.
+   
+   ![Subscription ID](img/20-subscriptionid.png)
+
+2. Navigate to Azure Active Directory on the left, and go to "Properties". Copy in your Directory ID, also known as
+   a Tenant ID, to `config.py` as **AZURE_TENANT_ID**.
+   
+   ![Tenant (aka Directory) ID](img/20-tenant.png)
+
+3. Register a new Web app in Azure Active Directory. Navigate to Azure Active Directory in the sidebar, then go to
+   "App Registrations", and click "New application registration".
+   
+   ![New Application Registration](img/21-newappreg.png)
+
+   Name the new app registration as you wish; "contrail" is a good choice. Be sure to select "Web app/API" for the type,
+   and setting sign-on URL to `http://localhost` is fine.
+   
+   ![Web App Naming](img/22-appregname.png)
+   
+   Take the newly created app's Application ID and save it in `config.py` as **AZURE_CLIENT_ID**.
+   
+   ![Azure App ID](img/23-appid.png)
+
+4. Create a key for this new App registration. Click "Settings" on the app's page, then "Keys".
+
+   ![Settings, Keys](img/24-settingskeys.png)
+   
+   In the new view, enter a name for the key, and set it to never expire. Then click "Save" at the top. As soon as you
+   click save, copy the key it generates to `client.py` as **AZURE_CLIENT_SECRET**.
+   
+   ![New Key](img/25-newkey.png)
 
 ## Usage
 
