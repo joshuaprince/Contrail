@@ -7,7 +7,7 @@ import boto3
 
 from crawler.providers import aws_ec2
 from crawler.providers.base_provider import BaseProvider
-from secret import AWS_ACCESS_KEY_ID, AWS_SECRET
+from config import AWS_ACCESS_KEY_ID, AWS_SECRET
 
 logger_all_regions = logging.getLogger('contrail.crawler.aws_ec2_spot')
 
