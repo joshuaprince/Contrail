@@ -6,7 +6,7 @@ import urllib.request
 
 import boto3
 
-from secret import AWS_ACCESS_KEY_ID, AWS_SECRET, AWS_BUCKET_NAME
+from config import AWS_ACCESS_KEY_ID, AWS_SECRET, AWS_BUCKET_NAME
 
 logger = logging.getLogger('contrail.crawler')
 

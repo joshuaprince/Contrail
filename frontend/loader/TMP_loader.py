@@ -7,7 +7,7 @@ import boto3
 from loader.loaders.aws_ec2 import AmazonEC2Loader
 from loader.loaders.base_loader import BaseLoader
 from loader.s3iterator import BucketIterator
-from secret import AWS_ACCESS_KEY_ID, AWS_SECRET, AWS_BUCKET_NAME
+from config import AWS_ACCESS_KEY_ID, AWS_SECRET, AWS_BUCKET_NAME
 
 
 class Loader:
