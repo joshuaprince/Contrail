@@ -3,60 +3,52 @@
 ### Public Cloud Market Price Tracker
 
 ### UC Davis ECS 193, 2019
-Contrail is a public cloud market price tracker that allows you to easily access and compare the prices and characteristics of VMs over various locations and cloud providers.
+Contrail is a public cloud market price tracker that allows you to easily access and compare the prices and
+characteristics of VMs over various locations, cloud providers, and times.
 
 ## Quick Start
-### virtual env
-create virtual environment
+### Virtual Environment
+Create virtual environment:
 ```
-virtual env -p python3 venv
+virtualenv -p python3 venv
 OR
 python3 -m virtualenv venv
 ```
 
-start virtual environment
+Start virtual environment:
 ```
 source venv/bin/activate
 ```
 
-should see `(venv)` show up in command prompt
+You should see `(venv)` show up in command prompt.
 
-install requirements our project uses
+Install requirements our project uses:
 ```
 pip install -r requirements.txt
 ```
 
-
-to exit virtual environment
+To exit virtual environment:
 ```
 deactivate
 ```
 
 
-### start Django
-Make sure you are in the frontend folder
-```
-python manage.py runserver
-```
-open [127.0.0.1:8000](127.0.0.1:8000)
+### Start Django
+Make sure you are in the `frontend/` folder and the virtual environment is activated.
 
-collect static files
+Collect static files and set up the database:
 ```
 python manage.py collectstatic
-```
-
-set up database (do this whenever changes made to model)
-```
 python manage.py makemigrations
 python manage.py migrate
 ```
-#### Admin
-username: admin\
-password: pw
 
-## To set up backend
-Click the links to visit documentation\
-[Crawler](/crawler/README.md)
+Start the Django server:
+```
+python manage.py runserver
+```
+
+Open [127.0.0.1:8000](http://127.0.0.1:8000) in a browser.
 
 
 ## API
@@ -67,7 +59,7 @@ request:
 {
     'operating_system': "Linux",
     'aws': "True",
-    'gcp': "True"],
+    'gcp': "True",
     'azure': "False",
     'region': None,
     'vcpus': None,
@@ -89,3 +81,17 @@ response:
     "price_unit": "per hour"
 }
 ```
+
+
+## Collecting your own data
+Contrail is split into a few distinct components:
+- Crawler: Collects and stores raw offer data from various cloud providers.
+- Loader: Parses raw offer data and stores it in a Clickhouse data warehouse.
+- API/Frontend: Communicates with the data warehouse and displays data nicely.
+ 
+The Quick Start above only sets up the API/Frontend component. By default, it points to our own data source. You will
+have to set up your own backend (crawler and loader) to collect your own data.
+
+Read more about setting up the first two components here:
+[Crawler](/crawler/README.md),
+[Loader](/loader/README.md).

@@ -27,7 +27,7 @@ This module loads data from S3 bucket and inserts it into the ClickHouse databas
     source venv/bin/activate
     ``` 
 
-2. Run `load.py`. 
+2. Run `python contrail.py loader`. 
 
 3. Run the following commands to launch the command-line client to query into the database:
 
