@@ -6,7 +6,7 @@ import urllib.request
 import boto3
 
 from crawler.providers import aws_ec2
-from crawler.providers.base_provider import BaseProvider
+from crawler.providers import BaseProvider, register_provider
 from config import AWS_ACCESS_KEY_ID, AWS_SECRET
 
 logger_all_regions = logging.getLogger('contrail.crawler.aws_ec2_spot')
@@ -22,6 +22,7 @@ URL_REGION_VERSION = aws_ec2.URL_REGION_VERSION
 DETAIL_COLLECTION_REGION = 'us-east-1'
 
 
+@register_provider
 class AmazonEC2Spot(BaseProvider):
     """
     Price crawler for Amazon Spot Instances.
@@ -44,6 +45,11 @@ class AmazonEC2Spot(BaseProvider):
         """Working list of currently available instances in this region."""
         self.next_token = ''
         """Token given to AWS to continue building instance_list."""
+
+    @classmethod
+    def create_providers(cls):
+        cls.load_instance_type_details()
+        return [AmazonEC2Spot(rgn) for rgn in _session.get_available_regions('ec2')]
 
     def crawl(self) -> datetime.timedelta:
         """
@@ -81,10 +87,6 @@ class AmazonEC2Spot(BaseProvider):
         self.logger.info("Retrieved {count} instances".format(region=self.region,
                                                               count=len(response['SpotPriceHistory'])))
         return datetime.timedelta(seconds=3)
-
-    @classmethod
-    def create_providers(cls):
-        return [AmazonEC2Spot(rgn) for rgn in _session.get_available_regions('ec2')]
 
     @classmethod
     def load_instance_type_details(cls):

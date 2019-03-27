@@ -4,44 +4,11 @@ import logging
 import sys
 from typing import List
 
-from crawler.providers.aws_ec2 import AmazonEC2
-from crawler.providers.aws_ec2_spot import AmazonEC2Spot
-from crawler.providers.azure import Azure
-from crawler.providers.base_provider import BaseProvider
+from crawler.providers import BaseProvider, REGISTERED_PROVIDER_CLASSES, import_provider_directory
 
 logger = logging.getLogger('contrail.crawler')
 
 providers: List[BaseProvider] = []
-
-
-def register_provider(instance: BaseProvider):
-    """
-    Register a provider class with the crawler to ensure this provider is crawled.
-    """
-    providers.append(instance)
-
-
-def load_providers() -> int:
-    """
-    Loads all modules in the `providers` directory.
-    :return: The number of providers loaded.
-    """
-    # TODO Make this dynamically load all modules in providers/
-    provider_count = 0
-
-    register_provider(AmazonEC2())
-    provider_count += 1
-
-    AmazonEC2Spot.load_instance_type_details()
-    spot_rgns = AmazonEC2Spot.create_providers()
-    for p in spot_rgns:
-        register_provider(p)
-    provider_count += len(spot_rgns)
-
-    register_provider(Azure())
-    provider_count += 1
-
-    return provider_count
 
 
 async def _crawl_loop(provider: BaseProvider):
@@ -72,6 +39,12 @@ async def _main():
     await asyncio.gather(*provider_tasks)
 
 
+def create_providers():
+    import_provider_directory()
+    for provider_class in REGISTERED_PROVIDER_CLASSES:
+        providers.extend(provider_class.create_providers())
+
+
 def crawl():
     """
     Runs the crawler until a keyboard interrupt is received.
@@ -85,10 +58,10 @@ def crawl():
 
     logger.info("Starting crawler.")
 
-    try:
-        num_providers = load_providers()
-        logger.info("Loaded {} providers.".format(num_providers))
+    create_providers()
+    logger.info("Loaded {} providers from {} provider classes.".format(len(providers), len(REGISTERED_PROVIDER_CLASSES)))
 
+    try:
         asyncio.run(_main())
     except KeyboardInterrupt:
         print("Crawler is shutting down.")

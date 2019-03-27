@@ -6,7 +6,7 @@ import time
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from crawler.providers.base_provider import BaseProvider
+from crawler.providers import BaseProvider, register_provider
 from config import AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID
 
 logger = logging.getLogger('contrail.crawler.azure')
@@ -25,11 +25,16 @@ URL queried to list prices. Replaces {subscriptionId}.
 """
 
 
+@register_provider
 class Azure(BaseProvider):
     def __init__(self):
         super().__init__()
         self._access_token = ''
         self._access_token_expire = 0
+
+    @classmethod
+    def create_providers(cls):
+        return [cls()]
 
     def crawl(self) -> datetime.timedelta:
         ratecard = self.request_ratecard()

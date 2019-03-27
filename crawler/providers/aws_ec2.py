@@ -3,7 +3,7 @@ import json
 import logging
 import urllib.request
 
-from crawler.providers.base_provider import BaseProvider
+from crawler.providers import BaseProvider, register_provider
 
 logger = logging.getLogger('contrail.crawler.aws_ec2')
 
@@ -19,6 +19,7 @@ region_index.
 """
 
 
+@register_provider
 class AmazonEC2(BaseProvider):
     def __init__(self):
         super().__init__()
@@ -26,6 +27,10 @@ class AmazonEC2(BaseProvider):
         self.regions = {}
 
         self.load_regions()
+
+    @classmethod
+    def create_providers(cls):
+        return [cls()]
 
     def crawl(self) -> datetime.timedelta:
         """
