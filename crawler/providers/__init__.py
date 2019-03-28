@@ -15,12 +15,6 @@ class BaseProvider(ABC):
     crawler with @register_provider for the crawler to crawl this provider.
     """
 
-    subclasses = []
-
-    def __init_subclass__(cls, **kwargs):
-        super().__init_subclass__(**kwargs)
-        cls.subclasses.append(cls)
-
     @classmethod
     @abstractmethod
     def create_providers(cls) -> List[BaseProvider]:
@@ -77,5 +71,5 @@ def import_provider_directory():
     :return:
     """
     for fl in os.listdir(os.path.dirname(__file__)):
-        if not os.path.basename(fl).startswith('__'):
+        if os.path.basename(fl).endswith('.py') and not os.path.basename(fl).startswith('__'):
             importlib.import_module('.' + os.path.basename(fl)[:-3], package=__package__)
