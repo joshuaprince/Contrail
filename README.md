@@ -34,18 +34,18 @@ deactivate
 
 
 ### Start Django
-Make sure you are in the `frontend/` folder and the virtual environment is activated.
+Make sure you are in the main Contrail folder and the virtual environment is activated.
 
 Collect static files and set up the database:
 ```
-python manage.py collectstatic
-python manage.py makemigrations
-python manage.py migrate
+python contrail.py frontend collectstatic
+python contrail.py frontend makemigrations
+python contrail.py frontend migrate
 ```
 
 Start the Django server:
 ```
-python manage.py runserver
+python contrail.py frontend runserver
 ```
 
 Open [127.0.0.1:8000](http://127.0.0.1:8000) in a browser.
