@@ -57,10 +57,12 @@ class Loader:
             if self.already_loaded(filename):
                 continue
 
-            try:
-                self.load_file(filename)
-            except Exception as e:
-                logger.warning("Failed to load data file {}:\n{}".format(filename, str(e)))
+            # self.load_file(filename)
+            if filename.startswith('AmazonEC2Spot'):
+                try:
+                    self.load_file(filename)
+                except Exception as e:
+                    logger.warning("Failed to load data file {}:\n{}".format(filename, str(e)))
 
 
 def load():
@@ -74,5 +76,5 @@ def load():
     logger.info("Loaded {} loaders.".format(len(REGISTERED_LOADER_CLASSES)))
     logger.debug(list(REGISTERED_LOADER_CLASSES.keys()))
 
-    create_contrail_table()
+    # create_contrail_table()
     Loader().load_initial_data()

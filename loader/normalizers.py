@@ -12,13 +12,16 @@ def clockSpeedNormalizer(key, value):
         clock_speed_is_up_to = False
         if re.findall("Up to", value):
             clock_speed_is_up_to = True
-        clock_speed = float(re.findall("\d+\.\d+", value)[0])
+        try:
+            clock_speed = float(re.findall("\d+\.\d+", value)[0])
+        except(IndexError):
+            clock_speed = float(re.findall("\d+", value)[0])
         return ('clockSpeedIsUpTo', clock_speed_is_up_to), ('clockSpeed', clock_speed)
     else:
         pass
 
 def dedicatedEbsThroughputNormalizer(key, value):
-    if key == 'dedicatedEbsThroughput':
+    if key == 'dedicatedEbsThroughput' and value != 'N/A':
         dedicated_ebs_throughput_is_up_to = False
         if re.findall("Upto", value):
             dedicated_ebs_throughput_is_up_to = True
@@ -101,9 +104,13 @@ def storageNormalizer(key, value):
         if value == 'EBS only':
             return ('storageIsEbsOnly', True)
         elif value != 'NA':
-            storage_info = re.findall(r"(\d+)", value)
-            storage_type = re.findall("\d+\s([^x]+)", value)[0]
-            return ('storageIsEbsOnly', False), ('storageCount', storage_info[0]), ('storageCapacity', storage_info[1]), ('storageType', storage_type)
+            try:
+                storage_info = re.findall(r"(\d+)", value)
+                storage_type = re.findall("\d+\s([^x]+)", value)[0]
+                return ('storageIsEbsOnly', False), ('storageCount', storage_info[0]), ('storageCapacity', storage_info[1]), ('storageType', storage_type)
+            except(IndexError):
+                storage_info = re.findall(r"(\d+)", value)
+                return ('storageIsEbsOnly', False), ('storageCount', storage_info[0]), ('storageCapacity', storage_info[1]), ('storageType', "HDD")
         else:
             pass
     else:
@@ -160,7 +167,6 @@ def normalizeData(key, value):
     'reservedUSD': reservedUSD(key, value)
     }
     func = switcher.get(key, lambda: (key, str(value)))
-
     try:
         if func() == None:
             pass

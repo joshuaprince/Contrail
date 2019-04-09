@@ -1,175 +1,14 @@
 import collections
 import itertools
 import re
+import logging
 
-def capacityStatus(key, value):
-    if key == 'capacitystatus':
-        return ('capacityStatus', value)
-    else:
-        pass
+from crawler.providers.aws_ec2_spot import AmazonEC2Spot
+from loader.warehouse import InstanceData, db
+from loader.loaders import BaseLoader, register_loader
+from loader.normalizers import normalizeData
 
-def clockSpeed(key, value):
-    if key == 'clockSpeed':
-        clockSpeedIsUpTo = False
-        if re.findall("Up to", value):
-            clockSpeedIsUpTo = True
-        clockSpeed = float(re.findall("\d+\.\d+", value)[0])
-        return ('clockSpeedIsUpTo', clockSpeedIsUpTo), ('clockSpeed', clockSpeed)
-    else:
-        pass
-
-def dedicatedEbsThroughput(key, value):
-    if key == 'dedicatedEbsThroughput':
-        dedicatedEbsThroughputIsUpTo = False
-        if re.findall("Upto", value):
-            dedicatedEbsThroughputIsUpTo = True
-        dedicatedEbsThroughput = int(re.findall("\d+", value)[0])
-        return ('dedicatedEbsThroughputIsUpTo', dedicatedEbsThroughputIsUpTo), ('dedicatedEbsThroughput', dedicatedEbsThroughput)
-    else:
-        pass
-
-def ecu(key, value):
-    if key == 'ecu':
-        if value == 'Variable':
-            return ('ecuIsVariable', True)
-        elif value == 'NA':
-            return ('ecuIsVariable', False)
-        else:
-            return ('ecuIsVariable', False), ('ecu', float(value)) 
-
-def instanceskuNormalizer(key, value):
-    if key == 'instancesku':
-        return ('instanceSKU', value)
-    else:
-        pass
-
-def maxThroughputvolumeNormalizer(key, value):
-    if key == 'maxThroughputvolume':
-        return ('maxThroughputVolume', value)
-    else:
-        pass
-
-def maxVolumeSizeNormalizer(key, value):
-    if key == 'maxVolumeSize':
-        max_volume_size = int(re.findall("\d+", value)[0])
-        return ('maxVolumeSize', max_volume_size)
-    else:
-        pass
-
-def memoryNormalizer(key, value):
-    if key == 'memory':
-        if value == 'NA':
-            pass
-        else:
-            try:
-                memory = float(re.findall("\d+\.\d+", value)[0])
-            except(IndexError):
-                try:
-                    memory = float(re.findall("\d+\,\d+", value)[0].replace(",", ""))
-                except(IndexError):
-                    memory = float(re.findall("\d+", value)[0])
-            return ('memory', memory)
-    else:
-        pass
-
-def normalizationSizeFactorNormalizer(key, value):
-    if key == 'normalizationSizeFactor':
-        if value == 'NA':
-            pass
-        else:
-            try:
-                normalization_size_factor = float(re.findall("\d+\.\d+", value)[0])
-            except(IndexError):
-                normalization_size_factor = float(re.findall("\d+", value)[0])
-            return ('normalizationSizeFactor', normalization_size_factor)
-    else:
-        pass
-
-def servicecodeNormalizer(key, value):
-    if key == 'servicecode':
-        return('serviceCode', value)
-    else:
-        pass
-
-def servicenameNormalizer(key, value):
-    if key == 'servicename':
-        return('serviceName', value)
-    else:
-        pass
-
-def storageNormalizer(key, value):
-    if key == 'storage':
-        if value == 'EBS only':
-            return ('storageIsEbsOnly', True)
-        elif value != 'NA':
-            storage_info = re.findall(r"(\d+)", value)
-            try:
-                storage_type = re.findall("\d+\s([^x]+)", value)[0]
-                return ('storageIsEbsOnly', False), ('storageCount', storage_info[0]), ('storageCapacity', storage_info[1]), ('storageType', storage_type)
-            except(IndexError):
-                return ('storageIsEbsOnly', False), ('storageCount', storage_info[0]), ('storageCapacity', storage_info[1]), ('storageType', 'HDD')
-        else:
-            pass
-    else:
-        pass
-
-def usagetypeNormalizer(key, value):
-    if key == 'usagetype':
-        return ('usageType', value)
-    else:
-        pass
-
-def spotPrice(key, value):
-    if key == 'SpotPrice':
-        return ('spotPrice', value)
-    else:
-        pass
-
-def timestamp(key, value):
-    if key == 'Timestamp':
-        return ('spotTimestamp', value)
-    else: 
-        pass
-
-def instanceType(key, value):
-    if key == 'InstanceType':
-        return ('spotInstanceType', value)
-    else:
-        pass
-
-def availabilityZone(key, value):
-    if key == 'AvailabilityZone':
-        return ('spotAvailabilityZone', value)
-    else:
-        pass
-
-
-def normalizeData(key, value):
-    switcher = {
-    'capacitystatus': capacityStatus(key, value),
-    'clockSpeed': clockSpeed(key, value),
-    'dedicatedEbsThroughput': dedicatedEbsThroughput(key, value),
-    'ecu': ecu(key, value),
-    'instancesku': instanceskuNormalizer(key, value),
-    'maxThroughputvolume': maxThroughputvolumeNormalizer(key, value),
-    'maxVolumeSize': maxVolumeSizeNormalizer(key, value),
-    'memory': memoryNormalizer(key, value),
-    'normalizationSizeFactor': normalizationSizeFactorNormalizer(key, value),
-    'servicecode': servicecodeNormalizer(key, value),
-    'servicename': servicenameNormalizer(key, value),
-    'storage': storageNormalizer(key, value),
-    'usagetype': usagetypeNormalizer(key, value),
-    'SpotPrice': spotPrice(key, value),
-    'Timestamp': timestamp(key, value),
-    'InstanceType': instanceType(key, value),
-    'AvailabilityZone': availabilityZone(key, value)
-    }
-    func = switcher.get(key, lambda: (key, value))
-
-    try:
-        return func()
-    except(TypeError):
-        return func
+logger = logging.getLogger('contrail.loader.aws_ec2')
 
 def getSpotData(d, keys):
     attributes = []
@@ -178,7 +17,14 @@ def getSpotData(d, keys):
         attributes.append(instance.keys())
     attributes = sorted(set(list(itertools.chain(*attributes))))
     spot_attributes = sorted(set(attributes) - set(list(set(attributes) & set(keys))))
-    attributes = keys+spot_attributes
+    qs = InstanceData.objects_in(db)
+    qs = qs.filter(instanceType = instance['instanceType'])
+    main = list(vars(qs[0]).items())[:70]
+    # print(main)
+    for i in qs:
+        if list(vars(i).items())[:70] != main:
+            print(set(list(vars(i).items())[:70]) - set(main))
+            print(set(main) - set(list(vars(i).items())[:70]))
     for instance in d:
         values = []
         for i in attributes:
@@ -199,3 +45,36 @@ def getSpotData(d, keys):
                 pass
         data.append(values)
     return data
+
+@register_loader(provider=AmazonEC2Spot)
+class AmazonEC2SpotLoader(BaseLoader):
+    @classmethod
+    def load(cls, filename: str, json: dict):
+        logger.info("Loading {} into ClickHouse.".format(filename.split('/')[-1]))
+        product_attributes = list(vars(InstanceData)['_fields'].keys())[:70]
+        spot_data = getSpotData(json, product_attributes)
+        # for k in spot_data:
+        #     print(k)
+        # print(spot_data)
+        # data = {}
+        # lst = []
+        # for key, value in combineddata.items():
+        #     for k, v in reserved_data.items():
+        #         if k.startswith(key):
+        #             lst.append(key)
+        #             try:
+        #                 data[k].append(value + v)
+        #             except(KeyError):
+        #                 data[k] = value + v
+        #     if key not in set(lst):
+        #         try:
+        #             data[key].append(value)
+        #         except(KeyError):
+        #             data[key] = value
+
+        # items = list(data.values())  # + spot_data
+        # for item in items:
+        #     instance = InstanceData()
+        #     for i in item:
+        #         setattr(instance, i[0], i[1])
+        #     db.insert([instance])
