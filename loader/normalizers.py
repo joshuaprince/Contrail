@@ -122,27 +122,9 @@ def usagetypeNormalizer(key, value):
     else:
         pass
 
-def onDemandUnit(key, value):
-    if key == 'onDemandUnit':
-        return ('onDemandPriceUnit', value)
-    else:
-        pass
-
-def onDemandUSD(key, value):
-    if key == 'onDemandUSD':
-        return ('onDemandPricePerUnit', value)
-    else:
-        pass
-
-def reservedUnit(key, value):
-    if key == 'reservedUnit':
-        return ('reservedPriceUnit', value)
-    else:
-        pass
-
-def reservedUSD(key, value):
-    if key == 'reservedUSD':
-        return ('reservedPricePerUnit', value)
+def USDnormalizer(key, value):
+    if key == 'USD':
+        return ('priceUnit', value)
     else:
         pass
 
@@ -161,10 +143,7 @@ def normalizeData(key, value):
     'servicename': servicenameNormalizer(key, value),
     'storage': storageNormalizer(key, value),
     'usagetype': usagetypeNormalizer(key, value),
-    'onDemandUnit': onDemandUnit(key, value),
-    'onDemandUSD': onDemandUSD(key, value),
-    'reservedUnit': reservedUnit(key, value),
-    'reservedUSD': reservedUSD(key, value)
+    'USD': USDnormalizer(key, value)
     }
     func = switcher.get(key, lambda: (key, str(value)))
     try:
@@ -177,30 +156,3 @@ def normalizeData(key, value):
             pass
         else:
             return func
-
-def getData(d, mylist):
-    data = {}
-    for sku, details in d.items():
-        values = []
-        a = d.get(sku)
-        for i in mylist:
-            try:
-                try:
-                    if normalizeData(i, a[i]) == None:
-                        pass
-                    else:
-                        key, value = normalizeData(i, a[i])
-                except(ValueError):
-                    values.extend(normalizeData(i, a[i]))
-                    pass
-                if isinstance(value, tuple):
-                    values.extend((key, value))
-                else:
-                    values.append((key, value))
-            except(KeyError, AttributeError):
-                pass
-        try:
-            data[sku].append(values)
-        except KeyError:
-            data[sku] = values
-    return data
