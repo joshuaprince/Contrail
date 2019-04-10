@@ -52,6 +52,9 @@ class BaseProvider(ABC):
 
 
 REGISTERED_PROVIDER_CLASSES: Set[Type[BaseProvider]] = set()
+"""
+A set consisting of all classes that have been registered with `@register_provider`.
+"""
 
 
 def register_provider(cls: Type[BaseProvider]):
