@@ -18,6 +18,23 @@ class HomeView(TemplateView):
         return context
 
 
+class InstanceView(TemplateView):
+    """
+    Render Home page
+    """
+    template_name = "instance.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        id = kwargs['id']
+        context['id'] = id
+
+
+        return context
+
+
+
+
 def priceview(request):
     """
     Render Price page

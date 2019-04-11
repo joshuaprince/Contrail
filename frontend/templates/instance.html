@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+{% endblock %}
+
+{% block content %}
+<br><br><br><br><br>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h1 style="text-align: center;">Instance {{ id }}</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <div class="container">
+
+        <br><br><br>
+        <table id="instances" class="table table-striped table-hover table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Instance</th>
+                    <td>{{ instance.instance_type }}</td>
+                </tr>
+            </thead>
+            <tbody>
+
+              <tr>
+                <th>Region</th>
+                <td>{{ instance.region }}</td>
+              </tr>
+
+              <tr>
+                <th>Operating System</th>
+                <td>{{ instance.operating_system }}</td>
+              </tr>
+
+              <tr>
+                <th>VCPUs</th>
+                <td>{{ instance.vcpus }}</td>
+              </tr>
+
+              <tr>
+                <th>Memory</th>
+                <td>{{ instance.memory }}</td>
+              </tr>
+
+            </tbody>
+        </table>
+
+        <br><h2 style="text-align:center;">Pricing</h2>
+
+        <table id="instances" class="table table-striped table-hover table-bordered" style="width:100%">
+          <tbody>
+
+            <tr>
+              <th>Price Type</th>
+              <td>{{ instance.price_type }}</td>
+            </tr>
+
+            <tr>
+              <th>Price</th>
+              <td>{{ instance.memory }}</td>
+            </tr>
+
+            <tr>
+              <th>Price Unit</th>
+              <td>{{ instance.price_unit }}</td>
+            </tr>
+
+          </tbody>
+        </table>
+
+      <div class="line"></div>
+
+      <h2 style="text-align:center;">Price History</h2>
+
+      <canvas id="myChart"></canvas>
+</div>
+
+
+{% endblock %}
+
+
+{% block script %}
+
+<!-- BOOTSTRAP TABLE -->
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#instances').DataTable( {
+        // "paging":   false,
+        "ordering": true,
+        // "info":     false,
+        "columns": [
+            {"type": "string"},
+            {"type": "string"},
+            {"type": "string"},
+            {"type": "num"},
+            {"type": "num"},
+            {"type": "string"},
+            {"type": "num"},
+            {"type": "string"},
+        ]
+    } );
+  } );
+</script>
+
+<!-- CHART.JS -->
+<script type="text/javascript">
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var chart = new Chart(ctx, {
+      // The type of chart we want to create
+      type: 'line',
+
+      // The data for our dataset
+      data: {
+          labels: ["January", "February", "March", "April", "May", "June", "July"],
+          datasets: [{
+              label: "Sample Instance Chart",
+              backgroundColor: 'rgb(255, 99, 132)',
+              borderColor: 'rgb(255, 99, 132)',
+              data: [0, 10, 5, 2, 20, 30, 45],
+          }]
+      },
+
+      // Configuration options go here
+      options: {}
+  });
+</script>
+
+{% endblock %}

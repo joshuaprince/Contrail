@@ -1,10 +1,38 @@
 /* For custom css */
-
-input[type="checkbox"]
-{
-    vertical-align:middle;
+#instances_info {
+  padding-bottom: 20px;
 }
-label,input{
-    display: inline-block;
-    vertical-align: middle;
+
+a.paginate_button {
+  /* background-color: Crimson;
+  border-radius: 5px; */
+  /* color: white; */
+  padding: .5em;
+  text-decoration: none;
+}
+
+
+a.paginate_button:focus,
+a.paginate_button:hover {
+  cursor: pointer;
+
+}
+
+#instances_previous,
+#instances_next {
+  background-color: #71aaa7;
+  border-radius: 5px;
+  color: white;
+  padding: .5em;
+  text-decoration: none;
+}
+
+
+#instances_previous:focus,
+#instances_previous:hover,
+#instances_next:focus,
+#instances_next:hover, {
+  background-color: FireBrick;
+  color: White;
+  cursor: pointer;
 }
