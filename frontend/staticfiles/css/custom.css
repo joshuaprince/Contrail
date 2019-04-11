@@ -1,12 +1,23 @@
 /* For custom css */
-#instances_info {
+
+.page-link {
+  color: #71aaa7;
+}
+
+.page-link:hover {
+  color: #71aaa7;
+}
+
+.page-item.active .page-link {
+  background-color: #71aaa7;
+  border-color: #71aaa7;
+}
+
+/* #instances_info {
   padding-bottom: 20px;
 }
 
 a.paginate_button {
-  /* background-color: Crimson;
-  border-radius: 5px; */
-  /* color: white; */
   padding: .5em;
   text-decoration: none;
 }
@@ -35,4 +46,4 @@ a.paginate_button:hover {
   background-color: FireBrick;
   color: White;
   cursor: pointer;
-}
+} */
