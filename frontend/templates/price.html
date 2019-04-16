@@ -3,6 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block css %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css"></script>
 <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 {% endblock %}
 
@@ -26,6 +27,25 @@
             <span>Set Attributes</span>
         </button>
         <br>
+
+
+
+
+
+
+        <div class="wrapper" style="padding:20px;">
+        <div class="range-slider">
+            <input type="text" class="js-range-slider" value="" />
+        </div>
+        <br><br><br>
+        <div class="extra-controls form-inline">
+          <div class="form-group">
+            <input type="text" class="js-input-from form-control" value="0" />
+            <input type="text" class="js-input-to form-control" value="0" />
+          </div>
+        </div>
+        </div>
+
 
         <nav id="subnav" class="navbar navbar-expand-lg navbar-light bg-light">
               <ul id="subnav" class="navbar-nav">
@@ -104,6 +124,7 @@
 
 
 {% block script %}
+
 <!-- SIDE BAR -->
 <script type="text/javascript">
     $(document).ready(function () {
@@ -118,6 +139,12 @@
         });
     });
 </script>
+
+<!-- SLIDER -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.3/jquery.min.js" ></script> -->
+<script src="{% static 'js/slider.js' %}" ></script>
+
+
 
 <!-- BOOTSTRAP TABLE -->
 <script type="text/javascript">
@@ -140,6 +167,9 @@
   } );
 
 </script>
+
+
+
 
 
 {% endblock %}
