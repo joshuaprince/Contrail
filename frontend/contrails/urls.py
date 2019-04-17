@@ -25,8 +25,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomeView.as_view(), name='home'),
     path('price/', priceview, name='price'),
-    path('compare/', compareview, name='compare'),
     url(r'^instance/(?P<id>\w+)/$', InstanceView.as_view(), name='instance'),
+    path('compare/', compareview, name='compare'),
     path('api/', include('frontend.api.urls')),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -34,7 +34,6 @@ class InstanceView(TemplateView):
 
 
 
-
 def priceview(request):
     """
     Render Price page
