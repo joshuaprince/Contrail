@@ -2,6 +2,7 @@ botocore==1.12.102
 certifi==2018.11.29
 chardet==3.0.4
 clickhouse-driver==0.0.18
+copyingmock==0.2
 docutils==0.14
 idna==2.8
 infi.clickhouse-orm==1.0.4

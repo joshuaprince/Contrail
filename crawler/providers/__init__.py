@@ -4,9 +4,11 @@ import datetime
 import importlib
 import os
 from abc import abstractmethod, ABC
-from typing import Set, Type, List
+from typing import Set, Type, Iterable, Dict
 
-from crawler.s3upload import upload_file_from_url, upload_file_from_variable
+from crawler.s3upload import S3Client
+
+s3client = S3Client()
 
 
 class BaseProvider(ABC):
@@ -17,7 +19,7 @@ class BaseProvider(ABC):
 
     @classmethod
     @abstractmethod
-    def create_providers(cls) -> List[BaseProvider]:
+    def create_providers(cls) -> Iterable[BaseProvider]:
         """
         Create a list of Provider objects for this class, each of which are crawled separately.
         If multiple servers or regions are being crawled, each should have a single Provider object.
@@ -40,15 +42,19 @@ class BaseProvider(ABC):
         """
         pass
 
-    def upload_provider_data(self, region: str, url: str = None, data=None):
-        if url is not None:
-            return upload_file_from_url(url, self.provider_name() + "/" + region + "/" +
-                                        datetime.datetime.utcnow().isoformat() + ".json")
-        if data is not None:
-            return upload_file_from_variable(data, self.provider_name() + "/" + region + "/" +
+    def store_provider_url(self, region: str, url: str):
+        """
+        Store raw data directly from a web URL.
+        """
+        return s3client.upload_file_from_url(url, self.provider_name() + "/" + region + "/" +
                                              datetime.datetime.utcnow().isoformat() + ".json")
 
-        raise ValueError("Must specify either a URL or data dictionary to upload.")
+    def store_provider_data(self, region: str, data):
+        """
+        Store data formatted as a Python object.
+        """
+        return s3client.upload_file_from_variable(data, self.provider_name() + "/" + region + "/" +
+                                                  datetime.datetime.utcnow().isoformat() + ".json")
 
 
 REGISTERED_PROVIDER_CLASSES: Set[Type[BaseProvider]] = set()

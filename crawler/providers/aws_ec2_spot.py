@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import datetime
 import json
 import logging
 import urllib.request
+from typing import List
 
 import boto3
 
@@ -47,8 +50,7 @@ class AmazonEC2Spot(BaseProvider):
         """Token given to AWS to continue building instance_list."""
 
     @classmethod
-    def create_providers(cls):
-        cls.load_instance_type_details()
+    def create_providers(cls) -> List[__class__]:
         return [AmazonEC2Spot(rgn) for rgn in _session.get_available_regions('ec2')]
 
     def crawl(self) -> datetime.timedelta:
@@ -57,9 +59,13 @@ class AmazonEC2Spot(BaseProvider):
 
         If there are no more instances in the current batch, finalize and upload the current `instance_list` instead.
         """
+
+        if not self.__class__.instance_types:
+            self.__class__.instance_types = self.__class__.get_instance_type_details()
+
         if self.next_token == '' and len(self.instance_list) > 0:
             self.logger.info("Got all instances in this batch. Finalizing batch for upload.")
-            self.upload_provider_data(region=self.region, data=self.instance_list)
+            self.store_provider_data(region=self.region, data=self.instance_list)
             self.instance_list.clear()
             return datetime.timedelta(minutes=10)
 
@@ -89,9 +95,9 @@ class AmazonEC2Spot(BaseProvider):
         return datetime.timedelta(seconds=3)
 
     @classmethod
-    def load_instance_type_details(cls):
+    def get_instance_type_details(cls) -> dict:
         """
-        Load a dictionary mapping instance type names to instance details such as vCPUs, RAM, etc.
+        Load a dictionary that maps instance type names (e.g. 'm2.large') to instance details such as vCPUs, RAM, etc.
         """
         region_request = urllib.request.urlopen(URL_REGION_INDEX)
         region_data = region_request.read().decode('utf-8')
@@ -105,7 +111,7 @@ class AmazonEC2Spot(BaseProvider):
         pricelist_data = pricelist_request.read().decode('utf-8')
         pricelist_json = json.loads(pricelist_data)
 
-        cls.instance_types.clear()
+        instance_types = {}
 
         for _sku, data in pricelist_json['products'].items():
             instance_type = data['attributes'].get('instanceType')
@@ -113,20 +119,22 @@ class AmazonEC2Spot(BaseProvider):
             if instance_type is None:
                 continue
 
-            if cls.instance_types.get(instance_type) is None:
+            if instance_types.get(instance_type) is None:
                 # Remove data that does not apply to all instances of this type
                 for k in ['location', 'locationType']:
                     data['attributes'].pop(k)
 
-                cls.instance_types[instance_type] = data['attributes']
+                instance_types[instance_type] = data['attributes']
             else:
                 for attribute, value in data['attributes'].items():
-                    existing_attr = cls.instance_types[instance_type].get(attribute)
+                    existing_attr = instance_types[instance_type].get(attribute)
 
                     # Only collect instance type details that are universal across all instances with that type.
                     # Therefore, if a detail on one instance mismatches an earlier instance's detail, remove it --
                     # the detail is not common to that instance type.
                     if existing_attr is not None and existing_attr != value:
-                        cls.instance_types[instance_type].pop(attribute)
+                        instance_types[instance_type].pop(attribute)
 
         logger_all_regions.info("Loaded instance type information.")
+
+        return instance_types
