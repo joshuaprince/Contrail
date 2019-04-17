@@ -36,3 +36,11 @@ a.paginate_button:hover {
   color: White;
   cursor: pointer;
 }
+
+#instances tbody tr:hover {
+  background-color: #c7d0cf;
+}
+
+#instances .selected {
+  background-color: #a1ccc9;
+}
