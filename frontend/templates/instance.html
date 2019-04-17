@@ -1,0 +1,313 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+{% endblock %}
+
+{% block content %}
+<br><br><br><br><br>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h1 style="text-align: center;">Instance {{ id }}</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <div class="container">
+
+        <br><br><br>
+        <table id="instances" class="table table-striped table-hover table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Instance</th>
+                    <td>{{ instance.instance_type }}</td>
+                </tr>
+            </thead>
+            <tbody>
+
+              <tr>
+                <th>Region</th>
+                <td>{{ instance.region }}</td>
+              </tr>
+
+              <tr>
+                <th>Operating System</th>
+                <td>{{ instance.operating_system }}</td>
+              </tr>
+
+              <tr>
+                <th>VCPUs</th>
+                <td>{{ instance.vcpus }}</td>
+              </tr>
+
+              <tr>
+                <th>Memory</th>
+                <td>{{ instance.memory }}</td>
+              </tr>
+
+            </tbody>
+        </table>
+
+        <br><h2 style="text-align:center;">Pricing</h2>
+
+        <table id="instances" class="table table-striped table-hover table-bordered" style="width:100%">
+          <tbody>
+
+            <tr>
+              <th>Price Type</th>
+              <td>{{ instance.price_type }}</td>
+            </tr>
+
+            <tr>
+              <th>Price</th>
+              <td>{{ instance.memory }}</td>
+            </tr>
+
+            <tr>
+              <th>Price Unit</th>
+              <td>{{ instance.price_unit }}</td>
+            </tr>
+
+          </tbody>
+        </table>
+
+      <div class="line"></div>
+
+      <h2 style="text-align:center;">Price History</h2>
+
+      <canvas id="myChart"></canvas>
+
+      <canvas id="canvas" style="display: block; width: 621px; height: 310px;" width="621" height="310" class="chartjs-render-monitor"></canvas>
+</div>
+
+
+{% endblock %}
+
+
+{% block script %}
+
+<!-- BOOTSTRAP TABLE -->
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#instances').DataTable( {
+        // "paging":   false,
+        "ordering": true,
+        // "info":     false,
+        "columns": [
+            {"type": "string"},
+            {"type": "string"},
+            {"type": "string"},
+            {"type": "num"},
+            {"type": "num"},
+            {"type": "string"},
+            {"type": "num"},
+            {"type": "string"},
+        ]
+    } );
+  } );
+</script>
+
+<!-- CHART.JS -->
+<script type="text/javascript">
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var chart = new Chart(ctx, {
+      // The type of chart we want to create
+      type: 'line',
+
+      // The data for our dataset
+      data: {
+          labels: ["January", "February", "March", "April", "May", "June", "July"],
+          datasets: [{
+              label: "Sample Instance Chart",
+              backgroundColor: 'rgb(255, 99, 132)',
+              borderColor: 'rgb(255, 99, 132)',
+              data: [0, 10, 5, 2, 20, 30, 45],
+          }]
+      },
+
+      // Configuration options go here
+      options: {}
+  });
+</script>
+
+
+<script>
+  // https://www.chartjs.org/samples/latest/scales/time/line.html
+		var timeFormat = 'MM/DD/YYYY HH:mm';
+
+		function newDate(days) {
+			return moment().add(days, 'd').toDate();
+		}
+
+		function newDateString(days) {
+			return moment().add(days, 'd').format(timeFormat);
+		}
+
+		var color = Chart.helpers.color;
+		var config = {
+			type: 'line',
+			data: {
+				labels: [ // Date Objects
+					newDate(0),
+					newDate(1),
+					newDate(2),
+					newDate(3),
+					newDate(4),
+					newDate(5),
+					newDate(6)
+				],
+				datasets: [{
+					label: 'My First dataset',
+					backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+					borderColor: window.chartColors.red,
+					fill: false,
+					data: [
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor()
+					],
+				}, {
+					label: 'My Second dataset',
+					backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+					borderColor: window.chartColors.blue,
+					fill: false,
+					data: [
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor()
+					],
+				}, {
+					label: 'Dataset with point data',
+					backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
+					borderColor: window.chartColors.green,
+					fill: false,
+					data: [{
+						x: newDateString(0),
+						y: randomScalingFactor()
+					}, {
+						x: newDateString(5),
+						y: randomScalingFactor()
+					}, {
+						x: newDateString(7),
+						y: randomScalingFactor()
+					}, {
+						x: newDateString(15),
+						y: randomScalingFactor()
+					}],
+				}]
+			},
+			options: {
+				title: {
+					text: 'Chart.js Time Scale'
+				},
+				scales: {
+					xAxes: [{
+						type: 'time',
+						time: {
+							parser: timeFormat,
+							// round: 'day'
+							tooltipFormat: 'll HH:mm'
+						},
+						scaleLabel: {
+							display: true,
+							labelString: 'Date'
+						}
+					}],
+					yAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'value'
+						}
+					}]
+				},
+			}
+		};
+
+		window.onload = function() {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myLine = new Chart(ctx, config);
+
+		};
+
+		document.getElementById('randomizeData').addEventListener('click', function() {
+			config.data.datasets.forEach(function(dataset) {
+				dataset.data.forEach(function(dataObj, j) {
+					if (typeof dataObj === 'object') {
+						dataObj.y = randomScalingFactor();
+					} else {
+						dataset.data[j] = randomScalingFactor();
+					}
+				});
+			});
+
+			window.myLine.update();
+		});
+
+		var colorNames = Object.keys(window.chartColors);
+		document.getElementById('addDataset').addEventListener('click', function() {
+			var colorName = colorNames[config.data.datasets.length % colorNames.length];
+			var newColor = window.chartColors[colorName];
+			var newDataset = {
+				label: 'Dataset ' + config.data.datasets.length,
+				borderColor: newColor,
+				backgroundColor: color(newColor).alpha(0.5).rgbString(),
+				data: [],
+			};
+
+			for (var index = 0; index < config.data.labels.length; ++index) {
+				newDataset.data.push(randomScalingFactor());
+			}
+
+			config.data.datasets.push(newDataset);
+			window.myLine.update();
+		});
+
+		document.getElementById('addData').addEventListener('click', function() {
+			if (config.data.datasets.length > 0) {
+				config.data.labels.push(newDate(config.data.labels.length));
+
+				for (var index = 0; index < config.data.datasets.length; ++index) {
+					if (typeof config.data.datasets[index].data[0] === 'object') {
+						config.data.datasets[index].data.push({
+							x: newDate(config.data.datasets[index].data.length),
+							y: randomScalingFactor(),
+						});
+					} else {
+						config.data.datasets[index].data.push(randomScalingFactor());
+					}
+				}
+
+				window.myLine.update();
+			}
+		});
+
+		document.getElementById('removeDataset').addEventListener('click', function() {
+			config.data.datasets.splice(0, 1);
+			window.myLine.update();
+		});
+
+		document.getElementById('removeData').addEventListener('click', function() {
+			config.data.labels.splice(-1, 1); // remove the label first
+
+			config.data.datasets.forEach(function(dataset) {
+				dataset.data.pop();
+			});
+
+			window.myLine.update();
+		});
+	</script>
+
+{% endblock %}

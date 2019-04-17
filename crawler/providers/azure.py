@@ -1,6 +1,10 @@
+from __future__ import annotations
+
 import datetime
 import json
 import logging
+from typing import List
+
 import requests
 import time
 from urllib.parse import urlencode
@@ -33,13 +37,13 @@ class Azure(BaseProvider):
         self._access_token_expire = 0
 
     @classmethod
-    def create_providers(cls):
+    def create_providers(cls) -> List[__class__]:
         return [cls()]
 
     def crawl(self) -> datetime.timedelta:
         ratecard = self.request_ratecard()
 
-        self.upload_provider_data(region='US', data=ratecard)
+        self.store_provider_data(region='US', data=ratecard)
 
         return datetime.timedelta(minutes=60)
 
@@ -81,7 +85,11 @@ class Azure(BaseProvider):
         self._access_token = resp_json['access_token']
         self._access_token_expire = int(resp_json['expires_on'])
 
-    def access_token(self):
+    def access_token(self) -> str:
+        """
+        Get a current Access token, renewing it if it is due to expire soon.
+        :return:
+        """
         # Renew access token 1 minute before the current one expires
         if self._access_token_expire < time.time() + 60:
             self._renew_access_token()

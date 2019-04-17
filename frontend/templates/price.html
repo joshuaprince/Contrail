@@ -3,6 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block css %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css"></script>
 <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 {% endblock %}
 
@@ -14,6 +15,17 @@
         <form method="POST">
           {% csrf_token %}
           {{ form | crispy }}
+
+          <div class="range-slider">
+              <input type="text" class="js-range-slider" value="" /> <br>
+          </div>
+
+          <div class="extra-controls form-inline">
+            <div class="form-group">
+              <input type="text" class="js-input-from form-control" value="0" style="width: 80px; margin-right: 30px;" />
+              <input type="text" class="js-input-to form-control" value="0" style="width: 80px;" />
+            </div>
+          </div><br>
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </nav>
@@ -41,64 +53,57 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Spot</a>
                     </li>
-
               </ul>
         </nav>
 
         <table id="instances" class="table table-striped table-bordered" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Instance</th>
-                        <!-- <th>Provider</th> -->
-                        <th>Region</th>
-                        <th>Operating System</th>
-                        <th>VCPUs</th>
-                        <th>Memory</th>
-                        <!-- <th>ECU</th> -->
-                        <th>Price Type</th>
-                        <th>Price</th>
-                        <th>Price Unit</th>
-                    </tr>
-                </thead>
-                <tbody>
+          <thead>
+              <tr>
+                  <th>Instance</th>
+                  <!-- <th>Provider</th> -->
+                  <th>Region</th>
+                  <th>Operating System</th>
+                  <th>VCPUs</th>
+                  <th>Memory</th>
+                  <!-- <th>ECU</th> -->
+                  <th>Price Type</th>
+                  <th>Price</th>
+                  <th>Price Unit</th>
+              </tr>
+          </thead>
+          <tbody>
 
-                {% for instance in instances %}
-                  <tr>
-                    <td>{{ instance.instance_type }}</td>
-                    <!-- <td>{{ instance.provider }}</td> -->
-                    <td>{{ instance.region }}</td>
-                    <td>{{ instance.operating_system }}</td>
-                    <td>{{ instance.vcpus }}</td>
-                    <td>{{ instance.memory }}</td>
-                    <!-- <td>{{ instance.ecu }}</td> -->
-                    <td>{% if instance.price_type == 'on_demand' %}on demand{% endif %}</td>
-                    <td>${{ instance.price | floatformat:3 }}</td>
-                    <td>{{ instance.price_unit }}</td>
-                  </tr>
-                  {% endfor %}
+          {% for instance in instances %}
+            <tr>
+              <td><a href="{% url 'instance' id=1 %}">{{ instance.instance_type }}</a></td>
+              <!-- <td>{{ instance.provider }}</td> -->
+              <td>{{ instance.region }}</td>
+              <td>{{ instance.operating_system }}</td>
+              <td>{{ instance.vcpus }}</td>
+              <td>{{ instance.memory }}</td>
+              <!-- <td>{{ instance.ecu }}</td> -->
+              <td>{% if instance.price_type == 'on_demand' %}on demand{% endif %}</td>
+              <td>${{ instance.price | floatformat:3 }}</td>
+              <td>{{ instance.price_unit }}</td>
+            </tr>
+            {% endfor %}
 
-                </tbody>
-                <tfoot>
-                    <tr>
-                      <th>Instance</th>
-                      <!-- <th>Provider</th> -->
-                      <th>Region</th>
-                      <th>Operating System</th>
-                      <th>VCPUs</th>
-                      <th>Memory</th>
-                      <!-- <th>ECU</th> -->
-                      <th>Price Type</th>
-                      <th>Price</th>
-                      <th>Price Unit</th>
-                    </tr>
-                </tfoot>
-            </table>
-
-
-        <div class="line"></div>
-
-        <canvas id="myChart"></canvas>
-
+          </tbody>
+          <tfoot>
+              <tr>
+                <th>Instance</th>
+                <!-- <th>Provider</th> -->
+                <th>Region</th>
+                <th>Operating System</th>
+                <th>VCPUs</th>
+                <th>Memory</th>
+                <!-- <th>ECU</th> -->
+                <th>Price Type</th>
+                <th>Price</th>
+                <th>Price Unit</th>
+              </tr>
+          </tfoot>
+      </table>
     </div>
 
 </div>
@@ -109,6 +114,7 @@
 
 
 {% block script %}
+
 <!-- SIDE BAR -->
 <script type="text/javascript">
     $(document).ready(function () {
@@ -123,6 +129,13 @@
         });
     });
 </script>
+
+<!-- SLIDER -->
+<!-- https://codepen.io/anon/pen/rbpqME -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.3/jquery.min.js" ></script> -->
+<script src="{% static 'js/slider.js' %}" ></script>
+
+
 
 <!-- BOOTSTRAP TABLE -->
 <script type="text/javascript">
@@ -144,33 +157,10 @@
     } );
   } );
 
-  // $(window).load(function() {
-  // })
-
-
 </script>
 
-<!-- CHART.JS -->
-<script type="text/javascript">
-  var ctx = document.getElementById('myChart').getContext('2d');
-  var chart = new Chart(ctx, {
-      // The type of chart we want to create
-      type: 'line',
 
-      // The data for our dataset
-      data: {
-          labels: ["January", "February", "March", "April", "May", "June", "July"],
-          datasets: [{
-              label: "Sample Instance Chart",
-              backgroundColor: 'rgb(255, 99, 132)',
-              borderColor: 'rgb(255, 99, 132)',
-              data: [0, 10, 5, 2, 20, 30, 45],
-          }]
-      },
 
-      // Configuration options go here
-      options: {}
-  });
-</script>
+
 
 {% endblock %}

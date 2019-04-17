@@ -12,6 +12,11 @@ providers: List[BaseProvider] = []
 
 
 async def _crawl_loop(provider: BaseProvider):
+    """
+    Endlessly crawls over a single provider, yielding between successive crawls.
+    :param provider:
+    :return:
+    """
     while True:
         # noinspection PyBroadException
         try:
@@ -34,12 +39,18 @@ async def _dummy_loop():
 
 
 async def _main():
+    """
+    Main async loop for the crawler.
+    """
     provider_tasks = [_crawl_loop(p) for p in providers]
     provider_tasks.append(_dummy_loop())
     await asyncio.gather(*provider_tasks)
 
 
 def create_providers():
+    """
+    Imports all providers in the crawler/providers directory, and loads them into `providers`
+    """
     import_provider_directory()
     for provider_class in REGISTERED_PROVIDER_CLASSES:
         providers.extend(provider_class.create_providers())
