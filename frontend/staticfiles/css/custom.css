@@ -331,6 +331,9 @@ a.paginate_button:hover {
 <<<<<<< HEAD
 }
 
+
+=======
+} */
 #instances tbody tr:hover {
   background-color: #c7d0cf;
 }
@@ -338,6 +341,3 @@ a.paginate_button:hover {
 #instances .selected {
   background-color: #a1ccc9;
 }
-=======
-} */
->>>>>>> b5d623dda66f9708b3936004ab86de09e14bdead
