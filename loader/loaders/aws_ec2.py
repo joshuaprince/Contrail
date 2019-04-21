@@ -6,31 +6,27 @@ import re
 from crawler.providers.aws_ec2 import AmazonEC2
 from loader.warehouse import InstanceData, db
 from loader.loaders import BaseLoader, register_loader
-from loader.normalizers import getData
+from loader.normalizers import normalizeData
 
 logger = logging.getLogger('contrail.loader.aws_ec2')
 
 
 def nested_dict_iter(nested):
+    lower = lambda s: s[:1].lower() + s[1:] if s else ''
     for key, value in nested.items():
         if isinstance(value, collections.abc.Mapping):
             yield from nested_dict_iter(value)
         else:
-            yield key, value
+            yield lower(key), value
 
 def reserved_nested_dict_iter(nested):
+    lower = lambda s: s[:1].lower() + s[1:] if s else ''
     for key, value in nested.items():
-        if isinstance(value, collections.abc.Mapping):
-            yield from reserved_nested_dict_iter(value)
-        else:
-            yield 'reserved' + re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), key, 1), value
-
-def on_demand_nested_dict_iter(nested):
-    for key, value in nested.items():
-        if isinstance(value, collections.abc.Mapping):
-            yield from on_demand_nested_dict_iter(value)
-        else:
-            yield 'onDemand' + re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), key, 1), value
+        if key != 'priceDimensions':
+            if isinstance(value, collections.abc.Mapping):
+                yield from nested_dict_iter(value)
+            else:
+                yield lower(key), value
 
 def getAllAttributes(d):
     product_dict = {}
@@ -42,29 +38,45 @@ def getAllAttributes(d):
     for sku, product in d['products'].items():
         a = d['terms']['OnDemand'].get(sku)
         b = d['terms']['Reserved'].get(sku)
+
         try:
             product_attributes = dict(nested_dict_iter(product))
             product_attributes_list = list(nested_dict_iter(product))
         except(KeyError, AttributeError):
             product_attributes = {}
             product_attributes_list = []
+
         try:
-            on_demand_data = dict(on_demand_nested_dict_iter(a))
-            on_demand_data_list = list(on_demand_nested_dict_iter(a))
+            on_demand_data = dict(nested_dict_iter(a))
+            on_demand_data_list = list(nested_dict_iter(a))
         except(KeyError, AttributeError):
             on_demand_data = {}
             on_demand_data_list = []
+        
         try:
-            reserved_data_list = list(reserved_nested_dict_iter(b))
             for key, value in b.items():
-                reserved_data = dict(reserved_nested_dict_iter(value))
-                try:
-                    reserved_dict[key].append(reserved_data)
-                except(KeyError, AttributeError):
-                    reserved_dict[key] = reserved_data
+                reserved_price_dimensions = {}
+                offer_info = dict(reserved_nested_dict_iter(value))
+                for i, j in value.items():
+                    if i == 'priceDimensions':
+                        reserved_price_dimensions = {}
+                        for x in list(nested_dict_iter(j)):
+                            if x[0] == 'unit' or x[0] == 'uSD' or x[0] == 'beginRange' or x[0] == 'endRange':                         
+                                pd_key = x[0]
+                                pd_val = x[1]
+                                if 'unit' in reserved_price_dimensions and reserved_price_dimensions['unit'] == 'Quantity' and pd_key == 'uSD':
+                                    reserved_price_dimensions['priceUpfront'] = pd_val
+                                elif 'unit' in reserved_price_dimensions and reserved_price_dimensions['unit'] == 'Hrs' and pd_key == 'uSD':
+                                    reserved_price_dimensions['pricePerHour'] = pd_val
+                                else:
+                                    reserved_price_dimensions[pd_key] = pd_val
+                    if reserved_price_dimensions:
+                        reserved_dict[key] = {**reserved_price_dimensions, **offer_info}
+            reserved_data_list = list(nested_dict_iter(b)) + [('priceUpfront', ''), ('pricePerHour', '')]
             reserved_keys.append([i[0] for i in reserved_data_list])
         except(KeyError, AttributeError):
             reserved_data = {}
+
         product_keys.append([i[0] for i in product_attributes_list])
         on_demand_keys.append([i[0] for i in on_demand_data_list])
         try:
@@ -76,36 +88,52 @@ def getAllAttributes(d):
     product_keys = sorted(set(list(itertools.chain(*product_keys))))
     on_demand_keys = sorted(set(list(itertools.chain(*on_demand_keys))))
     reserved_keys = sorted(set(list(itertools.chain(*reserved_keys))))
+
     return product_dict, on_demand_dict, reserved_dict, product_keys, on_demand_keys, reserved_keys
 
+def getData(d, mylist):
+    data = {}
+    for sku, details in d.items():
+        values = []
+        a = d.get(sku)
+        for i in mylist:
+            try:
+                try:
+                    if normalizeData(i, a[i]) == None:
+                        pass
+                    else:
+                        key, value = normalizeData(i, a[i])
+                except(ValueError):
+                    values.extend(normalizeData(i, a[i]))
+                    pass
+                if isinstance(value, tuple):
+                    values.extend((key, value))
+                else:
+                    values.append((key, value))
+            except(KeyError, AttributeError):
+                pass
+        try:
+            data[sku].append(values)
+        except KeyError:
+            data[sku] = values
+    return data
 
 @register_loader(provider=AmazonEC2)
 class AmazonEC2Loader(BaseLoader):
     @classmethod
-    def load(cls, filename: str, json: dict):
+    def load(cls, filename: str, json: dict, last_modified: str):
         logger.info("Loading {} into ClickHouse.".format(filename.split('/')[-1]))
+        region = "{}".format(filename.split('/')[1]).replace('-', "")
+        k, v = normalizeData('region', region)
         product_dict, on_demand_dict, reserved_dict, product_keys, on_demand_keys, reserved_keys = getAllAttributes(json)
         product_attribute_data = getData(product_dict, product_keys)
         on_demand_data = getData(on_demand_dict, on_demand_keys)
         reserved_data = getData(reserved_dict, reserved_keys)
-        combineddata = {key: on_demand_data[key] + value for key, value in product_attribute_data.items()}
-        data = {}
-        lst = []
-        for key, value in combineddata.items():
-            for k, v in reserved_data.items():
-                if k.startswith(key):
-                    lst.append(key)
-                    try:
-                        data[k].append(value + v)
-                    except(KeyError):
-                        data[k] = value + v
-            if key not in set(lst):
-                try:
-                    data[key].append(value)
-                except(KeyError):
-                    data[key] = value
-
-        items = list(data.values())  # + spot_data
+        for key, value in on_demand_data.items():
+            on_demand_data[key] = value + product_attribute_data[key] + [('priceType', 'On Demand'), ('lastModified', last_modified), (k, v)]  
+        for key, value in reserved_data.items():
+            reserved_data[key] = value + product_attribute_data[key[0:key.find('.')]] + [('priceType', 'Reserved'), ('lastModified', last_modified), (k, v)]
+        items = list(on_demand_data.values()) + list(reserved_data.values())
         for item in items:
             instance = InstanceData()
             for i in item:

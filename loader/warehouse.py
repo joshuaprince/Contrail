@@ -29,6 +29,8 @@ class BooleanField(Field):
 
 
 class InstanceData(models.Model):
+    lastModified = fields.NullableField(fields.DateTimeField())
+    region = fields.NullableField(fields.StringField())
     capacityStatus = fields.NullableField(fields.StringField())
     clockSpeedIsUpTo = fields.NullableField(BooleanField())
     clockSpeed = fields.NullableField(fields.Float32Field()) #in GHz
@@ -100,38 +102,22 @@ class InstanceData(models.Model):
     vcpu = fields.NullableField(fields.Int32Field())
     volumeType = fields.NullableField(fields.StringField())
 
-    onDemandAppliesTo = fields.NullableField(fields.StringField())
-    onDemandBeginRange = fields.NullableField(fields.StringField())
-    onDemandDescription = fields.NullableField(fields.StringField())
-    onDemandEffectiveDate = fields.NullableField(fields.DateTimeField())
-    onDemandEndRange = fields.NullableField(fields.Float32Field())
-    onDemandOfferTermCode = fields.NullableField(fields.StringField())
-    onDemandRateCode = fields.NullableField(fields.StringField())
-    onDemandPricePerUnit = fields.NullableField(fields.StringField())
-    onDemandPriceUnit = fields.NullableField(fields.StringField())
-
-    reservedAppliesTo = fields.NullableField(fields.StringField())
-    reservedBeginRange = fields.NullableField(fields.StringField())
-    reservedDescription = fields.NullableField(fields.StringField())
-    reservedEffectiveDate = fields.NullableField(fields.StringField())
-    reservedEndRange = fields.NullableField(fields.StringField())
-    reservedLeaseContractLength = fields.NullableField(fields.StringField())
-    reservedOfferTermCode = fields.NullableField(fields.StringField())
-    reservedOfferingClass = fields.NullableField(fields.StringField())
-    reservedPurchaseOption = fields.NullableField(fields.StringField())
-    reservedRateCode = fields.NullableField(fields.StringField())
-    reservedPricePerUnit = fields.NullableField(fields.StringField())
-    reservedPriceUnit = fields.NullableField(fields.StringField())
-
-    spotPrice = fields.NullableField(fields.StringField())
-    spotTimestamp = fields.NullableField(fields.StringField())
-    spotInstanceType = fields.NullableField(fields.StringField())
-    spotAvailabilityZone = fields.NullableField(fields.StringField())
+    priceType = fields.NullableField(fields.StringField()) #On Demand, Reserved, Spot
+    appliesTo = fields.NullableField(fields.StringField())
+    description = fields.NullableField(fields.StringField())
+    effectiveDate = fields.NullableField(fields.DateTimeField())
+    beginRange = fields.NullableField(fields.Float32Field())
+    endRange = fields.NullableField(fields.Float32Field())
+    pricePerHour = fields.NullableField(fields.Float32Field())
+    priceUpfront = fields.NullableField(fields.Float32Field())
+    leaseContractLength = fields.NullableField(fields.StringField())
+    offeringClass = fields.NullableField(fields.StringField())
+    purchaseOption = fields.NullableField(fields.StringField())
 
     engine = engines.Memory()
 
 
-def create_contrail_table(recreate=False):
+def create_contrail_table(recreate=True):
     if db.does_table_exist(InstanceData):
         if recreate:
             db.drop_table(InstanceData)
