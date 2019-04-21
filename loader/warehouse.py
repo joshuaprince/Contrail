@@ -2,8 +2,9 @@ from infi.clickhouse_orm import models, fields, engines
 from infi.clickhouse_orm.database import Database
 from infi.clickhouse_orm.fields import Field
 
+from config import CLICKHOUSE_DB_URL, CLICKHOUSE_DB_NAME
 
-db: Database = Database('contrail', db_url='http://54.153.73.138:8123')
+db = Database(CLICKHOUSE_DB_NAME, db_url=CLICKHOUSE_DB_URL)
 """ClickHouse Database connection object."""
 
 

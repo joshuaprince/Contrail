@@ -13,12 +13,13 @@ from rest_framework.status import (
 
 from infi.clickhouse_orm.database import Database
 
+from config import CLICKHOUSE_DB_NAME, CLICKHOUSE_DB_URL
 from loader.warehouse import InstanceData
 from .serializers import *
 
 import json
 
-db = Database('contrail', db_url='http://54.153.73.138:8123', readonly=True)
+db = Database(CLICKHOUSE_DB_NAME, db_url=CLICKHOUSE_DB_URL, readonly=True)
 
 
 class GetInstances(APIView):
