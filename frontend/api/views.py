@@ -13,7 +13,7 @@ from rest_framework.status import (
 
 from infi.clickhouse_orm.database import Database
 
-from loader.loader import InstanceData
+from loader.warehouse import InstanceData
 from .serializers import *
 
 import json

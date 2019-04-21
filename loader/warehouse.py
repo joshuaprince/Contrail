@@ -3,7 +3,7 @@ from infi.clickhouse_orm.database import Database
 from infi.clickhouse_orm.fields import Field
 
 
-db: Database = Database('contrail')
+db: Database = Database('contrail', db_url='http://54.153.73.138:8123')
 """ClickHouse Database connection object."""
 
 
