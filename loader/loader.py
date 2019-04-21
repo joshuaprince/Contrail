@@ -36,7 +36,7 @@ class Loader:
         # TODO implement this
         pass
 
-    def load_file(self, filename: str):
+    def load_file(self, filename: str, last_modified: str):
         loader_name = filename.split('/')[0]
 
         if not REGISTERED_LOADER_CLASSES.get(loader_name):
@@ -47,22 +47,21 @@ class Loader:
 
         with gzip.open('tmp-loading.json.gz', 'rt', encoding='ascii') as f_in:
             content = json.load(f_in)
-            REGISTERED_LOADER_CLASSES[loader_name].load(filename, content)
+            REGISTERED_LOADER_CLASSES[loader_name].load(filename, content, last_modified)
 
         self.mark_loaded(filename)
 
     def load_initial_data(self):
         for file in BucketIterator(self.s3client, AWS_BUCKET_NAME):
             filename = file['Key']
+            last_modified = file['LastModified']
             if self.already_loaded(filename):
                 continue
 
-            if filename.startswith('AmazonEC2/eu-west-1'):
-                self.load_file(filename)
-                # try:
-                #     self.load_file(filename)
-                # except Exception as e:
-                #     logger.warning("Failed to load data file {}:\n{}".format(filename, str(e)))
+            try:
+                self.load_file(filename, last_modified)
+            except Exception as e:
+                logger.warning("Failed to load data file {}:\n{}".format(filename, str(e)))
 
 
 def load():
