@@ -45,7 +45,7 @@ class Loader:
 
         with gzip.open('tmp-loading.json.gz', 'rt', encoding='ascii') as f_in:
             content = json.load(f_in)
-            REGISTERED_LOADER_CLASSES[loader_name].load(filename, content, last_modified)
+            REGISTERED_LOADER_CLASSES[loader_name].load(filename, content, last_modified, db)
 
         self.mark_loaded(filename)
 

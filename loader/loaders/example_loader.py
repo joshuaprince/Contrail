@@ -1,5 +1,4 @@
 from loader.loaders import BaseLoader, register_loader
-from loader.warehouse import db
 
 
 # Uncomment the "@" line below to activate your loader.
@@ -8,7 +7,7 @@ from loader.warehouse import db
 # @register_loader(provider='ExampleProvider')
 class ExampleLoader(BaseLoader):
     @classmethod
-    def load(cls, filename: str, json: dict):
+    def load(cls, filename: str, json: dict, last_modified: str, db):
         # Write your own loading logic here.
         # The parsed file being loaded is located in `json` as a dictionary.
         db.insert([])

@@ -3,8 +3,10 @@ import itertools
 import logging
 import re
 
+from infi.clickhouse_orm.database import Database
+
 from crawler.providers.aws_ec2 import AmazonEC2
-from loader.warehouse import InstanceData, db
+from loader.warehouse import InstanceData
 from loader.loaders import BaseLoader, register_loader
 from loader.normalizers import normalizeData
 
@@ -121,7 +123,7 @@ def getData(d, mylist):
 @register_loader(provider=AmazonEC2)
 class AmazonEC2Loader(BaseLoader):
     @classmethod
-    def load(cls, filename: str, json: dict, last_modified: str):
+    def load(cls, filename: str, json: dict, last_modified: str, db: Database):
         logger.info("Loading {} into ClickHouse.".format(filename.split('/')[-1]))
         region = "{}".format(filename.split('/')[1]).replace('-', "")
         k, v = normalizeData('region', region)

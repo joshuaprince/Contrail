@@ -4,8 +4,10 @@ import re
 import logging
 import operator
 
+from infi.clickhouse_orm.database import Database
+
 from crawler.providers.aws_ec2_spot import AmazonEC2Spot
-from loader.warehouse import InstanceData, db
+from loader.warehouse import InstanceData
 from loader.loaders import BaseLoader, register_loader
 from loader.normalizers import normalizeData
 
@@ -49,7 +51,7 @@ def getSpotData(d, last_modified, region):
 @register_loader(provider=AmazonEC2Spot)
 class AmazonEC2SpotLoader(BaseLoader):
     @classmethod
-    def load(cls, filename: str, json: dict, last_modified: str):
+    def load(cls, filename: str, json: dict, last_modified: str, db: Database):
         logger.info("Loading {} into ClickHouse.".format(filename.split('/')[-1]))
         region = "{}".format(filename.split('/')[1]).replace('-', "")
         spot_data = getSpotData(json, last_modified, region)
