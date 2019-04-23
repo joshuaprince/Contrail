@@ -118,11 +118,25 @@ class InstanceData(models.Model):
     engine = engines.Memory()
 
 
+class LoadedFile(models.Model):
+    """
+    Table that holds the full S3 path names of each file that has already been loaded, so that we don't load the
+    same file twice.
+    """
+    filename = fields.StringField()
+
+    engine = engines.Memory()
+
+
 def create_contrail_table(recreate=True):
+    if db.does_table_exist(InstanceData) and not recreate:
+        return
+
     if db.does_table_exist(InstanceData):
-        if recreate:
-            db.drop_table(InstanceData)
-        else:
-            return
+        db.drop_table(InstanceData)
+
+    if db.does_table_exist(LoadedFile):
+        db.drop_table(LoadedFile)
 
     db.create_table(InstanceData)
+    db.create_table(LoadedFile)
