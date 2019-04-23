@@ -35,26 +35,39 @@ class AmazonEC2TestCase(unittest.TestCase):
         """
         Check several structural components of the raw data to ensure it is in the proper format to be loaded.
         """
-        self.instance.load_regions()
-        region_url_postfix = self.instance.get_next_region()['currentVersionUrl']
+        try:
+            self.instance.load_regions()
+            region_url_postfix = self.instance.get_next_region()['currentVersionUrl']
 
-        response_json = requests.get(URL_REGION_VERSION.format(currentVersionUrl=region_url_postfix)).content
-        response_dict = json.loads(response_json)
+            response_json = requests.get(URL_REGION_VERSION.format(currentVersionUrl=region_url_postfix)).content
+            response_dict = json.loads(response_json)
 
-        self.assertEqual(response_dict['formatVersion'], 'v1.0')
-        self.assertEqual(response_dict['offerCode'], 'AmazonEC2')
-        self.assertIn('version', response_dict)
+            self.assertEqual(response_dict['formatVersion'], 'v1.0', "formatVersion mismatch: at /formatVersion")
+            self.assertEqual(response_dict['offerCode'], 'AmazonEC2', "offerCode mismatch: at /offerCode")
+            self.assertIn('version', response_dict, "version missing: at /version")
 
-        self.assertIn('products', response_dict)
-        for name, product in response_dict['products'].items():
-            self.assertIn('sku', product)
-            self.assertIn('attributes', product)
-            self.assertIn('location', product['attributes'])
+            self.assertIn('products', response_dict, "products list missing: at /products/")
+            for name, product in response_dict['products'].items():
+                self.assertIn('ska', product, "sku missing: at /products/{0}/sku".format(name))
+                self.assertIn('attributes', product, "attributes missing: at /products/{0}/attributes/".format(name))
+                self.assertIn('location', product['attributes'],
+                              "location missing: at /products/{0}/attributes/location".format(name))
 
-        self.assertIn('terms', response_dict)
+            self.assertIn('terms', response_dict, "terms missing: at /terms/")
 
-        for paymentType in ('OnDemand', 'Reserved'):
-            self.assertIn(paymentType, response_dict['terms'])
-            for name, product in response_dict['terms'][paymentType].items():
-                offer = list(product.values())[0]
-                self.assertIn('offerTermCode', offer)
+            for paymentType in ('OnDemand', 'Reserved'):
+                self.assertIn(paymentType, response_dict['terms'], "{0} missing: at /terms/{0}/".format(paymentType))
+                for name, product in response_dict['terms'][paymentType].items():
+                    offer = list(product.values())[0]
+                    self.assertIn('offerTermCode', offer,
+                                  "offerTermCode missing: at /terms/{0}/{1}/offerTermCode/".format(paymentType, name))
+
+        except AssertionError:
+            with open('ec2_erroneous.json', 'w') as outfile:
+                json.dump(response_dict, outfile, indent=2)
+
+            print("Encountered a structural error with the JSON retrieved from AWS.")
+            print("Writing the erroneous data to 'ec2_erroneous.json'")
+            print("The location of the error within the JSON hierarchy can be found in the error message below.")
+
+            raise
