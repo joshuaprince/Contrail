@@ -107,7 +107,7 @@
 
         <br><br>
 
-        <button id="comparebutton" class="btn btn-info">
+        <button id="comparebutton" class="btn btn-info" onclick="compareFunction()">
             Compare
         </button>
 
@@ -116,20 +116,35 @@
         <div id="comparepop" class="compareview">
           <div class="compare-container">
             <span class="close">&times;</span>
+            <div class="row">
+
+              <div class="column1">
+                <div class="card">
+                </div>
+              </div>
+
+              <div class="column2">
+                <div class="card">
+                </div>
+              </div>
+
+              <div class="column3">
+                <div class="card">
+                </div>
+              </div>
+
+            </div>
           </div>
       </div>
+
 
     </div>
 
 </div>
 
 
-
 {% endblock %}
-
-
 {% block script %}
-
 
 <!-- SIDE BAR -->
 <script type="text/javascript">
@@ -189,30 +204,65 @@
       }
     } );
 
-    var comparePop = document.getElementById('comparepop');
-    var btn = document.getElementById('comparebutton');
-    var span = document.getElementsByClassName("close")[0];
-    var card = 0;
-
-    btn.onclick = function() {
-      comparePop.style.display = "block";
-      table.rows().every(function(rowIndx, tableLoop, rowLoop) {
-        if ($(this).hasClass('selected')) {
-          var data = this.data();
-          data.style.color = red;
-        }
-      } );
-    }
-
-    span.onclick = function() {
-      comparePop.style.display = "none";
-    }
-
   } );
 </script>
 
 <script type="text/javascript">
+  var comparePop = document.getElementById('comparepop');
+  var btn = document.getElementById('comparebutton');
+  var span = document.getElementsByClassName("close")[0];
+  var card = 0;
 
+  btn.onclick = function() {
+    comparePop.style.display = "block";
+    var selectedRows = document.querySelectorAll(".selected");
+    if (selectedRows[0]) {
+      var row = selectedRows[0];
+      $(".column1 > .card").append(row.cells[0]);
+      $(".column1 > .card").append(row.cells[0]);
+      $(".column1 > .card").append(row.cells[0]);
+      $(".column1 > .card").append(row.cells[0]);
+      $(".column1 > .card").append(row.cells[0]);
+      $(".column1 > .card").append(row.cells[0]);
+      $(".column1 > .card").append(row.cells[0]);
+      $(".column1 > .card").append(row.cells[0]);
+    }
+    if (selectedRows[2]) {
+      var row = selectedRows[1];
+      $(".column2 > .card").append(row.cells[0]);
+      $(".column2 > .card").append(row.cells[0]);
+      $(".column2 > .card").append(row.cells[0]);
+      $(".column2 > .card").append(row.cells[0]);
+      $(".column2 > .card").append(row.cells[0]);
+      $(".column2 > .card").append(row.cells[0]);
+      $(".column2 > .card").append(row.cells[0]);
+      $(".column2 > .card").append(row.cells[0]);
+    }
+
+    if (selectedRows[2]) {
+      var row = selectedRows[2];
+      $(".column3 > .card").append(row.cells[0]);
+      $(".column3 > .card").append(row.cells[0]);
+      $(".column3 > .card").append(row.cells[0]);
+      $(".column3 > .card").append(row.cells[0]);
+      $(".column3 > .card").append(row.cells[0]);
+      $(".column3 > .card").append(row.cells[0]);
+      $(".column3 > .card").append(row.cells[0]);
+      $(".column3 > .card").append(row.cells[0]);
+    }
+
+
+  }
+
+  span.onclick = function() {
+    comparePop.style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    if (event.target == comparePop) {
+    comparePop.style.display = "none";
+  }
+}
 </script>
 
 
