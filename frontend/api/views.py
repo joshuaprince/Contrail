@@ -25,19 +25,47 @@ db = Database(CLICKHOUSE_DB_NAME, db_url=CLICKHOUSE_DB_URL, readonly=True)
 class GetInstances(APIView):
         '''
         Given atributes, return instances and their prices
-        Return
+        Takes in (All fields optional)::
         {
-            "instance_type": "c4"
-            "operating_system": "Linux",
-            "provider": "AWS",
-            "region": "US East",
-            "vcpus": 8,
-            "memory": 8,
-            "reserved", "spot",
-            "price_type": "on_demand",
-            "price": 0.233,
-            "price_unit": "per hour"
+            "providers": {
+                "aws": true,
+                "gcp": false,
+                "azure": false
+             },
+             "vcpus": {
+                "min": 0,
+                "max": 10
+             },
+             "memory": {
+                "min": 0,
+                "max": 10
+             },
+             "price": {
+                "min_hourly": 0,
+                "max_hourly": 10,
+                "min_upfront": 0,
+                "max_upfront": 10
+             },
+             "regions": ["us-west-1"],
         }
+
+        TODO paginate
+        Returns (All fields required):
+        [
+            {
+                "sku": "A1B2C3",
+                "provider": "aws",
+                "instance_type": "c4.4xlarge",
+                "region": "US East",
+                "vcpus": 8,
+                "memory": 8,
+                "price": {
+                    "type": "on_demand"
+                    "hourly": 0.233,
+                    "upfront": 0
+                }
+            }, ...
+        ]
         '''
         def post(self, request: Request):
             data = json.loads(request.body)
@@ -61,5 +89,39 @@ class GetInstances(APIView):
 
             # truncate query
             instances = instances.paginate(page_num=1, page_size=100).objects
+
+            return Response({'instances': [InstanceDataSerializer(obj).data for obj in instances]}, status=HTTP_200_OK)
+
+
+
+
+class GetInstanceDetail(APIView):
+        '''
+        Given atributes, return instances and their prices
+        Takes in (All fields optional)::
+        {
+            "sku":  "A1B2C3"
+        }
+
+        TODO paginate
+        Returns (All fields required):
+        [
+            {
+                "sku": "A1B2C3",
+                "provider": "aws",
+                "instance_type": "c4.4xlarge",
+                "region": "US East",
+                "vcpus": 8,
+                "memory": 8,
+                "price": {
+                    "type": "on_demand"
+                    "hourly": 0.233,
+                    "upfront": 0
+                }
+            }, ...
+        ]
+        '''
+        def post(self, request: Request):
+            data = json.loads(request.body)
 
             return Response({'instances': [InstanceDataSerializer(obj).data for obj in instances]}, status=HTTP_200_OK)
