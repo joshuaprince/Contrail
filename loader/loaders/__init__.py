@@ -3,6 +3,8 @@ import os
 from abc import abstractmethod, ABC
 from typing import Dict, Type, Union
 
+from infi.clickhouse_orm.database import Database
+
 from crawler.providers import BaseProvider
 
 
@@ -13,11 +15,13 @@ class BaseLoader(ABC):
 
     @classmethod
     @abstractmethod
-    def load(cls, filename: str, json: dict):
+    def load(cls, filename: str, json: dict, last_modified: str, db: Database):
         """
         Loads a single JSON file into the database. The JSON file is passed in as a dictionary.
         :param filename: Full path on S3 of the file to load.
         :param json: The contents of the file parsed as a dictionary.
+        :param last_modified: Date string the file was last modified.
+        :param db: ClickHouse Database object to load data into.
         """
         pass
 

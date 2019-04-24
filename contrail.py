@@ -2,15 +2,14 @@ import argparse
 import os
 import sys
 
-from crawler import crawler
-from loader import loader
-
 
 def run_crawler(args):
+    from crawler import crawler
     crawler.crawl()
 
 
 def run_loader(args):
+    from loader import loader
     loader.load()
 
 
@@ -27,6 +26,12 @@ def run_frontend(args):
     execute_from_command_line(sys.argv[1:])
 
 
+def run_tests(args):
+    import unittest
+    suite = unittest.TestLoader().discover('test', top_level_dir='.')
+    unittest.TextTestRunner().run(suite)
+
+
 def main():
     parser = argparse.ArgumentParser(description='Run one of Contrail\'s components.')
 
@@ -40,6 +45,9 @@ def main():
 
     parser_frontend = subparsers.add_parser('frontend', aliases=['f', 'manage.py', 'manage', 'm'])
     parser_frontend.set_defaults(func=run_frontend)
+
+    parser_test = subparsers.add_parser('test', aliases=['t'])
+    parser_test.set_defaults(func=run_tests)
 
     args, unknown = parser.parse_known_args()
     args.func(args)

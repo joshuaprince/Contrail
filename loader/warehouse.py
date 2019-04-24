@@ -2,8 +2,9 @@ from infi.clickhouse_orm import models, fields, engines
 from infi.clickhouse_orm.database import Database
 from infi.clickhouse_orm.fields import Field
 
+from config import CLICKHOUSE_DB_URL, CLICKHOUSE_DB_NAME
 
-db: Database = Database('contrail', db_url='http://54.153.73.138:8123')
+db = Database(CLICKHOUSE_DB_NAME, db_url=CLICKHOUSE_DB_URL)
 """ClickHouse Database connection object."""
 
 
@@ -117,11 +118,25 @@ class InstanceData(models.Model):
     engine = engines.Memory()
 
 
+class LoadedFile(models.Model):
+    """
+    Table that holds the full S3 path names of each file that has already been loaded, so that we don't load the
+    same file twice.
+    """
+    filename = fields.StringField()
+
+    engine = engines.Memory()
+
+
 def create_contrail_table(recreate=True):
+    if db.does_table_exist(InstanceData) and not recreate:
+        return
+
     if db.does_table_exist(InstanceData):
-        if recreate:
-            db.drop_table(InstanceData)
-        else:
-            return
+        db.drop_table(InstanceData)
+
+    if db.does_table_exist(LoadedFile):
+        db.drop_table(LoadedFile)
 
     db.create_table(InstanceData)
+    db.create_table(LoadedFile)

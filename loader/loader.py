@@ -8,7 +8,7 @@ import boto3
 from loader.loaders import REGISTERED_LOADER_CLASSES, import_loader_directory, LoaderDoesNotExistError
 from loader.s3iterator import BucketIterator
 from config import AWS_ACCESS_KEY_ID, AWS_SECRET, AWS_BUCKET_NAME
-from loader.warehouse import create_contrail_table
+from loader.warehouse import create_contrail_table, db, LoadedFile
 
 logger = logging.getLogger('contrail.loader')
 
@@ -26,15 +26,13 @@ class Loader:
         """
         Check the database for whether a file has already been loaded.
         """
-        # TODO implement this
-        return False
+        return LoadedFile.objects_in(db).filter(filename=filename).count() > 0
 
     def mark_loaded(self, filename: str):
         """
         Mark in the database that a file has been loaded, so that it will not be loaded again.
         """
-        # TODO implement this
-        pass
+        db.insert([LoadedFile(filename=filename)])
 
     def load_file(self, filename: str, last_modified: str):
         loader_name = filename.split('/')[0]
@@ -47,7 +45,7 @@ class Loader:
 
         with gzip.open('tmp-loading.json.gz', 'rt', encoding='ascii') as f_in:
             content = json.load(f_in)
-            REGISTERED_LOADER_CLASSES[loader_name].load(filename, content, last_modified)
+            REGISTERED_LOADER_CLASSES[loader_name].load(filename, content, last_modified, db)
 
         self.mark_loaded(filename)
 
