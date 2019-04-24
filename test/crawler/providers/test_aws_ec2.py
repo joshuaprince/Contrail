@@ -48,7 +48,7 @@ class AmazonEC2TestCase(unittest.TestCase):
 
             self.assertIn('products', response_dict, "products list missing: at /products/")
             for name, product in response_dict['products'].items():
-                self.assertIn('ska', product, "sku missing: at /products/{0}/sku".format(name))
+                self.assertIn('sku', product, "sku missing: at /products/{0}/sku".format(name))
                 self.assertIn('attributes', product, "attributes missing: at /products/{0}/attributes/".format(name))
                 self.assertIn('location', product['attributes'],
                               "location missing: at /products/{0}/attributes/location".format(name))
