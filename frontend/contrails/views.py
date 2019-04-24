@@ -45,7 +45,11 @@ def priceview(request):
         form = PriceForm(request.POST)
 
         if form.is_valid():
-
+            print("FROM")
+            print(form.cleaned_data['price_from'])
+            print("TO")
+            print(form.cleaned_data['price_to'])
+            
             data = {
                 'operating_system': form.cleaned_data['operating_system'],
                 'aws': form.cleaned_data['amazon_web_services'],

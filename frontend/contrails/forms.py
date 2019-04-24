@@ -46,4 +46,6 @@ class PriceForm(forms.Form):
     region = forms.ChoiceField(choices=REGION_CHOICES, required=False)
     vcpus = forms.IntegerField(required=False)
     memory = forms.FloatField(required=False)
+    price_from = forms.CharField(required=False)
+    price_to = forms.CharField(required=False)
     # ecu = forms.IntegerField(required=False)
