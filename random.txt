@@ -1,0 +1,18 @@
+    AppliesTo 
+    BeginRange 
+    Description 
+    EffectiveDate 
+    EndRange 
+    OfferTermCode 
+    RateCode 
+    PricePerUnit 
+    PriceUnit 
+
+    LeaseContractLength 
+    OfferingClass 
+    PurchaseOption 
+
+    Price 
+    Timestamp 
+    InstanceType 
+    AvailabilityZone 

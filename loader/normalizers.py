@@ -136,7 +136,7 @@ def unitNormalizer(key, value):
 
 def spotPriceNormalizer(key, value):
     if key == 'spotPrice':
-        return ('priceUpfront', value)
+        return ('pricePerHour', value)
     else:
         pass
 
@@ -146,14 +146,14 @@ def regionNormalizer(key, value):
         'usgoveast1': 'AWS Gov US East',
         'usgovewest1': 'AWS Gov US West',
         'apnortheast1': 'Asia Pacific Northeast',
-        'apnortheast2': 'Asia Pacific Northeast 2',
-        'apnortheast3': 'Asia Pacific Northeast 3',
+        'apnortheast2': 'Asia Pacific Northeast',
+        'apnortheast3': 'Asia Pacific Northeast',
         'apsoutheast1': 'Asia Pacific Southeast',
-        'apsoutheast2': 'Asia Pacific Southeast 2',
+        'apsoutheast2': 'Asia Pacific Southeast',
         'asiaeast1': 'Asia East',
-        'asiaeast2': 'Asia East 2',
+        'asiaeast2': 'Asia East',
         'asianortheast1': 'Asia Northeast', 
-        'asianortheast2': 'Asia Northeast 2',
+        'asianortheast2': 'Asia Northeast',
         'asiasouth1': 'Asia South',
         'asiasoutheast1': 'Asia Southeast',
         'australiasoutheast1': 'Australia Southeast',
@@ -162,24 +162,24 @@ def regionNormalizer(key, value):
         'cnnorthwest1': 'China Northwest',
         'eucentral1': 'Europe Central',
         'euwest1': 'Europe West',
-        'euwest2': 'Europe West 2',
-        'euwest3': 'Europe West 3',
+        'euwest2': 'Europe West',
+        'euwest3': 'Europe West',
         'eunorth1': 'Europe North',
         'europenorth1': 'Europe North',
         'europewest1': 'Europe West',
-        'europewest2': 'Europe West 2',
-        'europewest3': 'Europe West 3',
-        'europewest4': 'Europe West 4',
+        'europewest2': 'Europe West',
+        'europewest3': 'Europe West',
+        'europewest4': 'Europe West',
         'europewest6': 'Europe West 6',
         'northamericanortheast1': 'North America Northeast',
         'saeast1': 'South America East',
         'southamericaeast1': 'South America East',
         'uscentral1': 'US Central',
         'useast1': 'US East',
-        'useast2': 'US East 2',
-        'useast4': 'US East 4',
+        'useast2': 'US East',
+        'useast4': 'US East',
         'uswest1': 'US West',
-        'uswest2': 'US West 2'
+        'uswest2': 'US West'
         }
         return ('region', regions[value])
     else:
