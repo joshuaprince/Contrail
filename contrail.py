@@ -35,7 +35,8 @@ def run_tests(args):
 def main():
     parser = argparse.ArgumentParser(description='Run one of Contrail\'s components.')
 
-    subparsers = parser.add_subparsers(required=True, dest="component")
+    subparsers = parser.add_subparsers(dest="component")
+    subparsers.required = True
 
     parser_crawler = subparsers.add_parser('crawler', aliases=['c'])
     parser_crawler.set_defaults(func=run_crawler)

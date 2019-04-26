@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import datetime
 import json
 import logging
@@ -40,7 +38,7 @@ class AmazonEC2(BaseProvider):
         self.load_regions()
 
     @classmethod
-    def create_providers(cls) -> List[__class__]:
+    def create_providers(cls) -> List['AmazonEC2']:
         return [cls()]
 
     def crawl(self) -> datetime.timedelta:

@@ -39,7 +39,8 @@ class AmazonEC2TestCase(unittest.TestCase):
             self.instance.load_regions()
             region_url_postfix = self.instance.get_next_region()['currentVersionUrl']
 
-            response_json = requests.get(URL_REGION_VERSION.format(currentVersionUrl=region_url_postfix)).content
+            response_obj = requests.get(URL_REGION_VERSION.format(currentVersionUrl=region_url_postfix))
+            response_json = response_obj.content.decode('utf-8')
             response_dict = json.loads(response_json)
 
             self.assertEqual(response_dict['formatVersion'], 'v1.0', "formatVersion mismatch: at /formatVersion")

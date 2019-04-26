@@ -1,10 +1,8 @@
-from __future__ import annotations
-
 import datetime
 import importlib
 import os
 from abc import abstractmethod, ABC
-from typing import Set, Type, Iterable, Dict
+from typing import Set, Type, Iterable
 
 from crawler.s3upload import S3Client
 
@@ -19,7 +17,7 @@ class BaseProvider(ABC):
 
     @classmethod
     @abstractmethod
-    def create_providers(cls) -> Iterable[BaseProvider]:
+    def create_providers(cls) -> Iterable['BaseProvider']:
         """
         Create a list of Provider objects for this class, each of which are crawled separately.
         If multiple servers or regions are being crawled, each should have a single Provider object.
@@ -57,7 +55,7 @@ class BaseProvider(ABC):
                                                   datetime.datetime.utcnow().isoformat() + ".json")
 
 
-REGISTERED_PROVIDER_CLASSES: Set[Type[BaseProvider]] = set()
+REGISTERED_PROVIDER_CLASSES = set()  # type: Set[Type[BaseProvider]]
 """
 A set consisting of all classes that have been registered with `@register_provider`.
 """

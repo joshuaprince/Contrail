@@ -46,7 +46,7 @@ class LoadAmazonEC2TestCase(unittest.TestCase):
             db=self.test_db
         )
 
-        instances: List[InstanceData] = list(InstanceData.objects_in(self.test_db))
+        instances = list(InstanceData.objects_in(self.test_db))  # type: List[InstanceData]
 
         self.assertEqual(len(instances), 14)  # 2 on demand + 12 reserved
 

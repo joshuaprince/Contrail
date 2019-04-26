@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import datetime
 import json
 import logging
@@ -50,7 +48,7 @@ class AmazonEC2Spot(BaseProvider):
         """Token given to AWS to continue building instance_list."""
 
     @classmethod
-    def create_providers(cls) -> List[__class__]:
+    def create_providers(cls) -> List['AmazonEC2Spot']:
         return [AmazonEC2Spot(rgn) for rgn in _session.get_available_regions('ec2')]
 
     def crawl(self) -> datetime.timedelta:

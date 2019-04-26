@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import datetime
 import json
 import logging
@@ -37,7 +35,7 @@ class Azure(BaseProvider):
         self._access_token_expire = 0
 
     @classmethod
-    def create_providers(cls) -> List[__class__]:
+    def create_providers(cls) -> List['Azure']:
         return [cls()]
 
     def crawl(self) -> datetime.timedelta:
@@ -62,7 +60,7 @@ class Azure(BaseProvider):
         rate_card = requests.get(redirect_url)
 
         # Print the ratecard content
-        return json.loads(rate_card.content)
+        return json.loads(rate_card.content.decode('utf-8'))
 
     def _renew_access_token(self):
         """

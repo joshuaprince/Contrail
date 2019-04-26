@@ -8,7 +8,7 @@ from crawler.providers import BaseProvider, REGISTERED_PROVIDER_CLASSES, import_
 
 logger = logging.getLogger('contrail.crawler')
 
-providers: List[BaseProvider] = []
+providers = []  # type: List[BaseProvider]
 
 
 async def _crawl_loop(provider: BaseProvider):
@@ -20,7 +20,7 @@ async def _crawl_loop(provider: BaseProvider):
     while True:
         # noinspection PyBroadException
         try:
-            time_wait: datetime.timedelta = provider.crawl()
+            time_wait = provider.crawl()  # type: datetime.timedelta
         except Exception:
             # If a crawl attempt had an error, print error and try again in 2 minutes
             logger.exception("Caught exception while crawling {provider}".format(provider=provider.provider_name()))
@@ -72,8 +72,10 @@ def crawl():
     create_providers()
     logger.info("Loaded {} providers from {} provider classes.".format(len(providers), len(REGISTERED_PROVIDER_CLASSES)))
 
+    loop = asyncio.get_event_loop()
+
     try:
-        asyncio.run(_main())
+        loop.run_until_complete(_main())
     except KeyboardInterrupt:
         print("Crawler is shutting down.")
 
