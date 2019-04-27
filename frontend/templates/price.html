@@ -78,7 +78,7 @@
 
 
       <label for="id_vcpu" class="col-form-label ">
-          VCPUs
+          vCPUs
       </label>
       <div class="range-slider">
           <input type="text" class="vcpu-range-slider" value="" />
@@ -162,8 +162,8 @@
                   <th>Instance</th>
                   <!-- <th>Provider</th> -->
                   <th>Region</th>
-                  <th>VCPUs</th>
-                  <th>Memory</th>
+                  <th>vCPUs</th>
+                  <th>Memory (GiB)</th>
                   <th>Clock Speed</th>
                   <th>Price Type</th>
                   <th>Price Upfront</th>
@@ -231,7 +231,7 @@
 <!-- SLIDER -->
 <!-- https://codepen.io/anon/pen/rbpqME -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.3/jquery.min.js" ></script> -->
-<script src="{% static 'js/slider.js' %}" ></script>
+<script src="{% static 'js/priceSlider.js' %}" ></script>
 <script src="{% static 'js/memorySlider.js' %}" ></script>
 <script src="{% static 'js/vcpuSlider.js' %}" ></script>
 

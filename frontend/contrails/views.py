@@ -53,20 +53,20 @@ def priceview(request):
                     "azure": False
                  },
                  "vcpus": {
-                    "min": form.cleaned_data['vcpu_from'],
-                    "max": form.cleaned_data['vcpu_to']
+                    "min": int(form.cleaned_data['vcpu_from']),
+                    "max": int(form.cleaned_data['vcpu_to'])
                  },
                  "memory": {
-                    "min": form.cleaned_data['memory_from'],
-                    "max": form.cleaned_data['memory_to']
+                    "min": int(form.cleaned_data['memory_from']),
+                    "max": int(form.cleaned_data['memory_to'])
                  },
                  "price": {
-                    "min_hourly": form.cleaned_data['price_from'],
-                    "max_hourly": form.cleaned_data['price_to'],
+                    "min_hourly": float(form.cleaned_data['price_from']),
+                    "max_hourly": float(form.cleaned_data['price_to']),
                     "min_upfront": 0,
                     "max_upfront": 10
                  },
-                 "regions": [form.cleaned_data['region']],
+                 "region": form.cleaned_data['region'],
             }
 
 

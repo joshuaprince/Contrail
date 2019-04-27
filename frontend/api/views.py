@@ -70,6 +70,7 @@ class GetInstances(APIView):
         def get(self, request: Request):
             data = json.loads(request.body)
             print(data)
+            print(data['vcpus']['min'])
 
             # instances = InstanceData.objects_in(db).filter(onDemandPricePerUnit__ne=None).distinct()\
             #     .filter(instanceType__ne=None)\
@@ -87,10 +88,12 @@ class GetInstances(APIView):
             # if data['aws']: instances = instances.filter()
             # if data['gcp']: instances = instances.filter()
             # if data['azure']: instances = instances.filter()
-            # if data['region']: instances = instances.filter(location=data['region'])
-            # if data['vcpus']: instances = instances.filter(=data['vcpus'])
-            # if data['memory']: instances = instances.filter(memory=data['memory'])
-            # if data['ecu']: instances = instances.filter(=data['ecu'])
+            if data['region']: instances = instances.filter(region=data['region'])
+            instances = instances.filter(
+                vcpu__gte=data['vcpus']['min'], vcpu__lte=data['vcpus']['max'],
+                memory__gte=data['memory']['min'], memory__lte=data['memory']['max'],
+                pricePerHour__gte=data['price']['min_hourly'], pricePerHour__lte=data['price']['max_hourly']
+            )
 
             # truncate query
             instances = instances.paginate(page_num=1, page_size=100).objects
