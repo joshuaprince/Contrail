@@ -51,3 +51,6 @@ class PriceForm(forms.Form):
 
     price_from = forms.CharField(required=False)
     price_to = forms.CharField(required=False)
+
+    pricehr_from = forms.CharField(required=False)
+    pricehr_to = forms.CharField(required=False)

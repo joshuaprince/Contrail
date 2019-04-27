@@ -92,7 +92,8 @@ class GetInstances(APIView):
             instances = instances.filter(
                 vcpu__gte=data['vcpus']['min'], vcpu__lte=data['vcpus']['max'],
                 memory__gte=data['memory']['min'], memory__lte=data['memory']['max'],
-                pricePerHour__gte=data['price']['min_hourly'], pricePerHour__lte=data['price']['max_hourly']
+                pricePerHour__gte=data['price']['min_hourly'], pricePerHour__lte=data['price']['max_hourly'],
+                priceUpfront__gte=data['price']['min_upfront'], priceUpfront__lte=data['price']['max_upfront']
             )
 
             # truncate query

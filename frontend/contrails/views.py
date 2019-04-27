@@ -61,10 +61,10 @@ def priceview(request):
                     "max": int(form.cleaned_data['memory_to'])
                  },
                  "price": {
-                    "min_hourly": float(form.cleaned_data['price_from']),
-                    "max_hourly": float(form.cleaned_data['price_to']),
-                    "min_upfront": 0,
-                    "max_upfront": 10
+                    "min_hourly": float(form.cleaned_data['pricehr_from']),
+                    "max_hourly": float(form.cleaned_data['pricehr_to']),
+                    "min_upfront": float(form.cleaned_data['price_from']),
+                    "max_upfront": float(form.cleaned_data['price_to'])
                  },
                  "region": form.cleaned_data['region'],
             }

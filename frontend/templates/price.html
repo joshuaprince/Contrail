@@ -91,12 +91,12 @@
         </div>
       </div><br>
 
-      <label for="id_memory" class="col-form-label ">
-          Price
+      <label for="id_price" class="col-form-label ">
+          Price Upfront
       </label>
       <div class="range-slider">
           <input type="text" class="price-range-slider" value="" />
-      </div>
+      </div><br>
 
       <div class="extra-controls form-inline">
         <div class="form-group">
@@ -106,6 +106,19 @@
       </div>
 
 
+      <label for="id_pricehr" class="col-form-label ">
+          Price Hourly
+      </label>
+      <div class="range-slider">
+          <input type="text" class="pricehr-range-slider" value="" />
+      </div>
+
+      <div class="extra-controls form-inline">
+        <div class="form-group">
+          <input type="text" id="id_pricehr_from" class="pricehr-input-from form-control" name="pricehr_from" value="0" style="width: 80px; margin-right: 30px;" />
+          <input type="text" id="id_pricehr_to" class="pricehr-input-to form-control" name="pricehr_to" value="0" style="width: 80px;" />
+        </div>
+      </div>
 
       <br>
 
@@ -181,8 +194,8 @@
               <td>{{ instance.memory }}</td>
               <td>{{ instance.clock_speed }}</td>
               <td>{% if instance.price_type == 'on_demand' %}on demand{% endif %}</td>
-              <td>${{ instance.priceUpfront | floatformat:3 }}</td>
-              <td>{{ instance.pricePerHour }}</td>
+              <td>{% if instance.priceUpfront %}${{ instance.priceUpfront | floatformat:3 }}{% else %}none{% endif %}</td>
+              <td>${{ instance.pricePerHour }}</td>
             </tr>
             {% endfor %}
 
@@ -232,6 +245,7 @@
 <!-- https://codepen.io/anon/pen/rbpqME -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.3/jquery.min.js" ></script> -->
 <script src="{% static 'js/priceSlider.js' %}" ></script>
+<script src="{% static 'js/priceHourlySlider.js' %}" ></script>
 <script src="{% static 'js/memorySlider.js' %}" ></script>
 <script src="{% static 'js/vcpuSlider.js' %}" ></script>
 

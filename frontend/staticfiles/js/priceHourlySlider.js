@@ -2373,12 +2373,12 @@
 
 $(function () {
 
-var $range = $(".price-range-slider"),
-    $inputFrom = $(".price-input-from"),
-    $inputTo = $(".price-input-to"),
+var $range = $(".pricehr-range-slider"),
+    $inputFrom = $(".pricehr-input-from"),
+    $inputTo = $(".pricehr-input-to"),
     instance,
     min = 0,
-    max = 100000,
+    max = 6,
     from = 0,
     to = 0;
 
@@ -2387,11 +2387,11 @@ $range.ionRangeSlider({
     min: min,
     max: max,
     from: 0,
-    to: 100000,
+    to: 2,
     prefix: '$ ',
     onStart: updateInputs,
     onChange: updateInputs,
-    step: 10,
+    step: 0.01,
     prettify_enabled: true,
     prettify_separator: ".",
   values_separator: " - ",
