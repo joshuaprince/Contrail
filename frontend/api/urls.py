@@ -6,5 +6,6 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('getinstances/', GetInstances.as_view(), name='data'),
+    path('getinstances/', GetInstances.as_view(), name='getinstances'),
+    path('getinstancedetail/', GetInstanceDetail.as_view(), name='getinstancedetail'),
 ]

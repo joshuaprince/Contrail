@@ -70,7 +70,6 @@ class GetInstances(APIView):
         def get(self, request: Request):
             data = json.loads(request.body)
             print(data)
-            print(data['vcpus']['min'])
 
             # instances = InstanceData.objects_in(db).filter(onDemandPricePerUnit__ne=None).distinct()\
             #     .filter(instanceType__ne=None)\
@@ -79,9 +78,8 @@ class GetInstances(APIView):
             #           'onDemandPricePerUnit', 'onDemandPriceUnit')\
 
             instances = InstanceData.objects_in(db).filter(instanceType__ne=None).distinct()\
-                .only('region', 'instanceType', 'clockSpeed', 'memory', 'vcpu',
-                      # 'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
-                      'pricePerHour', 'priceUpfront')\
+                .only('region', 'instanceType', 'clockSpeed', 'memory', 'vcpu', 'pricePerHour', 'priceUpfront')
+            # 'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
 
             # if request has a value, filter original query
             # TODO
@@ -130,7 +128,15 @@ class GetInstanceDetail(APIView):
             }, ...
         ]
         '''
-        def post(self, request: Request):
+        def get(self, request: Request):
             data = json.loads(request.body)
+            print(data['sku'])
 
-            return Response({'instances': [InstanceDataSerializer(obj).data for obj in instances]}, status=HTTP_200_OK)
+            instance = InstanceData.objects_in(db).filter(instanceType__ne=data['sku']).distinct()\
+                .only('instanceType', 'region', 'clockSpeed', 'memory', 'vcpu', 'pricePerHour', 'priceUpfront',\
+                'networkPerformance', 'physicalCores', 'physicalProcessor', 'storageIsEbsOnly', 'storageCount', 'storageCapacity', 'storageType', 'volumeType')
+
+            # instance = instance.paginate(page_num=1, page_size=100).objects
+
+            return Response({'instance': [InstanceDetailSerializer(obj).data for obj in instance]}, status=HTTP_200_OK)
+            return Response(status=HTTP_200_OK)

@@ -27,7 +27,18 @@ class InstanceView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         id = kwargs['id']
-        context['id'] = id
+
+        data = {'sku': 'A1B2C3'}
+        # data = {'sku': id}
+
+        # call rest api
+        url = settings.URL + '/api/getinstancedetail/'
+        headers = {'content-type': 'application/json'}
+        r = requests.get(url, data=json.dumps(data), headers=headers)
+        context['instance'] = json.loads(r.text)['instance'][0]
+
+
+        print(context['instance'])
 
 
         return context
@@ -75,6 +86,7 @@ def priceview(request):
             headers = {'content-type': 'application/json'}
             r = requests.get(url, data=json.dumps(data), headers=headers)
             context['instances'] = json.loads(r.text)['instances']
+            print(context['instances'])
 
     return render(request, 'price.html', context)
 

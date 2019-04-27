@@ -11,7 +11,7 @@
   <div class="container">
     <div class="row">
       <div class="col">
-        <h1 style="text-align: center;">Instance {{ id }}</h1>
+        <h1 style="text-align: center;">Instance {{ instance.instance_type }}</h1>
       </div>
     </div>
   </div>
@@ -31,23 +31,58 @@
             <tbody>
 
               <tr>
+                <th>Provider</th>
+                <td>{{ instance.provider }}</td>
+              </tr>
+
+              <tr>
                 <th>Region</th>
                 <td>{{ instance.region }}</td>
               </tr>
 
               <tr>
-                <th>Operating System</th>
-                <td>{{ instance.operating_system }}</td>
-              </tr>
-
-              <tr>
-                <th>VCPUs</th>
+                <th>vCPUs</th>
                 <td>{{ instance.vcpus }}</td>
               </tr>
 
               <tr>
                 <th>Memory</th>
                 <td>{{ instance.memory }}</td>
+              </tr>
+
+              <tr>
+                <th>Network Performance</th>
+                <td>{{ instance.networkPerformance }}</td>
+              </tr>
+
+              <tr>
+                <th>physicalCores</th>
+                <td>{{ instance.physicalCores }}</td>
+              </tr>
+
+              <tr>
+                <th>Physical Processor</th>
+                <td>{{ instance.physicalProcessor }}</td>
+              </tr>
+
+              <tr>
+                <th>storageIsEbsOnly</th>
+                <td>{{ instance.storageIsEbsOnly }}</td>
+              </tr>
+
+              <tr>
+                <th>Storage Count</th>
+                <td>{{ instance.storageCount }}</td>
+              </tr>
+
+              <tr>
+                <th>Storage Capacity</th>
+                <td>{{ instance.storageCapacity }}</td>
+              </tr>
+
+              <tr>
+                <th>Storage Type</th>
+                <td>{{ instance.storageType }}</td>
               </tr>
 
             </tbody>
@@ -93,57 +128,36 @@
               <div class="card-body">
                 <h4 class="card-title">Reserved</h4><hr>
 
-                <div id="accordion">
-                  <div class="card">
-                    <div class="card-header" id="headingOne">
-                      <h5 class="mb-0">
-                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                          One Year
-                        </button>
-                      </h5>
-                    </div>
+                <a data-toggle="collapse" href="#one" aria-expanded="false" aria-controls="one"><h5>One Year</h5></a>
+                <div class="collapse multi-collapse" id="one">
+                  <div class="card card-body">
+                    <h5 class="card-title"><span style="font-size: 1.2em;">$5,000</span> upfront</h5>
+                    <p class="card-text">Full Upfront</p><hr style="margin-top: 0px;">
+                    <h5 class="card-title"><span style="font-size: 1.2em;">$5,000</span> upfront</h5>
+                    <h5 class="card-title"><span style="font-size: 1.2em;">$0.5</span> per hour</h5>
+                    <p class="card-text">Partial Upfront</p><hr style="margin-top: 0px;">
+                    <h5 class="card-title"><span style="font-size: 1.2em;">$0.5</span> per hour</h5>
+                    <p class="card-text">No Upfront</p>
 
-                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                      <div class="card-body">
-                        <p class="card-text">Upfront</p>
-                        <p class="card-text">Partial Upfront</p>
-                        <p class="card-text">No upfront</p>
-                      </div>
-                    </div>
                   </div>
-                  <div class="card">
-                    <div class="card-header" id="headingTwo">
-                      <h5 class="mb-0">
-                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                          Three Years
-                        </button>
-                      </h5>
-                    </div>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                      <div class="card-body">
-                        <p class="card-text">Upfront</p>
-                        <p class="card-text">Partial Upfront</p>
-                        <p class="card-text">No upfront</p>
-                      </div>
-                    </div>
+                </div><br>
+
+                <a data-toggle="collapse" href="#three" aria-expanded="false" aria-controls="three"><h5>Three years</h5></a>
+                <div class="collapse multi-collapse" id="three">
+                  <div class="card card-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
                   </div>
-                  <div class="card">
-                    <div class="card-header" id="headingThree">
-                      <h5 class="mb-0">
-                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                          Five Years
-                        </button>
-                      </h5>
-                    </div>
-                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                      <div class="card-body">
-                        <p class="card-text">Upfront</p>
-                        <p class="card-text">Partial Upfront</p>
-                        <p class="card-text">No upfront</p>
-                      </div>
-                    </div>
+                </div><br>
+
+                <a data-toggle="collapse" href="#five" aria-expanded="false" aria-controls="five"><h5>Five Years</h5></a>
+                <div class="collapse multi-collapse" id="five">
+                  <div class="card card-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
                   </div>
-                </div>
+                </div><br>
+
+
+
 
                 <a href="#" class="btn btn-primary">Go somewhere</a>
               </div>
