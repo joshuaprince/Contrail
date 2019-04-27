@@ -67,24 +67,29 @@ class GetInstances(APIView):
             }, ...
         ]
         '''
-        def post(self, request: Request):
+        def get(self, request: Request):
             data = json.loads(request.body)
+            print(data)
 
-            instances = InstanceData.objects_in(db).filter(onDemandPricePerUnit__ne=None).distinct()\
-                .filter(instanceType__ne=None, onDemandPricePerUnit__ne='0.0000000000')\
-                .only('location', 'instanceType', 'clockSpeed', 'memory', 'vcpu',
+            # instances = InstanceData.objects_in(db).filter(onDemandPricePerUnit__ne=None).distinct()\
+            #     .filter(instanceType__ne=None)\
+            #     .only('location', 'instanceType', 'clockSpeed', 'memory', 'vcpu',
+            #           # 'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
+            #           'onDemandPricePerUnit', 'onDemandPriceUnit')\
+
+            instances = InstanceData.objects_in(db).filter(instanceType__ne=None).distinct()\
+                .only('region', 'instanceType', 'clockSpeed', 'memory', 'vcpu',
                       # 'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
-                      'onDemandPricePerUnit', 'onDemandPriceUnit')\
+                      'pricePerHour', 'priceUpfront')\
 
             # if request has a value, filter original query
             # TODO
-            # if data['operating_system']: instances = instances.filter(operating_system=data['operating_system'])
             # if data['aws']: instances = instances.filter()
             # if data['gcp']: instances = instances.filter()
             # if data['azure']: instances = instances.filter()
-            if data['region']: instances = instances.filter(location=data['region'])
+            # if data['region']: instances = instances.filter(location=data['region'])
             # if data['vcpus']: instances = instances.filter(=data['vcpus'])
-            if data['memory']: instances = instances.filter(memory=data['memory'])
+            # if data['memory']: instances = instances.filter(memory=data['memory'])
             # if data['ecu']: instances = instances.filter(=data['ecu'])
 
             # truncate query

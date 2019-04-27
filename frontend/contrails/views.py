@@ -45,26 +45,35 @@ def priceview(request):
         form = PriceForm(request.POST)
 
         if form.is_valid():
-            print("FROM")
-            print(form.cleaned_data['price_from'])
-            print("TO")
-            print(form.cleaned_data['price_to'])
-            
+
             data = {
-                'operating_system': form.cleaned_data['operating_system'],
-                'aws': form.cleaned_data['amazon_web_services'],
-                'gcp': form.cleaned_data['google_cloud_platform'],
-                'azure': form.cleaned_data['microsoft_azure'],
-                'region': form.cleaned_data['region'],
-                'vcpus': form.cleaned_data['vcpus'],
-                'memory': form.cleaned_data['memory'],
-                # 'ecu': form.cleaned_data['ecu']
+                "providers": {
+                    "aws": True,
+                    "gcp": False,
+                    "azure": False
+                 },
+                 "vcpus": {
+                    "min": form.cleaned_data['vcpu_from'],
+                    "max": form.cleaned_data['vcpu_to']
+                 },
+                 "memory": {
+                    "min": form.cleaned_data['memory_from'],
+                    "max": form.cleaned_data['memory_to']
+                 },
+                 "price": {
+                    "min_hourly": form.cleaned_data['price_from'],
+                    "max_hourly": form.cleaned_data['price_to'],
+                    "min_upfront": 0,
+                    "max_upfront": 10
+                 },
+                 "regions": [form.cleaned_data['region']],
             }
+
 
             # call rest api
             url = settings.URL + '/api/getinstances/'
             headers = {'content-type': 'application/json'}
-            r = requests.post(url, data=json.dumps(data), headers=headers)
+            r = requests.get(url, data=json.dumps(data), headers=headers)
             context['instances'] = json.loads(r.text)['instances']
 
     return render(request, 'price.html', context)

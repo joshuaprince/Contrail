@@ -2373,9 +2373,9 @@
 
 $(function () {
 
-var $range = $(".price-range-slider"),
-    $inputFrom = $(".price-input-from"),
-    $inputTo = $(".price-input-to"),
+var $range = $(".vcpu-range-slider"),
+    $inputFrom = $(".vcpu-input-from"),
+    $inputTo = $(".vcpu-input-to"),
     instance,
     min = 0,
     max = 1000,
@@ -2388,7 +2388,7 @@ $range.ionRangeSlider({
     max: max,
     from: 0,
     to: 500,
-    prefix: '$ ',
+    prefix: '',
     onStart: updateInputs,
     onChange: updateInputs,
     step: 1,
