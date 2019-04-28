@@ -125,3 +125,4 @@ config.py
 .DS_Store
 *.json
 *.pem
+*.gz
