@@ -32,6 +32,7 @@ class BooleanField(Field):
 class InstanceData(models.Model):
     lastModified = fields.DateTimeField()
     region = fields.NullableField(fields.StringField())
+    sku = fields.NullableField(fields.StringField())
     capacityStatus = fields.NullableField(fields.StringField())
     clockSpeedIsUpTo = fields.NullableField(BooleanField())
     clockSpeed = fields.NullableField(fields.Float32Field()) #in GHz
