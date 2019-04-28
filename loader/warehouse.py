@@ -30,7 +30,7 @@ class BooleanField(Field):
 
 
 class InstanceData(models.Model):
-    lastModified = fields.NullableField(fields.DateTimeField())
+    lastModified = fields.DateTimeField()
     region = fields.NullableField(fields.StringField())
     capacityStatus = fields.NullableField(fields.StringField())
     clockSpeedIsUpTo = fields.NullableField(BooleanField())
@@ -64,7 +64,7 @@ class InstanceData(models.Model):
     instanceCapacityMedium = fields.NullableField(fields.Int32Field())
     instanceCapacityXlarge = fields.NullableField(fields.Int32Field())
     instanceFamily = fields.NullableField(fields.StringField())
-    instanceType = fields.NullableField(fields.StringField())
+    instanceType = fields.StringField()
     instanceSKU = fields.NullableField(fields.StringField())
     intelAvx2Available = fields.NullableField(BooleanField())
     intelAvxAvailable = fields.NullableField(BooleanField())
@@ -88,7 +88,7 @@ class InstanceData(models.Model):
     processorFeatures = fields.NullableField(fields.StringField())
     productFamily = fields.NullableField(fields.StringField())
     provisioned = fields.NullableField(BooleanField())
-    serviceCode = fields.NullableField(fields.StringField())
+    provider = fields.NullableField(fields.StringField())
     serviceName = fields.NullableField(fields.StringField())
     storageIsEbsOnly = fields.NullableField(BooleanField())
     storageCount = fields.NullableField(fields.Int32Field())
@@ -103,7 +103,7 @@ class InstanceData(models.Model):
     vcpu = fields.NullableField(fields.Int32Field())
     volumeType = fields.NullableField(fields.StringField())
 
-    priceType = fields.NullableField(fields.StringField()) #On Demand, Reserved, Spot
+    priceType = fields.StringField() #On Demand, Reserved, Spot
     appliesTo = fields.NullableField(fields.StringField())
     description = fields.NullableField(fields.StringField())
     effectiveDate = fields.NullableField(fields.DateTimeField())
@@ -115,6 +115,7 @@ class InstanceData(models.Model):
     offeringClass = fields.NullableField(fields.StringField())
     purchaseOption = fields.NullableField(fields.StringField())
 
+    # engine = engines.MergeTree('lastModified', ('priceType', 'instanceType'))
     engine = engines.Memory()
 
 
