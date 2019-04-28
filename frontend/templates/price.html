@@ -7,6 +7,8 @@
 <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 {% endblock %}
 
+<!-- SLIDER SOURCE -->
+<!-- https://codepen.io/anon/pen/rbpqME -->
 
 {% block content %}
 <div class="wrapper">
@@ -57,39 +59,70 @@
         </label>
         <div class="">
           <select name="region" class="select form-control" id="id_region"> <option value="" selected="">All</option> <option value="US East (N. Virgina)">US East (N. Virgina)</option> <option value="US East (Ohio)">US East (Ohio)</option> <option value="US West (Norther California)">US West (Norther California)</option> <option value="US West (Oregon)">US West (Oregon)</option> <option value="Asia Pacific (Mumbai)">Asia Pacific (Mumbai)</option> <option value="Asia Pacific (Seoul)">Asia Pacific (Seoul)</option> <option value="Asia Pacific (Singapore)">Asia Pacific (Singapore)</option> <option value="Asia Pacific (Sydney)">Asia Pacific (Sydney)</option> <option value="Asia Pacific (Tokyo)">Asia Pacific (Tokyo)</option> <option value="Canada (Central)">Canada (Central)</option> <option value="EU (Frankfurt)">EU (Frankfurt)</option> <option value="EU (Ireland)">EU (Ireland)</option> <option value="EU (London)">EU (London)</option> <option value="EU (Paris)">EU (Paris)</option> <option value="EU (Stockholm)">EU (Stockholm)</option> <option value="South America (Sao Paulo)">South America (Sao Paulo)</option> <option value="AWS GovCloud (US-East)">AWS GovCloud (US-East)</option> <option value="AWS GovCloud (US-West)">AWS GovCloud (US-West)</option>
-
           </select>
         </div>
       </div>
 
-      <div id="div_id_vcpus" class="form-group">
-        <label for="id_vcpus" class="col-form-label ">
-            Vcpus
-        </label>
-        <div class="">
-          <input type="number" name="vcpus" class="numberinput form-control" id="id_vcpus">
-        </div>
-      </div>
 
-      <div id="div_id_memory" class="form-group">
-        <label for="id_memory" class="col-form-label ">
-            Memory
-        </label>
-        <div class="">
-          <input type="number" name="memory" step="any" class="numberinput form-control" id="id_memory">
-        </div>
-      </div>
-
+      <label for="id_memory" class="col-form-label ">
+          Memory
+      </label>
       <div class="range-slider">
-          <input type="text" class="js-range-slider" value="" /> <br>
+          <input type="text" class="memory-range-slider" value="" />
       </div>
 
       <div class="extra-controls form-inline">
         <div class="form-group">
-          <input type="text" id="id_price_from" class="js-input-from form-control" name="price_from" value="0" style="width: 80px; margin-right: 30px;" />
-          <input type="text" id="id_price_to" class="js-input-to form-control" name="price_to" value="0" style="width: 80px;" />
+          <input type="text" id="id_memory_from" class="memory-input-from form-control" name="memory_from" value="0" style="width: 80px; margin-right: 30px;" />
+          <input type="text" id="id_memory_to" class="memory-input-to form-control" name="memory_to" value="0" style="width: 80px;" />
         </div>
       </div><br>
+
+
+      <label for="id_vcpu" class="col-form-label ">
+          vCPUs
+      </label>
+      <div class="range-slider">
+          <input type="text" class="vcpu-range-slider" value="" />
+      </div>
+
+      <div class="extra-controls form-inline">
+        <div class="form-group">
+          <input type="text" id="id_vcpu_from" class="vcpu-input-from form-control" name="vcpu_from" value="0" style="width: 80px; margin-right: 30px;" />
+          <input type="text" id="id_vcpu_to" class="vcpu-input-to form-control" name="vcpu_to" value="0" style="width: 80px;" />
+        </div>
+      </div><br>
+
+      <label for="id_price" class="col-form-label ">
+          Price Upfront
+      </label>
+      <div class="range-slider">
+          <input type="text" class="price-range-slider" value="" />
+      </div><br>
+
+      <div class="extra-controls form-inline">
+        <div class="form-group">
+          <input type="text" id="id_price_from" class="price-input-from form-control" name="price_from" value="0" style="width: 80px; margin-right: 30px;" />
+          <input type="text" id="id_price_to" class="price-input-to form-control" name="price_to" value="0" style="width: 80px;" />
+        </div>
+      </div>
+
+
+      <label for="id_pricehr" class="col-form-label ">
+          Price Hourly
+      </label>
+      <div class="range-slider">
+          <input type="text" class="pricehr-range-slider" value="" />
+      </div>
+
+      <div class="extra-controls form-inline">
+        <div class="form-group">
+          <input type="text" id="id_pricehr_from" class="pricehr-input-from form-control" name="pricehr_from" value="0" style="width: 80px; margin-right: 30px;" />
+          <input type="text" id="id_pricehr_to" class="pricehr-input-to form-control" name="pricehr_to" value="0" style="width: 80px;" />
+        </div>
+      </div>
+
+      <br>
 
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
@@ -144,29 +177,27 @@
                   <th>Instance</th>
                   <!-- <th>Provider</th> -->
                   <th>Region</th>
-                  <th>Operating System</th>
-                  <th>VCPUs</th>
-                  <th>Memory</th>
-                  <!-- <th>ECU</th> -->
+                  <th>vCPUs</th>
+                  <th>Memory (GiB)</th>
+                  <th>Clock Speed</th>
                   <th>Price Type</th>
-                  <th>Price</th>
-                  <th>Price Unit</th>
+                  <th>Price Upfront</th>
+                  <th>Price Per Hour</th>
               </tr>
           </thead>
           <tbody>
 
           {% for instance in instances %}
             <tr>
-              <td><a href="{% url 'instance' id=1 %}">{{ instance.instance_type }}</a></td>
+              <td><a href="{% url 'instance' id=instance.sku %}">{{ instance.instance_type }}</a></td>
               <!-- <td>{{ instance.provider }}</td> -->
               <td>{{ instance.region }}</td>
-              <td>{{ instance.operating_system }}</td>
               <td>{{ instance.vcpus }}</td>
               <td>{{ instance.memory }}</td>
-              <!-- <td>{{ instance.ecu }}</td> -->
+              <td>{{ instance.clock_speed }}</td>
               <td>{% if instance.price_type == 'on_demand' %}on demand{% endif %}</td>
-              <td>${{ instance.price | floatformat:3 }}</td>
-              <td>{{ instance.price_unit }}</td>
+              <td>{% if instance.priceUpfront %}${{ instance.priceUpfront | floatformat:3 }}{% else %}none{% endif %}</td>
+              <td>${{ instance.pricePerHour }}</td>
             </tr>
             {% endfor %}
 
@@ -215,7 +246,10 @@
 <!-- SLIDER -->
 <!-- https://codepen.io/anon/pen/rbpqME -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.3/jquery.min.js" ></script> -->
-<script src="{% static 'js/slider.js' %}" ></script>
+<script src="{% static 'js/priceSlider.js' %}" ></script>
+<script src="{% static 'js/priceHourlySlider.js' %}" ></script>
+<script src="{% static 'js/memorySlider.js' %}" ></script>
+<script src="{% static 'js/vcpuSlider.js' %}" ></script>
 
 
 

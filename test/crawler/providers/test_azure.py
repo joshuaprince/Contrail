@@ -52,7 +52,7 @@ class AzureTestCase(unittest.TestCase):
         mocked_instance.crawl()
 
         # Make sure that the crawl has attempted to upload exactly once.
-        mocked_instance.store_provider_data.assert_called_once()
+        self.assertEqual(mocked_instance.store_provider_data.call_count, 1)
 
         # Make sure that this crawl most likely attempted to upload real data, by ensuring that it called upload with
         #   data that contains a 'Meters' key.

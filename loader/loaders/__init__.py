@@ -26,7 +26,7 @@ class BaseLoader(ABC):
         pass
 
 
-REGISTERED_LOADER_CLASSES: Dict[str, Type[BaseLoader]] = {}
+REGISTERED_LOADER_CLASSES = {}  # type: Dict[str, Type[BaseLoader]]
 
 
 def register_loader(provider: Union[Type[BaseProvider], str]):

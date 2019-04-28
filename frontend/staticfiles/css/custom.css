@@ -16,7 +16,6 @@
 
 
 
-
 /* Ion.RangeSlider
 // css version 2.0.3
 // Â© 2013-2014 Denis Ineshin | IonDen.com
@@ -249,12 +248,12 @@
 }
 
 .irs-min, .irs-max {
-    color: #333;
+    color: white;
     font-size: 12px; line-height: 1.333;
     text-shadow: none;
     top: 0;
     padding: 1px 5px;
-    background: rgba(0,0,0,0.1);
+    /* background: rgba(0,0,0,0.1); */
     border-radius: 3px;
     -moz-border-radius: 3px;
 }
@@ -265,10 +264,11 @@
 
 .irs-from, .irs-to, .irs-single {
     color: #fff;
-    font-size: 14px; line-height: 1.333;
+    font-size: 14px;
+    line-height: 1.333;
     text-shadow: none;
     padding: 1px 5px;
-    background: #428bca;
+    background: #71aaa7;
     border-radius: 3px;
     -moz-border-radius: 3px;
 }

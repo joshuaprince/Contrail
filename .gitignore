@@ -124,5 +124,6 @@ secret.py
 config.py
 .DS_Store
 *.json
+*.gz
 *.pem
 *.gz

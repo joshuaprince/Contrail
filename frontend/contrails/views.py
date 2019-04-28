@@ -27,7 +27,18 @@ class InstanceView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         id = kwargs['id']
-        context['id'] = id
+
+        data = {'sku': 'A1B2C3'}
+        # data = {'sku': id}
+
+        # call rest api
+        url = settings.URL + '/api/getinstancedetail/'
+        headers = {'content-type': 'application/json'}
+        r = requests.get(url, data=json.dumps(data), headers=headers)
+        context['instance'] = json.loads(r.text)['instance'][0]
+
+
+        print(context['instance'])
 
 
         return context
@@ -45,27 +56,37 @@ def priceview(request):
         form = PriceForm(request.POST)
 
         if form.is_valid():
-            print("FROM")
-            print(form.cleaned_data['price_from'])
-            print("TO")
-            print(form.cleaned_data['price_to'])
-            
+
             data = {
-                'operating_system': form.cleaned_data['operating_system'],
-                'aws': form.cleaned_data['amazon_web_services'],
-                'gcp': form.cleaned_data['google_cloud_platform'],
-                'azure': form.cleaned_data['microsoft_azure'],
-                'region': form.cleaned_data['region'],
-                'vcpus': form.cleaned_data['vcpus'],
-                'memory': form.cleaned_data['memory'],
-                # 'ecu': form.cleaned_data['ecu']
+                "providers": {
+                    "aws": True,
+                    "gcp": False,
+                    "azure": False
+                 },
+                 "vcpus": {
+                    "min": int(form.cleaned_data['vcpu_from']),
+                    "max": int(form.cleaned_data['vcpu_to'])
+                 },
+                 "memory": {
+                    "min": int(form.cleaned_data['memory_from']),
+                    "max": int(form.cleaned_data['memory_to'])
+                 },
+                 "price": {
+                    "min_hourly": float(form.cleaned_data['pricehr_from']),
+                    "max_hourly": float(form.cleaned_data['pricehr_to']),
+                    "min_upfront": float(form.cleaned_data['price_from']),
+                    "max_upfront": float(form.cleaned_data['price_to'])
+                 },
+                 "region": form.cleaned_data['region'],
             }
+
 
             # call rest api
             url = settings.URL + '/api/getinstances/'
             headers = {'content-type': 'application/json'}
-            r = requests.post(url, data=json.dumps(data), headers=headers)
+            r = requests.get(url, data=json.dumps(data), headers=headers)
             context['instances'] = json.loads(r.text)['instances']
+            print(context['instances'])
 
     return render(request, 'price.html', context)
 
