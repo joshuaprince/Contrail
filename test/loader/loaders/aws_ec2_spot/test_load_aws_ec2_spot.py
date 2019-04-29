@@ -54,12 +54,24 @@ class LoadAmazonEC2SpotTestCase(unittest.TestCase):
             self.assertFalse(inst.priceUpfront)  # price == 0 or None
 
         # Check that explicit instances were loaded
-        self.assertTrue(any(
-            i.instanceType == 'm5d.12xlarge' and
-            i.ecu == 173 and
-            i.vcpu == 48 and
-            i.memory == 192 and
-            i.clockSpeed == 2.5 and
-            i.pricePerHour == 0.9523
-            for i in instances
-        ), "Couldn't find instance 1 from ec2_spot_limited.json in the loaded database.")
+        m5d12xl = next(i for i in instances if i.instanceType == 'm5d.12xlarge')
+        self.assertEqual(m5d12xl.ecu, 173)
+        self.assertEqual(m5d12xl.vcpu, 48)
+        self.assertEqual(m5d12xl.memory, 192)
+        self.assertEqual(m5d12xl.clockSpeed, 2.5)
+        self.assertEqual(m5d12xl.pricePerHour, 0.9523)
+
+        c52xl = next(i for i in instances if i.instanceType == 'c5.2xlarge')
+        self.assertEqual(c52xl.ecu, 34)
+        self.assertEqual(c52xl.vcpu, 8)
+        self.assertEqual(c52xl.memory, 16)
+        self.assertEqual(c52xl.clockSpeed, 3.0)
+        self.assertEqual(c52xl.pricePerHour, 0.1298)
+
+        for i in instances:
+            if not i.instanceType == 't3.nano':
+                continue
+            self.assertEqual(i.memory, 0.5)
+            self.assertEqual(i.vcpu, 2)
+            self.assertFalse(i.clockSpeed)  # clock speed is unspecified for t3.nano instances in raw data
+            self.assertEqual(i.pricePerHour, 0.0059)
