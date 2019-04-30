@@ -84,8 +84,8 @@ def priceview(request):
             # call rest api
             url = settings.URL + '/api/getinstances/'
             headers = {'content-type': 'application/json'}
-            r = requests.get(url, data=json.dumps(data), headers=headers)
-            context['instances'] = json.loads(r.text)['instances']
+            r = requests.get(url, data=json.dumps(data), headers=headers).content.decode('utf-8')
+            context['instances'] = json.loads(r)['instances']
             print(context['instances'])
 
     return render(request, 'price.html', context)

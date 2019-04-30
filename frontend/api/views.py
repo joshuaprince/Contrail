@@ -68,7 +68,7 @@ class GetInstances(APIView):
         ]
         '''
         def get(self, request: Request):
-            data = json.loads(request.body)
+            data = request.data
             print(data)
 
             # instances = InstanceData.objects_in(db).filter(onDemandPricePerUnit__ne=None).distinct()\
@@ -77,7 +77,7 @@ class GetInstances(APIView):
             #           # 'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
             #           'onDemandPricePerUnit', 'onDemandPriceUnit')\
 
-            instances = InstanceData.objects_in(db).filter(instanceType__ne=None).distinct()\
+            instances = InstanceData.objects_in(db).distinct()\
                 .only('region', 'instanceType', 'clockSpeed', 'memory', 'vcpu', 'pricePerHour', 'priceUpfront')
             # 'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
 
