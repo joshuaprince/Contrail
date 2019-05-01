@@ -1,9 +1,11 @@
 from rest_framework import serializers
 
+from loader.warehouse import InstanceData, db
+
 
 class InstanceDataSerializer(serializers.Serializer):
     # sku = serializers.CharField(source='instanceSKU', max_length=127)
-    sku = serializers.SerializerMethodField()
+    sku = serializers.CharField()
 
     region = serializers.CharField(allow_blank=True, max_length=127)
     instance_type = serializers.CharField(source='instanceType', allow_blank=True, max_length=127)
@@ -33,14 +35,15 @@ class InstanceDataSerializer(serializers.Serializer):
         if obj.spotTimestamp:
             return 'spot'
 
-    def get_sku(self, obj):
-        return 'A1B2C3'
 
+class InstancePriceSerializer(serializers.Serializer):
+    lastModified = serializers.DateTimeField()
+    pricePerHour = serializers.FloatField()
 
 
 class InstanceDetailSerializer(serializers.Serializer):
     # sku = serializers.CharField(source='instanceSKU', max_length=127)
-    sku = serializers.SerializerMethodField()
+    sku = serializers.CharField()
 
     region = serializers.CharField(allow_blank=True, max_length=127)
     instance_type = serializers.CharField(source='instanceType', allow_blank=True, max_length=127)
@@ -51,6 +54,8 @@ class InstanceDetailSerializer(serializers.Serializer):
 
     pricePerHour = serializers.FloatField()
     priceUpfront = serializers.FloatField()
+
+    priceHistory = serializers.SerializerMethodField()
 
     networkPerformance = serializers.CharField(max_length=127)
     physicalCores = serializers.IntegerField()
@@ -78,5 +83,5 @@ class InstanceDetailSerializer(serializers.Serializer):
         if obj.spotTimestamp:
             return 'spot'
 
-    def get_sku(self, obj):
-        return 'A1B2C3'
+    def get_priceHistory(self, obj):
+        return InstancePriceSerializer(list(InstanceData.objects_in(db).filter(sku=obj.sku)), many=True)

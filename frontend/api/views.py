@@ -78,7 +78,7 @@ class GetInstances(APIView):
             #           'onDemandPricePerUnit', 'onDemandPriceUnit')\
 
             instances = InstanceData.objects_in(db).distinct()\
-                .only('region', 'instanceType', 'clockSpeed', 'memory', 'vcpu', 'pricePerHour', 'priceUpfront')
+                .only('sku', 'region', 'instanceType', 'clockSpeed', 'memory', 'vcpu', 'pricePerHour', 'priceUpfront')
             # 'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
 
             # if request has a value, filter original query
@@ -129,14 +129,19 @@ class GetInstanceDetail(APIView):
         ]
         '''
         def get(self, request: Request):
-            data = json.loads(request.body)
+            # data = json.loads(request.body)
+            data = request.POST
             print(data['sku'])
 
             instance = InstanceData.objects_in(db).filter(instanceType__ne=data['sku']).distinct()\
-                .only('instanceType', 'region', 'clockSpeed', 'memory', 'vcpu', 'pricePerHour', 'priceUpfront',\
-                'networkPerformance', 'physicalCores', 'physicalProcessor', 'storageIsEbsOnly', 'storageCount', 'storageCapacity', 'storageType', 'volumeType')
+                .only('instanceType', 'region', 'clockSpeed', 'memory', 'vcpu', 'pricePerHour', 'priceUpfront',
+                'networkPerformance', 'physicalCores', 'physicalProcessor', 'storageIsEbsOnly', 'storageCount',
+                'storageCapacity', 'storageType', 'volumeType')[0]
 
+            instance_serialized = InstanceDetailSerializer(instance)
             # instance = instance.paginate(page_num=1, page_size=100).objects
 
-            return Response({'instance': [InstanceDetailSerializer(obj).data for obj in instance]}, status=HTTP_200_OK)
+            # instance_serialized.priceHistory = InstanceData.objects_in(db).filter(sku=data['sku'])
+
+            return Response({'instance': [instance_serialized.data]}, status=HTTP_200_OK)
             return Response(status=HTTP_200_OK)

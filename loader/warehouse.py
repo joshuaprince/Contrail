@@ -30,9 +30,15 @@ class BooleanField(Field):
 
 
 class InstanceData(models.Model):
-    lastModified = fields.DateTimeField()
+    sku = fields.StringField()
+
     region = fields.NullableField(fields.StringField())
-    sku = fields.NullableField(fields.StringField())
+    priceType = fields.StringField()  # On Demand, Reserved, Spot
+
+    lastModified = fields.DateTimeField()
+    pricePerHour = fields.NullableField(fields.Float32Field())
+    priceUpfront = fields.NullableField(fields.Float32Field())
+
     capacityStatus = fields.NullableField(fields.StringField())
     clockSpeedIsUpTo = fields.NullableField(BooleanField())
     clockSpeed = fields.NullableField(fields.Float32Field()) #in GHz
@@ -104,14 +110,11 @@ class InstanceData(models.Model):
     vcpu = fields.NullableField(fields.Int32Field())
     volumeType = fields.NullableField(fields.StringField())
 
-    priceType = fields.StringField() #On Demand, Reserved, Spot
     appliesTo = fields.NullableField(fields.StringField())
     description = fields.NullableField(fields.StringField())
     effectiveDate = fields.NullableField(fields.DateTimeField())
     beginRange = fields.NullableField(fields.Float32Field())
     endRange = fields.NullableField(fields.Float32Field())
-    pricePerHour = fields.NullableField(fields.Float32Field())
-    priceUpfront = fields.NullableField(fields.Float32Field())
     leaseContractLength = fields.NullableField(fields.StringField())
     offeringClass = fields.NullableField(fields.StringField())
     purchaseOption = fields.NullableField(fields.StringField())
