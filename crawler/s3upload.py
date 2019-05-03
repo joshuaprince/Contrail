@@ -56,6 +56,6 @@ class S3Client:
 
         # source: https://stackoverflow.com/questions/49534901/is-there-a-way-to-use-json-dump-with-gzip
         with gzip.open(zipfile, 'wt', encoding='ascii') as f_out:
-            json.dump(data, f_out)
+            json.dump(data, f_out, indent=2)
 
         self._client.upload_file(zipfile, AWS_BUCKET_NAME, destination + ".gz")

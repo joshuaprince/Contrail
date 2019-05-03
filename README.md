@@ -33,6 +33,23 @@ deactivate
 ```
 
 
+### Configure
+Find `config_example.py` in the main Contrail folder and make a copy named `config.py`. For a quick start, change the
+line
+
+```
+CLICKHOUSE_DB_URL = 'http://localhost:8123'
+```
+
+to
+
+```
+CLICKHOUSE_DB_URL = 'http://contrail.tk:8123'
+```
+
+This will make the frontend pull data from the official Contrail database. To collect your own data, see [Collecting 
+your own data](#collecting-your-own-data) below.
+
 ### Start Django
 Make sure you are in the main Contrail folder and the virtual environment is activated.
 

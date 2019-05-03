@@ -37,7 +37,14 @@ class AmazonEC2TestCase(unittest.TestCase):
         """
         try:
             self.instance.load_regions()
-            region_url_postfix = self.instance.get_next_region()['currentVersionUrl']
+
+            # Get the us-west-1 region to test on
+            region = self.instance.get_next_region()
+            while region['regionCode'] != 'us-west-1':
+                self.assertTrue(self.instance.region_queued(), "Couldn't find region 'us-west-1'.")
+                region = self.instance.get_next_region()
+
+            region_url_postfix = region['currentVersionUrl']
 
             response_obj = requests.get(URL_REGION_VERSION.format(currentVersionUrl=region_url_postfix))
             response_json = response_obj.content.decode('utf-8')
@@ -49,6 +56,10 @@ class AmazonEC2TestCase(unittest.TestCase):
 
             self.assertIn('products', response_dict, "products list missing: at /products/")
             for name, product in response_dict['products'].items():
+                if product['productFamily'] == 'Data Transfer':
+                    # For now, ignore data transfer products, which are not compute instances and don't match format
+                    continue
+
                 self.assertIn('sku', product, "sku missing: at /products/{0}/sku".format(name))
                 self.assertIn('attributes', product, "attributes missing: at /products/{0}/attributes/".format(name))
                 self.assertIn('location', product['attributes'],
