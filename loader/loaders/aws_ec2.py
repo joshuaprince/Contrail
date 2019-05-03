@@ -136,8 +136,12 @@ class AmazonEC2Loader(BaseLoader):
         for key, value in reserved_data.items():
             reserved_data[key] = value + product_attribute_data[key[0:key.find('.')]] + [('priceType', 'Reserved'), ('lastModified', last_modified), (k, v)]
         items = list(on_demand_data.values()) + list(reserved_data.values())
+        instances = []
         for item in items:
             instance = InstanceData()
             for i in item:
                 setattr(instance, i[0], i[1])
-            db.insert([instance])
+            instances.append(instance)
+        insertables = [instances[i * 1000:(i + 1) * 1000] for i in range((len(instances) + 1000 - 1) // 1000 )] 
+        for inst in insertables:
+            db.insert(inst)

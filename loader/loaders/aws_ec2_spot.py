@@ -56,8 +56,12 @@ class AmazonEC2SpotLoader(BaseLoader):
         region = "{}".format(filename.split('/')[1]).replace('-', "")
         spot_data = getSpotData(json, last_modified, region)
 
+        instances = []
         for item in spot_data:
             instance = InstanceData()
             for i in item:
                 setattr(instance, i[0], i[1])
-            db.insert([instance])
+            instances.append(instance)
+        insertables = [instances[i * 1000:(i + 1) * 1000] for i in range((len(instances) + 1000 - 1) // 1000 )] 
+        for inst in insertables:
+            db.insert(inst)

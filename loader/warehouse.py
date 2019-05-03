@@ -116,8 +116,8 @@ class InstanceData(models.Model):
     offeringClass = fields.NullableField(fields.StringField())
     purchaseOption = fields.NullableField(fields.StringField())
 
-    # engine = engines.MergeTree('lastModified', ('priceType', 'instanceType'))
-    engine = engines.Memory()
+    engine = engines.MergeTree('lastModified', ('priceType', 'instanceType'))
+    # engine = engines.Memory()
 
 
 class LoadedFile(models.Model):
