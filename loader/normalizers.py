@@ -181,7 +181,7 @@ def regionNormalizer(key, value):
         'uswest1': 'US West 1',
         'uswest2': 'US West 2'
         }
-        return ('region', regions[value])
+        return ('region', value)
     else:
         pass
 

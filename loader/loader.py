@@ -60,6 +60,7 @@ class Loader:
                 self.load_file(filename, last_modified)
             except Exception as e:
                 logger.warning("Failed to load data file {}:\n{}".format(filename, str(e)))
+                logger.exception(e)
 
 
 def load():
