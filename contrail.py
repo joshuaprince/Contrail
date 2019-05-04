@@ -1,6 +1,13 @@
+#!/usr/bin/env python3
 import argparse
 import os
 import sys
+
+try:
+    import config
+except ImportError:
+    print("Couldn't load config.py. Make a copy of config_example.py and see the README to configure Contrail.")
+    sys.exit(1)
 
 
 def run_crawler(args):
