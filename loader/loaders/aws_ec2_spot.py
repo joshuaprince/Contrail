@@ -44,6 +44,11 @@ def getSpotData(d, last_modified, region):
                 pass
         k, v = normalizeData('region', region)
         values += [('priceType', 'Spot'), ('lastModified', str(last_modified)), (k, v)]
+
+        instanceType = [val for val in values if val[0] == 'instanceType'][0][1]
+        sku = 'ec2sp-' + region + '-' + instanceType
+        values += [('sku', sku)]
+
         data.append(values)
     return data
 
