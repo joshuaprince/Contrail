@@ -1,7 +1,7 @@
 import datetime
 import json
 import logging
-from typing import List
+from typing import List, Dict
 
 import requests
 import time
@@ -26,6 +26,12 @@ URL_RATECARD_REQUEST = "https://management.azure.com:443/subscriptions/{subscrip
 URL queried to list prices. Replaces {subscriptionId}.
 """
 
+URL_CAPABILITIES_REQUEST = "https://management.azure.com/subscriptions/{subscriptionId}/" \
+                           "providers/Microsoft.Compute/skus?api-version=2017-09-01"
+"""
+URL queried to get instance capabilities (mapping from size to vcpus, memory, etc). Replaces {subscriptionId}.
+"""
+
 
 @register_provider
 class Azure(BaseProvider):
@@ -40,15 +46,13 @@ class Azure(BaseProvider):
 
     def crawl(self) -> datetime.timedelta:
         ratecard = self.request_ratecard()
+        ratecard['Capabilities'] = self.request_capabilities()
 
         self.store_provider_data(region='US', data=ratecard)
 
         return datetime.timedelta(minutes=60)
 
     def request_ratecard(self):
-        # post_data = {
-        #     'Authorization': 'Bearer {}'.format(self.access_token())
-        # }
         url = URL_RATECARD_REQUEST.format(subscriptionId=AZURE_SUBSCRIPTION_ID)
         response = requests.get(url, allow_redirects=False,
                                 headers={'Authorization': 'Bearer {}'.format(self.access_token())})
@@ -59,8 +63,37 @@ class Azure(BaseProvider):
         # Get the ratecard content by making another call to go the redirect URL
         rate_card = requests.get(redirect_url)
 
-        # Print the ratecard content
         return json.loads(rate_card.content.decode('utf-8'))
+
+    def request_capabilities(self) -> Dict[str, Dict]:
+        """
+        Get a mapping from instance sizes to parameters such as vcpus, memory, etc.
+        """
+        url = URL_CAPABILITIES_REQUEST.format(subscriptionId=AZURE_SUBSCRIPTION_ID)
+        response = requests.get(url, allow_redirects=False,
+                                headers={'Authorization': 'Bearer {}'.format(self.access_token())})
+
+        resp_dict = json.loads(response.content.decode('utf-8'))
+
+        capabilities = {}
+
+        for instance in resp_dict['value']:
+            if instance.get('resourceType') != 'virtualMachines':
+                continue
+
+            if instance.get('size') in capabilities:
+                # Response contains each instance size multiple times, so don't load if we've already loaded this size
+                continue
+
+            size = instance['size'].replace('_', ' ')
+
+            # Response lists capabilities like this: [{"name": "vCPUS", "value": 2}, {"name": "memory", "value": 8}...]
+            # Convert it to a more pythonic form, like {"vCPUS": 2, "memory": 8...}
+            capabilities[size] = {}
+            for capability in instance['capabilities']:
+                capabilities[size][capability['name']] = capability['value']
+
+        return capabilities
 
     def _renew_access_token(self):
         """

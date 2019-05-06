@@ -30,15 +30,26 @@ class BooleanField(Field):
 
 
 class InstanceData(models.Model):
+    # Universal fields ---------------------------------------------------------
+    sku = fields.StringField()
     lastModified = fields.DateTimeField()
-    region = fields.NullableField(fields.StringField())
-    sku = fields.NullableField(fields.StringField())
+    region = fields.StringField()
+
+    priceType = fields.StringField()  # On Demand, Reserved, Spot
+    pricePerHour = fields.Float32Field(default=0)
+    priceUpfront = fields.Float32Field(default=0)
+
+    vcpu = fields.Int32Field()
+    memory = fields.Float32Field()  # in GiB
+    gpu = fields.NullableField(fields.Int32Field())
+
+    # AWS Specific -------------------------------------------------------------
     capacityStatus = fields.NullableField(fields.StringField())
     clockSpeedIsUpTo = fields.NullableField(BooleanField())
-    clockSpeed = fields.NullableField(fields.Float32Field()) #in GHz
+    clockSpeed = fields.NullableField(fields.Float32Field())  # in GHz
     currentGeneration = fields.NullableField(BooleanField())
     dedicatedEbsThroughputIsUpTo = fields.NullableField(BooleanField())
-    dedicatedEbsThroughput = fields.NullableField(fields.Int32Field()) #in Mbps
+    dedicatedEbsThroughput = fields.NullableField(fields.Int32Field())  # in Mbps
     ebsOptimized = fields.NullableField(BooleanField())
     ecuIsVariable = fields.NullableField(BooleanField())
     ecu = fields.NullableField(fields.Float32Field())
@@ -46,7 +57,6 @@ class InstanceData(models.Model):
     enhancedNetworkingSupported = fields.NullableField(BooleanField())
     fromLocation = fields.NullableField(fields.StringField())
     fromLocationType = fields.NullableField(fields.StringField())
-    gpu = fields.NullableField(fields.Int32Field())
     gpuMemory = fields.NullableField(fields.StringField())
     group = fields.NullableField(fields.StringField())
     groupDescription = fields.NullableField(fields.StringField())
@@ -76,8 +86,7 @@ class InstanceData(models.Model):
     maxIopsBurstPerformance = fields.NullableField(fields.StringField())
     maxIopsVolume = fields.NullableField(fields.StringField())
     maxThroughputVolume = fields.NullableField(fields.StringField())
-    maxVolumeSize = fields.NullableField(fields.Int32Field()) #in TiB
-    memory = fields.NullableField(fields.Float32Field()) #in GiB
+    maxVolumeSize = fields.NullableField(fields.Int32Field())  # in TiB
     networkPerformance = fields.NullableField(fields.StringField())
     normalizationSizeFactor = fields.NullableField(fields.Float32Field())
     operatingSystem = fields.NullableField(fields.StringField())
@@ -101,23 +110,31 @@ class InstanceData(models.Model):
     toLocationType = fields.NullableField(fields.StringField())
     transferType = fields.NullableField(fields.StringField())
     usageType = fields.NullableField(fields.StringField())
-    vcpu = fields.NullableField(fields.Int32Field())
     volumeType = fields.NullableField(fields.StringField())
 
-    priceType = fields.StringField() #On Demand, Reserved, Spot
     appliesTo = fields.NullableField(fields.StringField())
     description = fields.NullableField(fields.StringField())
     effectiveDate = fields.NullableField(fields.DateTimeField())
     beginRange = fields.NullableField(fields.Float32Field())
     endRange = fields.NullableField(fields.Float32Field())
-    pricePerHour = fields.NullableField(fields.Float32Field())
-    priceUpfront = fields.NullableField(fields.Float32Field())
     leaseContractLength = fields.NullableField(fields.StringField())
     offeringClass = fields.NullableField(fields.StringField())
     purchaseOption = fields.NullableField(fields.StringField())
 
+    # Azure specific -----------------------------------------------------------
+    meterSubCategory = fields.NullableField(fields.StringField())
+    maxResourceVolumeMb = fields.NullableField(fields.StringField())
+    osVhdSizeMb = fields.NullableField(fields.StringField())
+    hyperVGenerations = fields.NullableField(fields.StringField())
+    maxDataDiskCount = fields.NullableField(fields.StringField())
+    lowPriorityCapable = fields.NullableField(fields.StringField())
+    premiumIo = fields.NullableField(fields.StringField())
+    vcpusAvailable = fields.NullableField(fields.StringField())
+    vcpusPerCore = fields.NullableField(fields.StringField())
+    ephemeralOsDiskSupported = fields.NullableField(fields.StringField())
+
+    # InstanceData ClickHouse configuration ====================================
     engine = engines.MergeTree('lastModified', ('priceType', 'instanceType'))
-    # engine = engines.Memory()
 
 
 class LoadedFile(models.Model):
