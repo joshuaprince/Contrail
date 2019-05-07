@@ -156,7 +156,7 @@ class LoadedFile(models.Model):
     engine = engines.MergeTree('time_loaded', ('filename', 'time_loaded'))
 
 
-def create_contrail_table(recreate=True):
+def create_contrail_table(recreate=False):
     if db.does_table_exist(InstanceData) and not recreate:
         return
 
