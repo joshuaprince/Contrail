@@ -91,12 +91,45 @@ def priceview(request):
     return render(request, 'price.html', context)
 
 
-class CompareView(TemplateView):
+def compareview(request):
     """
-    Render Compare page
+    Render Price page
     """
-    template_name = "compare.html"
+    context = {'form':PriceForm()}
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+    if request.method == 'POST':
+        form = PriceForm(request.POST)
+
+        if form.is_valid():
+
+            data = {
+                "providers": {
+                    "aws": True,
+                    "gcp": False,
+                    "azure": False
+                 },
+                 "vcpus": {
+                    "min": int(form.cleaned_data['vcpu_from']),
+                    "max": int(form.cleaned_data['vcpu_to'])
+                 },
+                 "memory": {
+                    "min": int(form.cleaned_data['memory_from']),
+                    "max": int(form.cleaned_data['memory_to'])
+                 },
+                 "price": {
+                    "min_hourly": float(form.cleaned_data['pricehr_from']),
+                    "max_hourly": float(form.cleaned_data['pricehr_to']),
+                    "min_upfront": float(form.cleaned_data['price_from']),
+                    "max_upfront": float(form.cleaned_data['price_to'])
+                 },
+                 "region": form.cleaned_data['region'],
+            }
+
+            # call rest api
+            url = settings.URL + '/api/getinstances/'
+            headers = {'content-type': 'application/json'}
+            r = requests.get(url, data=json.dumps(data), headers=headers).content.decode('utf-8')
+            context['instances'] = json.loads(r)['instances']
+            print(context['instances'])
+
+    return render(request, 'compare.html', context)
