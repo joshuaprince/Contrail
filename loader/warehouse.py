@@ -151,8 +151,9 @@ class LoadedFile(models.Model):
     same file twice.
     """
     filename = fields.StringField()
+    time_loaded = fields.DateTimeField()
 
-    engine = engines.Memory()
+    engine = engines.MergeTree('time_loaded', ('filename', 'time_loaded'))
 
 
 def create_contrail_table(recreate=True):

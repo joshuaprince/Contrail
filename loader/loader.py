@@ -1,3 +1,4 @@
+import datetime
 import gzip
 import json
 import logging
@@ -32,7 +33,7 @@ class Loader:
         """
         Mark in the database that a file has been loaded, so that it will not be loaded again.
         """
-        db.insert([LoadedFile(filename=filename)])
+        db.insert([LoadedFile(filename=filename, time_loaded=datetime.datetime.now())])
 
     def load_file(self, filename: str, last_modified: str):
         loader_name = filename.split('/')[0]
