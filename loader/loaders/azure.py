@@ -42,7 +42,7 @@ class AzureLoader(BaseLoader):
         if meter['MeterName'] == 'Compute Hours':
             return False
 
-        # Don't load Windows instances
+        # Don't load Windows instances (for now)
         if 'Windows' in meter['MeterSubCategory']:
             return False
 
@@ -96,14 +96,16 @@ class AzureLoader(BaseLoader):
 
         capabilities = all_capabilities.get(size)
         if not capabilities:
-            logger.warning("Couldn't get capabilities for instance size {}".format(size))
+            # Not all instance sizes seem to have a corresponding capabilities lookup.
+            # For now, just don't load these instances (this makes up ~3% of all instances, all of them are M or N type)
+            logger.warning("Couldn't get capabilities for instance size {} ({})".format(size, meter['MeterId']))
             return None
 
         inst.vcpu = capabilities['vCPUs']
         inst.memory = capabilities['MemoryGB']
         inst.gpu = capabilities.get('GPUs', 0)
 
-        # Azure-specific fields. Not necessary, so we use get() instead of [] so there aren't any errors
+        # Azure-specific fields. Not required, so we use get() instead of [] so there aren't any errors if unspecified
         inst.meterSubCategory = meter['MeterSubCategory']
         inst.maxResourceVolumeMb = capabilities.get('MaxResourceVolumeMB')
         inst.osVhdSizeMb = capabilities.get('OSVhdSizeMB')
@@ -114,6 +116,14 @@ class AzureLoader(BaseLoader):
         inst.vcpusAvailable = capabilities.get('vCPUsAvailable')
         inst.vcpusPerCore = capabilities.get('vCPUsPerCore')
         inst.ephemeralOsDiskSupported = capabilities.get('EphemeralOSDiskSupported')
+        inst.acus = capabilities.get('ACUs')
+        inst.combinedTempDiskAndCachedReadBytesPerSecond = capabilities.get('CombinedTempDiskAndCachedReadBytesPerSecond')
+        inst.combinedTempDiskAndCachedWriteBytesPerSecond = capabilities.get('CombinedTempDiskAndCachedWriteBytesPerSecond')
+        inst.combinedTempDiskAndCachedIOPS = capabilities.get('CombinedTempDiskAndCachedIOPS')
+        inst.uncachedDiskBytesPerSecond = capabilities.get('UncachedDiskBytesPerSecond')
+        inst.uncachedDiskIOPS = capabilities.get('UncachedDiskIOPS')
+        inst.cachedDiskBytes = capabilities.get('CachedDiskBytes')
+        inst.maxWriteAcceleratorDisksAllowed = capabilities.get('MaxWriteAcceleratorDisksAllowed')
 
         return inst
 
