@@ -320,6 +320,64 @@
   } );
 </script>
 
+<script type="text/javascript">
+  var comparePop = document.getElementById('comparepop');
+  var btn = document.getElementById('comparebutton');
+  var span = document.getElementsByClassName("close")[0];
+  var card = 0;
+
+  btn.onclick = function() {
+    comparePop.style.display = "block";
+    var selectedRows = document.querySelectorAll(".selected");
+    if (selectedRows[0]) {
+      var row = selectedRows[0];
+      $(".column1 > .card").append(row.cells[0]);
+      $(".column1 > .card").append(row.cells[0]);
+      $(".column1 > .card").append(row.cells[0]);
+      $(".column1 > .card").append(row.cells[0]);
+      $(".column1 > .card").append(row.cells[0]);
+      $(".column1 > .card").append(row.cells[0]);
+      $(".column1 > .card").append(row.cells[0]);
+      $(".column1 > .card").append(row.cells[0]);
+    }
+    if (selectedRows[2]) {
+      var row = selectedRows[1];
+      $(".column2 > .card").append(row.cells[0]);
+      $(".column2 > .card").append(row.cells[0]);
+      $(".column2 > .card").append(row.cells[0]);
+      $(".column2 > .card").append(row.cells[0]);
+      $(".column2 > .card").append(row.cells[0]);
+      $(".column2 > .card").append(row.cells[0]);
+      $(".column2 > .card").append(row.cells[0]);
+      $(".column2 > .card").append(row.cells[0]);
+    }
+
+    if (selectedRows[2]) {
+      var row = selectedRows[2];
+      $(".column3 > .card").append(row.cells[0]);
+      $(".column3 > .card").append(row.cells[0]);
+      $(".column3 > .card").append(row.cells[0]);
+      $(".column3 > .card").append(row.cells[0]);
+      $(".column3 > .card").append(row.cells[0]);
+      $(".column3 > .card").append(row.cells[0]);
+      $(".column3 > .card").append(row.cells[0]);
+      $(".column3 > .card").append(row.cells[0]);
+    }
+
+
+  }
+
+  span.onclick = function() {
+    comparePop.style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    if (event.target == comparePop) {
+    comparePop.style.display = "none";
+  }
+}
+</script>
+
 
 
 
