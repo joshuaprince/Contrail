@@ -32,6 +32,7 @@ class AzureLoader(BaseLoader):
           - Non-VMs
           - Compute Hours
           - Windows machines
+          - Expired meters
           - Instances that don't specify a region (?)
         """
         # Load VM instances only
@@ -46,6 +47,10 @@ class AzureLoader(BaseLoader):
         if 'Windows' in meter['MeterSubCategory']:
             return False
 
+        # Don't load expired meters
+        if 'Expired' in meter['MeterName']:
+            return False
+
         # Strangely, some meters just don't specify a region. Skip those too
         if not meter['MeterRegion']:
             return False
@@ -53,19 +58,19 @@ class AzureLoader(BaseLoader):
         return True
 
     @classmethod
-    def normalize_meter_name(cls, meter_name: str) -> (str, bool):
+    def normalize_meter_name(cls, meter_name: str) -> (str, str, bool):
         """
         Azure "instance sizes" are stored in the raw data in the MeterName field. This field contains the name of the
         instance size (i.e. M32s) but also might say "Low Priority" to designate this offer as a spot-like instance.
         Also, it may reflect the pricing of multiple similar instance types, such as "F2/F2s".
 
         Examples:
-          - "M32s Low Priority" -> ("M32s", True)
-          - "F2/F2s Low Priority" -> ("F2", True)
-          - "A6" -> ("A6", False)
+          - "M32s Low Priority" -> ("M32s", "M32s", True)
+          - "F2/F2s Low Priority" -> ("F2/F2s", "F2", True)
+          - "A6" -> ("A6", "A6", False)
 
-        :return: A tuple consisting of the instance's size (i.e. M32s), and a bool that is True if this is a Low
-        Priority instance or false otherwise.
+        :return: A tuple consisting of the instance's size(s) (i.e. F2/F2s), the key to get its capabilities (i.e. F2),
+        and a bool that is True if this is a Low Priority instance or false otherwise.
         """
         lp = ' Low Priority'
         is_spot = False
@@ -74,10 +79,9 @@ class AzureLoader(BaseLoader):
             meter_name = meter_name[:-len(lp)]
             is_spot = True
 
-        if '/' in meter_name:
-            meter_name = meter_name.split('/')[0]
+        capability_key = meter_name.split('/')[0]
 
-        return meter_name, is_spot
+        return meter_name, capability_key, is_spot
 
     @classmethod
     def normalize(cls, meter: dict, all_capabilities: dict) -> InstanceData or None:
@@ -90,11 +94,11 @@ class AzureLoader(BaseLoader):
         inst.region = meter['MeterRegion']
         inst.pricePerHour = meter['MeterRates']['0']
 
-        size, is_spot = cls.normalize_meter_name(meter['MeterName'])
+        size, capability_key, is_spot = cls.normalize_meter_name(meter['MeterName'])
         inst.instanceType = size
         inst.priceType = ('Spot' if is_spot else 'On Demand')
 
-        capabilities = all_capabilities.get(size)
+        capabilities = all_capabilities.get(capability_key)
         if not capabilities:
             # Not all instance sizes seem to have a corresponding capabilities lookup.
             # For now, just don't load these instances (this makes up ~3% of all instances, all of them are M or N type)
