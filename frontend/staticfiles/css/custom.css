@@ -328,7 +328,8 @@ a.paginate_button:hover {
   background-color: FireBrick;
   color: White;
   cursor: pointer;
-} */
+}
+
 
 #instances tbody tr:hover {
   background-color: #c7d0cf;
