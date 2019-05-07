@@ -1,0 +1,240 @@
+{
+  "OfferTerms": [],
+  "Meters": [
+    {
+      "EffectiveDate": "2019-03-01T00:00:00Z",
+      "IncludedQuantity": 0.0,
+      "MeterCategory": "Virtual Machines",
+      "MeterId": "d0bf9053-17c4-4fec-8502-4eb8376343a7",
+      "MeterName": "F2/F2s Low Priority",
+      "MeterRates": {
+        "0": 0.0766
+      },
+      "MeterRegion": "US West 2",
+      "MeterStatus": "Active",
+      "MeterSubCategory": "F/FS Series Windows",
+      "MeterTags": [],
+      "Unit": "1 Hour"
+    },
+    {
+      "EffectiveDate": "2017-02-01T00:00:00Z",
+      "IncludedQuantity": 0.0,
+      "MeterCategory": "SQL Database",
+      "MeterId": "8b7672d4-16fc-446e-9935-cf2223c5290f",
+      "MeterName": "S3 Secondary DTUs",
+      "MeterRates": {
+        "0": 4.0177
+      },
+      "MeterRegion": "KR South",
+      "MeterStatus": "Active",
+      "MeterSubCategory": "Single Standard",
+      "MeterTags": [],
+      "Unit": "1/Day"
+    },
+    {
+      "EffectiveDate": "2018-12-11T00:00:00Z",
+      "IncludedQuantity": 0.0,
+      "MeterCategory": "Virtual Machines",
+      "MeterId": "1187b6a8-3ef9-4de3-8400-796ab3905e96",
+      "MeterName": "M32s Low Priority",
+      "MeterRates": {
+        "0": 1.209
+      },
+      "MeterRegion": "AP East",
+      "MeterStatus": "Active",
+      "MeterSubCategory": "MS Series",
+      "MeterTags": [],
+      "Unit": "1 Hour"
+    },
+    {
+      "EffectiveDate": "2014-05-01T00:00:00Z",
+      "IncludedQuantity": 0.0,
+      "MeterCategory": "Virtual Machines",
+      "MeterId": "2c4db260-4bc7-4388-a42f-b0c709255ae8",
+      "MeterName": "A6",
+      "MeterRates": {
+        "0": 0.64
+      },
+      "MeterRegion": "AP Southeast",
+      "MeterStatus": "Active",
+      "MeterSubCategory": "A Series Windows",
+      "MeterTags": [],
+      "Unit": "1 Hour"
+    },
+    {
+      "EffectiveDate": "2018-03-01T00:00:00Z",
+      "IncludedQuantity": 0.0,
+      "MeterCategory": "Virtual Machines",
+      "MeterId": "84426b7f-eaf8-4f7a-a9ce-d93f17e1cc9a",
+      "MeterName": "F2s v2 Low Priority",
+      "MeterRates": {
+        "0": 0.017
+      },
+      "MeterRegion": "US West 2",
+      "MeterStatus": "Active",
+      "MeterSubCategory": "FSv2 Series",
+      "MeterTags": [],
+      "Unit": "1 Hour"
+    },
+    {
+      "EffectiveDate": "2017-11-03T00:00:00Z",
+      "IncludedQuantity": 0.0,
+      "MeterCategory": "Virtual Machines",
+      "MeterId": "8bef034b-b24b-4b01-ba0a-b36ecc0bcc11",
+      "MeterName": "D32 v3/D32s v3 Low Priority",
+      "MeterRates": {
+        "0": 0.352
+      },
+      "MeterRegion": "US Central",
+      "MeterStatus": "Active",
+      "MeterSubCategory": "Dv3/DSv3 Series",
+      "MeterTags": [],
+      "Unit": "1 Hour"
+    },
+    {
+      "EffectiveDate": "2017-06-17T00:00:00Z",
+      "IncludedQuantity": 0.0,
+      "MeterCategory": "Virtual Machines",
+      "MeterId": "a802d938-75d2-45f6-b13e-cc955263f274",
+      "MeterName": "F4/F4s",
+      "MeterRates": {
+        "0": 0.239
+      },
+      "MeterRegion": "US Gov AZ",
+      "MeterStatus": "Active",
+      "MeterSubCategory": "F/FS Series",
+      "MeterTags": [],
+      "Unit": "1 Hour"
+    }
+  ],
+  "Currency": "USD",
+  "Locale": "en-US",
+  "IsTaxIncluded": false,
+  "Capabilities": {
+    "F2": {
+      "MaxResourceVolumeMB": "32768",
+      "OSVhdSizeMB": "1047552",
+      "vCPUs": "2",
+      "HyperVGenerations": "V1",
+      "MemoryGB": "4",
+      "MaxDataDiskCount": "8",
+      "LowPriorityCapable": "True",
+      "PremiumIO": "False",
+      "vCPUsAvailable": "2",
+      "ACUs": "210",
+      "vCPUsPerCore": "1",
+      "CombinedTempDiskAndCachedIOPS": "6000",
+      "CombinedTempDiskAndCachedReadBytesPerSecond": "97517568",
+      "CombinedTempDiskAndCachedWriteBytesPerSecond": "48234496",
+      "EphemeralOSDiskSupported": "False"
+    },
+    "F2s": {
+      "MaxResourceVolumeMB": "8192",
+      "OSVhdSizeMB": "1047552",
+      "vCPUs": "2",
+      "HyperVGenerations": "V1",
+      "MemoryGB": "4",
+      "MaxDataDiskCount": "8",
+      "LowPriorityCapable": "True",
+      "PremiumIO": "True",
+      "vCPUsAvailable": "2",
+      "ACUs": "210",
+      "vCPUsPerCore": "1",
+      "CombinedTempDiskAndCachedIOPS": "8000",
+      "CombinedTempDiskAndCachedReadBytesPerSecond": "67108864",
+      "CombinedTempDiskAndCachedWriteBytesPerSecond": "67108864",
+      "CachedDiskBytes": "25769803776",
+      "UncachedDiskIOPS": "6400",
+      "UncachedDiskBytesPerSecond": "100663296",
+      "EphemeralOSDiskSupported": "True"
+    },
+    "A6": {
+      "MaxResourceVolumeMB": "291840",
+      "OSVhdSizeMB": "1047552",
+      "vCPUs": "4",
+      "HyperVGenerations": "V1",
+      "MemoryGB": "28",
+      "MaxDataDiskCount": "8",
+      "LowPriorityCapable": "True",
+      "PremiumIO": "False",
+      "vCPUsAvailable": "4",
+      "ACUs": "100",
+      "vCPUsPerCore": "1",
+      "EphemeralOSDiskSupported": "False"
+    },
+    "F2s v2": {
+      "MaxResourceVolumeMB": "16384",
+      "OSVhdSizeMB": "1047552",
+      "vCPUs": "2",
+      "HyperVGenerations": "V1,V2",
+      "MemoryGB": "4",
+      "MaxDataDiskCount": "4",
+      "LowPriorityCapable": "True",
+      "PremiumIO": "True",
+      "vCPUsAvailable": "2",
+      "ACUs": "195",
+      "vCPUsPerCore": "2",
+      "CombinedTempDiskAndCachedIOPS": "4000",
+      "CombinedTempDiskAndCachedReadBytesPerSecond": "32505856",
+      "CombinedTempDiskAndCachedWriteBytesPerSecond": "32505856",
+      "CachedDiskBytes": "34359738368",
+      "UncachedDiskIOPS": "3200",
+      "UncachedDiskBytesPerSecond": "49283072",
+      "EphemeralOSDiskSupported": "True"
+    },
+    "D32 v3": {
+      "MaxResourceVolumeMB": "819200",
+      "OSVhdSizeMB": "1047552",
+      "vCPUs": "32",
+      "HyperVGenerations": "V1",
+      "MemoryGB": "128",
+      "MaxDataDiskCount": "32",
+      "LowPriorityCapable": "True",
+      "PremiumIO": "False",
+      "vCPUsAvailable": "32",
+      "ACUs": "160",
+      "vCPUsPerCore": "2",
+      "CombinedTempDiskAndCachedIOPS": "48000",
+      "CombinedTempDiskAndCachedReadBytesPerSecond": "786432000",
+      "CombinedTempDiskAndCachedWriteBytesPerSecond": "393216000",
+      "EphemeralOSDiskSupported": "False"
+    },
+    "D32s v3": {
+      "MaxResourceVolumeMB": "262144",
+      "OSVhdSizeMB": "1047552",
+      "vCPUs": "32",
+      "HyperVGenerations": "V1,V2",
+      "MemoryGB": "128",
+      "MaxDataDiskCount": "32",
+      "LowPriorityCapable": "True",
+      "PremiumIO": "True",
+      "vCPUsAvailable": "32",
+      "ACUs": "160",
+      "vCPUsPerCore": "2",
+      "CombinedTempDiskAndCachedIOPS": "64000",
+      "CombinedTempDiskAndCachedReadBytesPerSecond": "536870912",
+      "CombinedTempDiskAndCachedWriteBytesPerSecond": "536870912",
+      "CachedDiskBytes": "858993459200",
+      "UncachedDiskIOPS": "51200",
+      "UncachedDiskBytesPerSecond": "805306368",
+      "EphemeralOSDiskSupported": "True"
+    },
+    "F4": {
+      "MaxResourceVolumeMB": "65536",
+      "OSVhdSizeMB": "1047552",
+      "vCPUs": "4",
+      "HyperVGenerations": "V1",
+      "MemoryGB": "8",
+      "MaxDataDiskCount": "16",
+      "LowPriorityCapable": "True",
+      "PremiumIO": "False",
+      "vCPUsAvailable": "4",
+      "ACUs": "210",
+      "vCPUsPerCore": "1",
+      "CombinedTempDiskAndCachedIOPS": "12000",
+      "CombinedTempDiskAndCachedReadBytesPerSecond": "196083712",
+      "CombinedTempDiskAndCachedWriteBytesPerSecond": "97517568",
+      "EphemeralOSDiskSupported": "False"
+    }
+  }
+}
