@@ -1,14 +1,13 @@
 import collections
 import itertools
 import logging
-import re
 
 from infi.clickhouse_orm.database import Database
 
-from crawler.providers.aws_ec2 import AmazonEC2
-from loader.warehouse import InstanceData
-from loader.loaders import BaseLoader, register_loader
-from loader.normalizers import normalizeData
+from contrail.crawler.providers.aws_ec2 import AmazonEC2
+from contrail.loader.warehouse import InstanceData
+from contrail.loader.loaders import BaseLoader, register_loader
+from contrail.loader.normalizers import normalizeData
 
 logger = logging.getLogger('contrail.loader.aws_ec2')
 

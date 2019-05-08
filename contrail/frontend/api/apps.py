@@ -1,4 +1,4 @@
 from django.apps import AppConfig
 
 class ApiConfig(AppConfig):
-    name = 'frontend.api'
+    name = 'contrail.frontend.api'

@@ -4,7 +4,7 @@ import logging
 import urllib.request
 from typing import List
 
-from crawler.providers import BaseProvider, register_provider
+from contrail.crawler.providers import BaseProvider, register_provider
 
 logger = logging.getLogger('contrail.crawler.aws_ec2')
 

@@ -6,8 +6,8 @@ from typing import List
 
 import boto3
 
-from crawler.providers import aws_ec2
-from crawler.providers import BaseProvider, register_provider
+from contrail.crawler.providers import aws_ec2
+from contrail.crawler.providers import BaseProvider, register_provider
 from config import AWS_ACCESS_KEY_ID, AWS_SECRET
 
 logger_all_regions = logging.getLogger('contrail.crawler.aws_ec2_spot')

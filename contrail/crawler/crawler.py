@@ -4,7 +4,7 @@ import logging
 import sys
 from typing import List
 
-from crawler.providers import BaseProvider, REGISTERED_PROVIDER_CLASSES, import_provider_directory
+from contrail.crawler.providers import BaseProvider, REGISTERED_PROVIDER_CLASSES, import_provider_directory
 
 logger = logging.getLogger('contrail.crawler')
 

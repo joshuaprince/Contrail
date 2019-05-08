@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'frontend.api',
+    'contrail.frontend.api',
     'rest_framework',
     'crispy_forms'
 
@@ -57,12 +57,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'frontend.contrails.urls'
+ROOT_URLCONF = 'contrail.frontend.contrails.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['frontend/templates'],
+        'DIRS': ['contrail/frontend/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

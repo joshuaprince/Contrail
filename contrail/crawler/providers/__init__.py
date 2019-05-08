@@ -4,7 +4,7 @@ import os
 from abc import abstractmethod, ABC
 from typing import Set, Type, Iterable
 
-from crawler.s3upload import S3Client
+from contrail.crawler.s3upload import S3Client
 
 s3client = S3Client()
 

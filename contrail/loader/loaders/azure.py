@@ -1,9 +1,9 @@
 import logging
 from typing import Dict, List
 
-from crawler.providers.azure import Azure
-from loader.loaders import BaseLoader, register_loader
-from loader.warehouse import InstanceData
+from contrail.crawler.providers.azure import Azure
+from contrail.loader.loaders import BaseLoader, register_loader
+from contrail.loader.warehouse import InstanceData
 
 logger = logging.getLogger('contrail.loader.azure')
 

@@ -4,8 +4,8 @@ import unittest
 from infi.clickhouse_orm.database import Database
 
 from config import CLICKHOUSE_DB_URL
-from loader.loaders.azure import AzureLoader
-from loader.warehouse import InstanceData
+from contrail.loader.loaders.azure import AzureLoader
+from contrail.loader.warehouse import InstanceData
 
 
 class LoadAzureTestCase(unittest.TestCase):

@@ -8,7 +8,7 @@ import time
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from crawler.providers import BaseProvider, register_provider
+from contrail.crawler.providers import BaseProvider, register_provider
 from config import AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID
 
 logger = logging.getLogger('contrail.crawler.azure')

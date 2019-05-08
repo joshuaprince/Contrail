@@ -5,7 +5,7 @@ from typing import Dict, Type, Union
 
 from infi.clickhouse_orm.database import Database
 
-from crawler.providers import BaseProvider
+from contrail.crawler.providers import BaseProvider
 
 
 class BaseLoader(ABC):

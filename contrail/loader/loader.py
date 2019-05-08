@@ -6,10 +6,10 @@ import sys
 
 import boto3
 
-from loader.loaders import REGISTERED_LOADER_CLASSES, import_loader_directory, LoaderDoesNotExistError
-from loader.s3iterator import BucketIterator
+from contrail.loader.loaders import REGISTERED_LOADER_CLASSES, import_loader_directory, LoaderDoesNotExistError
+from contrail.loader.s3iterator import BucketIterator
 from config import AWS_ACCESS_KEY_ID, AWS_SECRET, AWS_BUCKET_NAME
-from loader.warehouse import create_contrail_table, db, LoadedFile
+from contrail.loader.warehouse import create_contrail_table, db, LoadedFile
 
 logger = logging.getLogger('contrail.loader')
 

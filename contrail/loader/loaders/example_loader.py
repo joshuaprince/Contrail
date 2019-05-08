@@ -1,4 +1,4 @@
-from loader.loaders import BaseLoader, register_loader
+from contrail.loader.loaders import BaseLoader
 
 
 # Uncomment the "@" line below to activate your loader.

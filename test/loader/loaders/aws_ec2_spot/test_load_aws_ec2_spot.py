@@ -5,8 +5,8 @@ from typing import List
 from infi.clickhouse_orm.database import Database
 
 from config import CLICKHOUSE_DB_URL
-from loader.loaders.aws_ec2_spot import AmazonEC2SpotLoader
-from loader.warehouse import InstanceData
+from contrail.loader.loaders.aws_ec2_spot import AmazonEC2SpotLoader
+from contrail.loader.warehouse import InstanceData
 
 
 class LoadAmazonEC2SpotTestCase(unittest.TestCase):
