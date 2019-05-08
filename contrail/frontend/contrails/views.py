@@ -24,14 +24,14 @@ class InstanceView(TemplateView):
         context = super().get_context_data(**kwargs)
         id = kwargs['id']
 
-        data = {'sku': 'A1B2C3'}
+        data = {'id': 'A1B2C3'}
         # data = {'sku': id}
 
         # call rest api
         url = settings.URL + '/api/getinstancedetail/'
         headers = {'content-type': 'application/json'}
         r = requests.get(url, data=json.dumps(data), headers=headers)
-        context['instance'] = json.loads(r.text)['instance'][0]
+        context['instance'] = r.json()
 
         print(context['instance'])
 

@@ -75,7 +75,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'frontend.contrails.wsgi.application'
+WSGI_APPLICATION = 'contrail.frontend.contrails.wsgi.application'
 
 
 # Database

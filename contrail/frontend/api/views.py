@@ -103,7 +103,7 @@ class GetInstanceDetail(APIView):
     Given atributes, return instances and their prices
     Takes in (All fields optional)::
     {
-        "sku":  "A1B2C3"
+        "id":  "A1B2C3"
     }
 
     TODO paginate
@@ -141,13 +141,65 @@ class GetInstanceDetail(APIView):
     '''
     def get(self, request: Request):
         data = json.loads(request.body)
-        print(data['sku'])
+        print(data['id'])
 
-        instance = InstanceData.objects_in(db).filter(instanceType__ne=data['sku']).distinct()\
-            .only('instanceType', 'region', 'clockSpeed', 'memory', 'vcpu', 'pricePerHour', 'priceUpfront',\
-            'networkPerformance', 'physicalCores', 'physicalProcessor', 'storageIsEbsOnly', 'storageCount', 'storageCapacity', 'storageType', 'volumeType')
+        # TODO on_demand_instances = InstanceData.objects_in(db).filter(instanceType__eq=data['id'], priceType__eq='On Demand').distinct() \
 
-        # instance = instance.paginate(page_num=1, page_size=100).objects
+        on_demand_instances = InstanceData.objects_in(db).filter(instanceType__ne=data['id']).distinct() \
+            .only('provider', 'region', 'clockSpeed', 'priceType', 'pricePerHour', 'priceUpfront', 'memory', 'vcpu', 'gpu', \
+            'capacityStatus', 'clockSpeedIsUpTo', 'clockSpeed', 'currentGeneration', 'dedicatedEbsThroughputIsUpTo', 'dedicatedEbsThroughput', 'ebsOptimized', \
+            'ecuIsVariable', 'ecu', 'elasticGraphicsType', 'enhancedNetworkingSupported', 'fromLocation', 'fromLocationType', 'gpuMemory', 'group', 'groupDescription', \
+            'instance', 'instanceFamily', 'instanceType', 'intelAvx2Available', 'intelAvxAvailable', 'intelTurboAvailable', 'licenseModel', 'location', 'locationType', \
+            'maxIopsBurstPerformance', 'maxIopsVolume', 'maxThroughputVolume', 'maxVolumeSize', 'networkPerformance', 'normalizationSizeFactor', 'operatingSystem', 'operation', \
+            'physicalCores', 'physicalProcessor', 'preInstalledSw', 'processorArchitecture', 'processorFeatures', 'productFamily', 'provisioned', 'serviceName', \
+            'storageIsEbsOnly', 'storageCount', 'storageCapacity', 'storageType', 'storageMedia', 'tenancy', 'toLocation', 'toLocationType', 'usageType', 'volumeType', \
+            'appliesTo', 'description', 'effectiveDate', 'beginRange', 'endRange', 'leaseContractLength', 'offeringClass', 'purchaseOption', \
+            'meterSubCategory', 'maxResourceVolumeMb', 'osVhdSizeMb', 'hyperVGenerations', 'maxDataDiskCount', 'lowPriorityCapable', 'premiumIo', 'vcpusAvailable', 'vcpusPerCore')\
+            # .order_by('-crawlTime').limit(20)
+            # 'crawlTime', 'ephemeralOsDiskSupported', 'acus', 'combinedTempDiskAndCachedReadBytesPerSecond', 'combinedTempDiskAndCachedWriteBytesPerSecond', 'combinedTempDiskAndCachedIOPS', \
+            # 'uncachedDiskBytesPerSecond', 'uncachedDiskIOPS', 'cachedDiskBytes', 'maxWriteAcceleratorDisksAllowed')
 
-        return Response({'instance': [InstanceDetailSerializer(obj).data for obj in instance]}, status=HTTP_200_OK)
-        return Response(status=HTTP_200_OK)
+
+        # hourly_reserved_instances = InstanceData.objects_in(db).filter(instanceType__ne=data['id'], priceType__eq='Reserved', reservedType__eq='hourly').distinct() \
+        #     .only('crawlTime', 'pricePerHour', 'priceUpfront').order_by('-crawlTime')
+
+        # partial_reserved_instances = InstanceData.objects_in(db).filter(instanceType__ne=data['id'], priceType__eq='Reserved', reservedType__eq='partial').distinct() \
+        #     .only('crawlTime', 'pricePerHour', 'priceUpfront').order_by('-crawlTime')
+
+        # upfront_reserved_instances = InstanceData.objects_in(db).filter(instanceType__ne=data['id'], priceType__eq='Reserved', reservedType__eq='upfront').distinct() \
+        #     .only('crawlTime', 'pricePerHour', 'priceUpfront').order_by('-crawlTime')
+
+        serialized_instance = {
+
+            "instance_type": on_demand_instances[0].instanceType,
+            "sku": on_demand_instances[0].sku,
+            "provider": on_demand_instances[0].provider,
+            "region": on_demand_instances[0].region,
+            "vcpus": on_demand_instances[0].vcpu,
+            "memory": on_demand_instances[0].memory,
+            "gpu": on_demand_instances[0].gpu,
+            "price": [
+                {
+                    "type": "on_demand",
+                    "hourly": on_demand_instances[0].pricePerHour,
+                    "upfront": on_demand_instances[0].priceUpfront
+                },
+                # {
+                #     "type": "hourly_reserved",
+                #     "hourly": hourly_reserved_instances[0].pricePerHour,
+                #     "upfront": hourly_reserved_instances[0].priceUpfront,
+                # },
+                # {
+                #     "type": "partial_reserved",
+                #     "hourly": partial_reserved_instances[0].pricePerHour,
+                #     "upfront": partial_reserved_instances[0].priceUpfront,
+                # },
+                # {
+                #     "type": "upfront_reserved",
+                #     "hourly": upfront_reserved_instances[0].pricePerHour,
+                #     "upfront": upfront_reserved_instances[0].priceUpfront,
+                # },
+            ],
+        }
+
+        return Response(serialized_instance, status=HTTP_200_OK)
