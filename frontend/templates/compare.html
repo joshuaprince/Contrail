@@ -215,8 +215,6 @@
           </tfoot>
       </table>
 
-        <br><br>
-
         <button id="comparebutton" class="btn btn-info" onclick="compareFunction()">
             Compare
         </button>
@@ -226,25 +224,61 @@
         <div id="comparepop" class="compareview">
           <div class="compare-container">
             <span class="close">&times;</span>
-            <div class="row">
-
-              <div class="column1">
-                <div class="card">
-                </div>
-              </div>
-
-              <div class="column2">
-                <div class="card">
-                </div>
-              </div>
-
-              <div class="column3">
-                <div class="card">
-                </div>
-              </div>
-
-            </div>
-          </div>
+            <table id="instancesComp" class="table table-striped table-hover table-bordered comparetable" style="width:100%">
+              <thead>
+                <tr>
+                  <th style="width:40%">Specifications</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Region</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>vCPUs</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>Memory (GiB)</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>Clock Speed</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>Price Type</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>Price Upfront</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>Price Per Hour</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+          </table>
+        </div>
       </div>
 
 
@@ -324,58 +358,47 @@
   var comparePop = document.getElementById('comparepop');
   var btn = document.getElementById('comparebutton');
   var span = document.getElementsByClassName("close")[0];
-  var card = 0;
+  var compareTable = document.getElementById('instancesComp');
+  var numSpecs = document.getElementById('instances').rows[0].cells.length;
 
   btn.onclick = function() {
     comparePop.style.display = "block";
     var selectedRows = document.querySelectorAll(".selected");
-    if (selectedRows[0]) {
-      var row = selectedRows[0];
-      $(".column1 > .card").append(row.cells[0]);
-      $(".column1 > .card").append(row.cells[0]);
-      $(".column1 > .card").append(row.cells[0]);
-      $(".column1 > .card").append(row.cells[0]);
-      $(".column1 > .card").append(row.cells[0]);
-      $(".column1 > .card").append(row.cells[0]);
-      $(".column1 > .card").append(row.cells[0]);
-      $(".column1 > .card").append(row.cells[0]);
-    }
-    if (selectedRows[2]) {
-      var row = selectedRows[1];
-      $(".column2 > .card").append(row.cells[0]);
-      $(".column2 > .card").append(row.cells[0]);
-      $(".column2 > .card").append(row.cells[0]);
-      $(".column2 > .card").append(row.cells[0]);
-      $(".column2 > .card").append(row.cells[0]);
-      $(".column2 > .card").append(row.cells[0]);
-      $(".column2 > .card").append(row.cells[0]);
-      $(".column2 > .card").append(row.cells[0]);
-    }
+    var numSelected = selectedRows.length;
 
-    if (selectedRows[2]) {
-      var row = selectedRows[2];
-      $(".column3 > .card").append(row.cells[0]);
-      $(".column3 > .card").append(row.cells[0]);
-      $(".column3 > .card").append(row.cells[0]);
-      $(".column3 > .card").append(row.cells[0]);
-      $(".column3 > .card").append(row.cells[0]);
-      $(".column3 > .card").append(row.cells[0]);
-      $(".column3 > .card").append(row.cells[0]);
-      $(".column3 > .card").append(row.cells[0]);
+    for (var i = 1; i <= numSelected; i++) {
+      for (var j = 0; j < numSpecs; j++) {
+        compareTable.rows[j].cells[i].append(selectedRows[i-1].cells[j].innerText);
+      }
     }
-
-
-  }
+ }
 
   span.onclick = function() {
     comparePop.style.display = "none";
+    var selectedRows = document.querySelectorAll(".selected");
+    var numSelected = selectedRows.length;
+
+    for (var i = 1; i <= numSelected; i++) {
+      for (var j = 0; j < numSpecs; j++) {
+        compareTable.rows[j].cells[i].innerHTML = "";
+      }
+    }
   }
 
   window.onclick = function(event) {
     if (event.target == comparePop) {
     comparePop.style.display = "none";
+
+      var selectedRows = document.querySelectorAll(".selected");
+      var numSelected = selectedRows.length;
+
+      for (var i = 1; i <= numSelected; i++) {
+        for (var j = 0; j < numSpecs; j++) {
+          compareTable.rows[j].cells[i].innerHTML = "";
+        }
+      }
+    }
   }
-}
 </script>
 
 

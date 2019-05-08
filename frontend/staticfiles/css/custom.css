@@ -328,51 +328,17 @@ a.paginate_button:hover {
   background-color: FireBrick;
   color: White;
   cursor: pointer;
-}
+} */
 
 
 #instances tbody tr:hover {
-  background-color: #c7d0cf;
+  background-color: #d7e1e0;
 }
 
 #instances .selected {
   background-color: #a1ccc9;
 }
 
-.compare-container {
-  box-sizing: border-box;
-}
-
-.compare-container, .compare-container:before, .compare-container:after {
-  box-sizing: inherit;
-}
-
-.column1, .column2, .column3 {
-  float: left;
-  width: 33.3%;
-  padding: 0 8px;
-}
-
-@media screen and (max-width: 650px) {
-  .column1, .column2, .column3 {
-    width: 100%;
-    display: block;
-  }
-}
-
-.card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  padding: 16px 16px 16px 16px;
-  text-align: center;
-}
-
-.card::after, .row::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-
-.iheading {
-  background-color: gray;
-  font-size: 20px;
+#instancesComp thead {
+  background-color: #a1ccc9;
 }
