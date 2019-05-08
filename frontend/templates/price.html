@@ -16,15 +16,7 @@
   <nav id="sidebar">
     <form method="POST">
       {% csrf_token %}
-      <div id="div_id_operating_system" class="form-group">
-        <label for="id_operating_system" class="col-form-label ">
-          Operating system
-        </label>
-        <div class="">
-          <select name="operating_system" class="select form-control" id="id_operating_system"> <option value="" selected="">All</option> <option value="Linux">Linux</option> <option value="RHEL">RHEL</option> <option value="SLES">SLES</option> <option value="Windows">Windows</option> <option value="Windows with SQL Standard">Windows with SQL Standard</option> <option value="Windows with SQL Web">Windows with SQL Web</option> <option value="Windows with SQL Enterprise">Windows with SQL Enterprise</option> <option value="Linux with SQL Standard">Linux with SQL Standard</option> <option value="Linux with SQL Web">Linux with SQL Web</option> <option value="Linux with SQL Enterprise">Linux with SQL Enterprise</option>
-          </select>
-        </div>
-      </div>
+      <h4><strong>Set Attributes</strong></h4>
 
       <div class="form-group">
         <div id="div_id_amazon_web_services" class="form-check">

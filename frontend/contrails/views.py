@@ -13,10 +13,6 @@ class HomeView(TemplateView):
     """
     template_name = "home.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-
 
 class InstanceView(TemplateView):
     """
@@ -37,13 +33,9 @@ class InstanceView(TemplateView):
         r = requests.get(url, data=json.dumps(data), headers=headers)
         context['instance'] = json.loads(r.text)['instance'][0]
 
-
         print(context['instance'])
 
-
         return context
-
-
 
 
 def priceview(request):

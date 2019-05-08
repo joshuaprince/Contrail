@@ -4,6 +4,10 @@
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+<!-- CHART.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+<script src="https://www.chartjs.org/dist/2.8.0/Chart.min.js"></script>
+<script src="https://www.chartjs.org/samples/latest/utils.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -169,8 +173,6 @@
 
       <h2 style="text-align:center;">Price History</h2>
 
-      <canvas id="myChart"></canvas>
-
       <canvas id="canvas" style="display: block; width: 621px; height: 310px;" width="621" height="310" class="chartjs-render-monitor"></canvas>
 </div>
 
@@ -187,44 +189,12 @@
         // "paging":   false,
         "ordering": true,
         // "info":     false,
-        "columns": [
-            {"type": "string"},
-            {"type": "string"},
-            {"type": "string"},
-            {"type": "num"},
-            {"type": "num"},
-            {"type": "string"},
-            {"type": "num"},
-            {"type": "string"},
-        ]
+        "columns": []
     } );
   } );
 </script>
 
 <!-- CHART.JS -->
-<script type="text/javascript">
-  var ctx = document.getElementById('myChart').getContext('2d');
-  var chart = new Chart(ctx, {
-      // The type of chart we want to create
-      type: 'line',
-
-      // The data for our dataset
-      data: {
-          labels: ["January", "February", "March", "April", "May", "June", "July"],
-          datasets: [{
-              label: "Sample Instance Chart",
-              backgroundColor: 'rgb(255, 99, 132)',
-              borderColor: 'rgb(255, 99, 132)',
-              data: [0, 10, 5, 2, 20, 30, 45],
-          }]
-      },
-
-      // Configuration options go here
-      options: {}
-  });
-</script>
-
-
 <script>
   // https://www.chartjs.org/samples/latest/scales/time/line.html
 		var timeFormat = 'MM/DD/YYYY HH:mm';
@@ -251,7 +221,7 @@
 					newDate(6)
 				],
 				datasets: [{
-					label: 'My First dataset',
+					label: 'On Demand',
 					backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
 					borderColor: window.chartColors.red,
 					fill: false,
@@ -265,7 +235,7 @@
 						randomScalingFactor()
 					],
 				}, {
-					label: 'My Second dataset',
+					label: 'Reserved',
 					backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
 					borderColor: window.chartColors.blue,
 					fill: false,
@@ -279,7 +249,7 @@
 						randomScalingFactor()
 					],
 				}, {
-					label: 'Dataset with point data',
+					label: 'Spot',
 					backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
 					borderColor: window.chartColors.green,
 					fill: false,
@@ -331,72 +301,6 @@
 
 		};
 
-		document.getElementById('randomizeData').addEventListener('click', function() {
-			config.data.datasets.forEach(function(dataset) {
-				dataset.data.forEach(function(dataObj, j) {
-					if (typeof dataObj === 'object') {
-						dataObj.y = randomScalingFactor();
-					} else {
-						dataset.data[j] = randomScalingFactor();
-					}
-				});
-			});
-
-			window.myLine.update();
-		});
-
-		var colorNames = Object.keys(window.chartColors);
-		document.getElementById('addDataset').addEventListener('click', function() {
-			var colorName = colorNames[config.data.datasets.length % colorNames.length];
-			var newColor = window.chartColors[colorName];
-			var newDataset = {
-				label: 'Dataset ' + config.data.datasets.length,
-				borderColor: newColor,
-				backgroundColor: color(newColor).alpha(0.5).rgbString(),
-				data: [],
-			};
-
-			for (var index = 0; index < config.data.labels.length; ++index) {
-				newDataset.data.push(randomScalingFactor());
-			}
-
-			config.data.datasets.push(newDataset);
-			window.myLine.update();
-		});
-
-		document.getElementById('addData').addEventListener('click', function() {
-			if (config.data.datasets.length > 0) {
-				config.data.labels.push(newDate(config.data.labels.length));
-
-				for (var index = 0; index < config.data.datasets.length; ++index) {
-					if (typeof config.data.datasets[index].data[0] === 'object') {
-						config.data.datasets[index].data.push({
-							x: newDate(config.data.datasets[index].data.length),
-							y: randomScalingFactor(),
-						});
-					} else {
-						config.data.datasets[index].data.push(randomScalingFactor());
-					}
-				}
-
-				window.myLine.update();
-			}
-		});
-
-		document.getElementById('removeDataset').addEventListener('click', function() {
-			config.data.datasets.splice(0, 1);
-			window.myLine.update();
-		});
-
-		document.getElementById('removeData').addEventListener('click', function() {
-			config.data.labels.splice(-1, 1); // remove the label first
-
-			config.data.datasets.forEach(function(dataset) {
-				dataset.data.pop();
-			});
-
-			window.myLine.update();
-		});
 	</script>
 
 {% endblock %}
