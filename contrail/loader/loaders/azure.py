@@ -147,7 +147,7 @@ class AzureLoader(BaseLoader):
             inst = cls.normalize(meter, all_capabilities)
             if not inst:
                 continue
-            inst.lastModified = last_modified
+            inst.crawlTime = last_modified
             instances.append(inst)
 
         # Insert rows 1000 rows at a time

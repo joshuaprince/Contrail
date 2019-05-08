@@ -131,9 +131,9 @@ class AmazonEC2Loader(BaseLoader):
         on_demand_data = getData(on_demand_dict, on_demand_keys)
         reserved_data = getData(reserved_dict, reserved_keys)
         for key, value in on_demand_data.items():
-            on_demand_data[key] = value + product_attribute_data[key] + [('priceType', 'On Demand'), ('lastModified', last_modified), (k, v)]  
+            on_demand_data[key] = value + product_attribute_data[key] + [('priceType', 'On Demand'), ('crawlTime', last_modified), (k, v)]
         for key, value in reserved_data.items():
-            reserved_data[key] = value + product_attribute_data[key[0:key.find('.')]] + [('priceType', 'Reserved'), ('lastModified', last_modified), (k, v)]
+            reserved_data[key] = value + product_attribute_data[key[0:key.find('.')]] + [('priceType', 'Reserved'), ('crawlTime', last_modified), (k, v)]
         items = list(on_demand_data.values()) + list(reserved_data.values())
         instances = []
         for item in items:

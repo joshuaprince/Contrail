@@ -33,7 +33,7 @@ class InstanceData(models.Model):
     # Universal fields ---------------------------------------------------------
     sku = fields.StringField()
     provider = fields.StringField()
-    lastModified = fields.DateTimeField()
+    crawlTime = fields.DateTimeField()
     region = fields.StringField()
 
     priceType = fields.StringField()  # On Demand, Reserved, Spot
@@ -142,8 +142,7 @@ class InstanceData(models.Model):
     maxWriteAcceleratorDisksAllowed = fields.NullableField(fields.StringField())
 
     # InstanceData ClickHouse configuration ====================================
-    # engine = engines.MergeTree('lastModified', ('priceType', 'instanceType'))
-    engine = engines.MergeTree(order_by=['lastModified'], partition_key=['region', 'provider'])
+    engine = engines.MergeTree(order_by=['crawlTime'], partition_key=['region', 'provider'])
 
 class LoadedFile(models.Model):
     """
