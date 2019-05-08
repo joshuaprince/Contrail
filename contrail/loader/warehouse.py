@@ -32,6 +32,7 @@ class BooleanField(Field):
 class InstanceData(models.Model):
     # Universal fields ---------------------------------------------------------
     sku = fields.StringField()
+    provider = fields.StringField()
     lastModified = fields.DateTimeField()
     region = fields.StringField()
 
@@ -98,7 +99,6 @@ class InstanceData(models.Model):
     processorFeatures = fields.NullableField(fields.StringField())
     productFamily = fields.NullableField(fields.StringField())
     provisioned = fields.NullableField(BooleanField())
-    provider = fields.NullableField(fields.StringField())
     serviceName = fields.NullableField(fields.StringField())
     storageIsEbsOnly = fields.NullableField(BooleanField())
     storageCount = fields.NullableField(fields.Int32Field())
@@ -142,8 +142,8 @@ class InstanceData(models.Model):
     maxWriteAcceleratorDisksAllowed = fields.NullableField(fields.StringField())
 
     # InstanceData ClickHouse configuration ====================================
-    engine = engines.MergeTree('lastModified', ('priceType', 'instanceType'))
-
+    # engine = engines.MergeTree('lastModified', ('priceType', 'instanceType'))
+    engine = engines.MergeTree(order_by=['lastModified'], partition_key=['region', 'provider'])
 
 class LoadedFile(models.Model):
     """

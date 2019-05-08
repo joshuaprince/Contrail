@@ -140,6 +140,12 @@ def servicecodeNormalizer(key, value):
     else:
         pass 
 
+def operatingSystem(key, value):
+    if key == 'operatingSystem' and value == 'Linux':
+        return (key, value)
+    else:
+        pass
+
 def regionNormalizer(key, value):
     if key == 'region':
         regions = {
@@ -204,6 +210,7 @@ def normalizeData(key, value):
     'unit': unitNormalizer(key, value),
     'spotPrice': spotPriceNormalizer(key, value),
     'region': regionNormalizer(key, value),
+    'operatingSystem': operatingSystem(key, value)
     }
     func = switcher.get(key, lambda: (key, str(value)))
     try:
