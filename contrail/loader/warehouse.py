@@ -90,7 +90,7 @@ class InstanceData(models.Model):
     maxVolumeSize = fields.NullableField(fields.Int32Field())  # in TiB
     networkPerformance = fields.NullableField(fields.StringField())
     normalizationSizeFactor = fields.NullableField(fields.Float32Field())
-    operatingSystem = fields.NullableField(fields.StringField())
+    operatingSystem = fields.StringField()
     operation = fields.NullableField(fields.StringField())
     physicalCores = fields.NullableField(fields.Int32Field())
     physicalProcessor = fields.NullableField(fields.StringField())
