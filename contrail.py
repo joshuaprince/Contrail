@@ -1,20 +1,27 @@
+#!/usr/bin/env python3
 import argparse
 import os
 import sys
 
+try:
+    import config
+except ImportError:
+    print("Couldn't load config.py. Make a copy of config_example.py and see the README to configure Contrail.")
+    sys.exit(1)
+
 
 def run_crawler(args):
-    from crawler import crawler
+    from contrail.crawler import crawler
     crawler.crawl()
 
 
 def run_loader(args):
-    from loader import loader
+    from contrail.loader import loader
     loader.load()
 
 
 def run_frontend(args):
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'frontend.contrails.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'contrail.frontend.contrails.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

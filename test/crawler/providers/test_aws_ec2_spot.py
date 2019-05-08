@@ -2,7 +2,7 @@ import unittest
 import unittest.mock
 import copyingmock
 
-from crawler.providers.aws_ec2_spot import AmazonEC2Spot
+from contrail.crawler.providers.aws_ec2_spot import AmazonEC2Spot
 
 
 class AmazonEC2SpotTestCase(unittest.TestCase):

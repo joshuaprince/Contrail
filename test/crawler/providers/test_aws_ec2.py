@@ -3,7 +3,7 @@ import unittest
 
 import requests
 
-from crawler.providers.aws_ec2 import AmazonEC2, URL_REGION_VERSION
+from contrail.crawler.providers.aws_ec2 import AmazonEC2, URL_REGION_VERSION
 
 
 class AmazonEC2TestCase(unittest.TestCase):

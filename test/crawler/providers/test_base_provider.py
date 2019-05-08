@@ -1,7 +1,7 @@
 import datetime
 import unittest
 
-from crawler.providers import REGISTERED_PROVIDER_CLASSES, import_provider_directory, BaseProvider, register_provider
+from contrail.crawler.providers import REGISTERED_PROVIDER_CLASSES, import_provider_directory, BaseProvider, register_provider
 
 
 class BaseProviderTestCase(unittest.TestCase):

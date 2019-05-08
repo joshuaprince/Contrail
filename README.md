@@ -111,4 +111,4 @@ have to set up your own backend (crawler and loader) to collect your own data.
 
 Read more about setting up the first two components here:
 [Crawler](/crawler/README.md),
-[Loader](/loader/README.md).
+[Loader](/contrail/loader/README.md).
