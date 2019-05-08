@@ -32,7 +32,7 @@ class BooleanField(Field):
 class InstanceData(models.Model):
     # Universal fields ---------------------------------------------------------
     sku = fields.StringField()
-    lastModified = fields.DateTimeField()
+    crawlTime = fields.DateTimeField()
     region = fields.StringField()
 
     priceType = fields.StringField()  # On Demand, Reserved, Spot
