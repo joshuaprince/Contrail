@@ -17,120 +17,137 @@ db = Database(CLICKHOUSE_DB_NAME, db_url=CLICKHOUSE_DB_URL, readonly=True)
 
 
 class GetInstances(APIView):
-        '''
-        Given atributes, return instances and their prices
-        Takes in (All fields optional)::
+    '''
+    Given atributes, return instances and their prices
+    Takes in (All fields optional)::
+    {
+        "providers": {
+            "aws": true,
+            "gcp": false,
+            "azure": false
+        },
+        "vcpus": {
+            "min": 0,
+            "max": 10
+        },
+        "memory": {
+            "min": 0,
+            "max": 10
+        },
+        "gpus": {
+            "min": 0,
+            "max": 10
+        },
+        "price": {
+            "min_hourly": 0,
+            "max_hourly": 10,
+            "min_upfront": 0,
+            "max_upfront": 10
+        },
+        "regions": ["us-west-1"],
+    }
+
+    TODO paginate
+    Returns (All fields required):
+    [
         {
-            "providers": {
-                "aws": true,
-                "gcp": false,
-                "azure": false
-             },
-             "vcpus": {
-                "min": 0,
-                "max": 10
-             },
-             "memory": {
-                "min": 0,
-                "max": 10
-             },
-             "price": {
-                "min_hourly": 0,
-                "max_hourly": 10,
-                "min_upfront": 0,
-                "max_upfront": 10
-             },
-             "regions": ["us-west-1"],
-        }
+            "sku": "A1B2C3",
+            "provider": "aws",
+            "instanceType": "c4.4xlarge",
+            "region": "US East",
+            "vcpus": 8,
+            "memory": 8,
+            "priceType": "On Demand",
+            "priceHourly": 0.233,
+            "priceUpfront": 0
+        }, ...
+    ]
+    '''
+    def post(self, request: Request):
+        data = request.data
+        print(data)
 
-        TODO paginate
-        Returns (All fields required):
-        [
-            {
-                "sku": "A1B2C3",
-                "provider": "aws",
-                "instance_type": "c4.4xlarge",
-                "region": "US East",
-                "vcpus": 8,
-                "memory": 8,
-                "price": {
-                    "type": "on_demand"
-                    "hourly": 0.233,
-                    "upfront": 0
-                }
-            }, ...
-        ]
-        '''
-        def get(self, request: Request):
-            data = request.data
-            print(data)
+        # instances = InstanceData.objects_in(db).filter(onDemandPricePerUnit__ne=None).distinct()\
+        #     .filter(instanceType__ne=None)\
+        #     .only('location', 'instanceType', 'clockSpeed', 'memory', 'vcpu',
+        #           # 'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
+        #           'onDemandPricePerUnit', 'onDemandPriceUnit')\
 
-            # instances = InstanceData.objects_in(db).filter(onDemandPricePerUnit__ne=None).distinct()\
-            #     .filter(instanceType__ne=None)\
-            #     .only('location', 'instanceType', 'clockSpeed', 'memory', 'vcpu',
-            #           # 'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
-            #           'onDemandPricePerUnit', 'onDemandPriceUnit')\
+        instances = InstanceData.objects_in(db).distinct()\
+            .only('region', 'instanceType', 'clockSpeed', 'memory', 'vcpu', 'pricePerHour', 'priceUpfront')
+        # 'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
 
-            instances = InstanceData.objects_in(db).distinct()\
-                .only('region', 'instanceType', 'clockSpeed', 'memory', 'vcpu', 'pricePerHour', 'priceUpfront')
-            # 'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
+        # if request has a value, filter original query
+        # TODO
+        # if data['aws']: instances = instances.filter()
+        # if data['gcp']: instances = instances.filter()
+        # if data['azure']: instances = instances.filter()
+        if data['region']: instances = instances.filter(region=data['region'])
+        instances = instances.filter(
+            vcpu__gte=data['vcpus']['min'], vcpu__lte=data['vcpus']['max'],
+            memory__gte=data['memory']['min'], memory__lte=data['memory']['max'],
+            pricePerHour__gte=data['price']['min_hourly'], pricePerHour__lte=data['price']['max_hourly'],
+            priceUpfront__gte=data['price']['min_upfront'], priceUpfront__lte=data['price']['max_upfront']
+        )
 
-            # if request has a value, filter original query
-            # TODO
-            # if data['aws']: instances = instances.filter()
-            # if data['gcp']: instances = instances.filter()
-            # if data['azure']: instances = instances.filter()
-            if data['region']: instances = instances.filter(region=data['region'])
-            instances = instances.filter(
-                vcpu__gte=data['vcpus']['min'], vcpu__lte=data['vcpus']['max'],
-                memory__gte=data['memory']['min'], memory__lte=data['memory']['max'],
-                pricePerHour__gte=data['price']['min_hourly'], pricePerHour__lte=data['price']['max_hourly'],
-                priceUpfront__gte=data['price']['min_upfront'], priceUpfront__lte=data['price']['max_upfront']
-            )
+        # truncate query
+        instances = instances.paginate(page_num=1, page_size=100).objects
 
-            # truncate query
-            instances = instances.paginate(page_num=1, page_size=100).objects
-
-            return Response({'instances': [InstanceDataSerializer(obj).data for obj in instances]}, status=HTTP_200_OK)
+        return Response({'instances': [InstanceDataSerializer(obj).data for obj in instances]}, status=HTTP_200_OK)
 
 
 
 
 class GetInstanceDetail(APIView):
-        '''
-        Given atributes, return instances and their prices
-        Takes in (All fields optional)::
-        {
-            "sku":  "A1B2C3"
-        }
+    '''
+    Given atributes, return instances and their prices
+    Takes in (All fields optional)::
+    {
+        "sku":  "A1B2C3"
+    }
 
-        TODO paginate
-        Returns (All fields required):
-        [
-            {
-                "sku": "A1B2C3",
-                "provider": "aws",
-                "instance_type": "c4.4xlarge",
-                "region": "US East",
-                "vcpus": 8,
-                "memory": 8,
-                "price": {
+    TODO paginate
+    Returns (All fields required):
+    [
+        {
+            "sku": "A1B2C3",
+            "provider": "aws",
+            "instance_type": "c4.4xlarge",
+            "region": "US East",
+            "vcpus": 8,
+            "memory": 8,
+            "price": [
+                {
                     "type": "on_demand"
                     "hourly": 0.233,
                     "upfront": 0
-                }
-            }, ...
-        ]
-        '''
-        def get(self, request: Request):
-            data = json.loads(request.body)
-            print(data['sku'])
+                },
+                {
+                    "type": "reserved"
+                    "hourly": 0.233,
+                    "upfront": 0
+                },
+                {
+                    "type": "reserved",
+                    "hourly": 0.233,
+                    "upfront": 0
+                },
+            ]
+            "networkPerformance": "..."
+            ...
+            "priceHistory":
+        }, ...
+    ]
+    '''
+    def get(self, request: Request):
+        data = json.loads(request.body)
+        print(data['sku'])
 
-            instance = InstanceData.objects_in(db).filter(instanceType__ne=data['sku']).distinct()\
-                .only('instanceType', 'region', 'clockSpeed', 'memory', 'vcpu', 'pricePerHour', 'priceUpfront',\
-                'networkPerformance', 'physicalCores', 'physicalProcessor', 'storageIsEbsOnly', 'storageCount', 'storageCapacity', 'storageType', 'volumeType')
+        instance = InstanceData.objects_in(db).filter(instanceType__ne=data['sku']).distinct()\
+            .only('instanceType', 'region', 'clockSpeed', 'memory', 'vcpu', 'pricePerHour', 'priceUpfront',\
+            'networkPerformance', 'physicalCores', 'physicalProcessor', 'storageIsEbsOnly', 'storageCount', 'storageCapacity', 'storageType', 'volumeType')
 
-            # instance = instance.paginate(page_num=1, page_size=100).objects
+        # instance = instance.paginate(page_num=1, page_size=100).objects
 
-            return Response({'instance': [InstanceDetailSerializer(obj).data for obj in instance]}, status=HTTP_200_OK)
-            return Response(status=HTTP_200_OK)
+        return Response({'instance': [InstanceDetailSerializer(obj).data for obj in instance]}, status=HTTP_200_OK)
+        return Response(status=HTTP_200_OK)
