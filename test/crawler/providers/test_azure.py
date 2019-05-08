@@ -1,7 +1,7 @@
 import unittest
 import unittest.mock
 
-from crawler.providers.azure import Azure
+from contrail.crawler.providers.azure import Azure
 
 
 class AzureTestCase(unittest.TestCase):
