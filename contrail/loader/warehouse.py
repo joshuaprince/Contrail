@@ -31,7 +31,6 @@ class BooleanField(Field):
 
 class InstanceData(models.Model):
     # Universal fields ---------------------------------------------------------
-    sku = fields.StringField()
     provider = fields.StringField()
     crawlTime = fields.DateTimeField()
     region = fields.StringField()
@@ -100,6 +99,7 @@ class InstanceData(models.Model):
     productFamily = fields.NullableField(fields.StringField())
     provisioned = fields.NullableField(BooleanField())
     serviceName = fields.NullableField(fields.StringField())
+    sku = fields.NullableField(fields.StringField())
     storageIsEbsOnly = fields.NullableField(BooleanField())
     storageCount = fields.NullableField(fields.Int32Field())
     storageCapacity = fields.NullableField(fields.Int32Field())
@@ -122,6 +122,7 @@ class InstanceData(models.Model):
     purchaseOption = fields.NullableField(fields.StringField())
 
     # Azure specific -----------------------------------------------------------
+    meterId = fields.NullableField(fields.StringField())
     meterSubCategory = fields.NullableField(fields.StringField())
     maxResourceVolumeMb = fields.NullableField(fields.Int32Field())
     osVhdSizeMb = fields.NullableField(fields.Int32Field())
@@ -142,7 +143,7 @@ class InstanceData(models.Model):
     maxWriteAcceleratorDisksAllowed = fields.NullableField(fields.StringField())
 
     # InstanceData ClickHouse configuration ====================================
-    engine = engines.MergeTree(order_by=['crawlTime'], partition_key=['region', 'provider'])
+    engine = engines.MergeTree('crawlTime', order_by=['provider', 'region', 'crawlTime'])
 
 class LoadedFile(models.Model):
     """

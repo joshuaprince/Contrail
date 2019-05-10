@@ -90,7 +90,8 @@ class AzureLoader(BaseLoader):
         """
         inst = InstanceData()
 
-        inst.sku = meter['MeterId']
+        inst.provider = 'Azure'
+        inst.meterId = meter['MeterId']
         inst.region = meter['MeterRegion']
         inst.pricePerHour = meter['MeterRates']['0']
 

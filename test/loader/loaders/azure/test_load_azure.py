@@ -64,6 +64,9 @@ class LoadAzureTestCase(unittest.TestCase):
             db=self.test_db
         )
 
+        # Make sure that the 'Azure' provider tag is put on each instance
+        self.assertEqual(InstanceData.objects_in(self.test_db).filter(provider='Azure').count(), 3)
+
         # Make sure that only the 3 instances that are meant to be loaded were loaded, and no more
         self.assertEqual(InstanceData.objects_in(self.test_db).filter(instanceType='F2/F2s').count(), 0)  # Windows
         self.assertEqual(InstanceData.objects_in(self.test_db).filter(instanceType='S3 Secondary DTUs').count(), 0)
