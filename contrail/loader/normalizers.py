@@ -141,7 +141,7 @@ def servicecodeNormalizer(key, value):
         pass 
 
 def operatingSystem(key, value):
-    if key == 'operatingSystem' and value == 'Linux':
+    if key == 'operatingSystem':
         return (key, value)
     else:
         pass

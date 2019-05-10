@@ -43,10 +43,6 @@ class AzureLoader(BaseLoader):
         if meter['MeterName'] == 'Compute Hours':
             return False
 
-        # Don't load Windows instances (for now)
-        if 'Windows' in meter['MeterSubCategory']:
-            return False
-
         # Don't load expired meters
         if 'Expired' in meter['MeterName']:
             return False
@@ -98,6 +94,8 @@ class AzureLoader(BaseLoader):
         size, capability_key, is_spot = cls.normalize_meter_name(meter['MeterName'])
         inst.instanceType = size
         inst.priceType = ('Spot' if is_spot else 'On Demand')
+
+        inst.operatingSystem = 'Windows' if 'Windows' in meter['MeterSubCategory'] else 'Linux'
 
         capabilities = all_capabilities.get(capability_key)
         if not capabilities:
