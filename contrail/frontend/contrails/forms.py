@@ -16,6 +16,13 @@ class PriceForm(forms.Form):
     #     ("Linux with SQL Enterprise", "Linux with SQL Enterprise"),
     # )
 
+    PRICE_TYPE_CHOICES = (
+        ('', 'All'),
+        ('on_demand', 'On Demand'),
+        ('reserved', 'Reserved'),
+        ('spot', 'Spot')
+    )
+
     REGION_CHOICES = (
         ('', 'All'),
         ("US East (N. Virgina)", "US East (N. Virgina)"),
@@ -48,6 +55,10 @@ class PriceForm(forms.Form):
 
     vcpu_from = forms.CharField(required=False)
     vcpu_to = forms.CharField(required=False)
+
+    on_demand = forms.BooleanField(required=False, initial=True)
+    reserved = forms.BooleanField(required=False, initial=True)
+    spot = forms.BooleanField(required=False, initial=True)
 
     price_from = forms.CharField(required=False)
     price_to = forms.CharField(required=False)

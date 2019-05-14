@@ -39,6 +39,7 @@ class GetInstances(APIView):
             "max": 10
         },
         "price": {
+            "price_type": "On Demand"
             "min_hourly": 0,
             "max_hourly": 10,
             "min_upfront": 0,
@@ -67,12 +68,6 @@ class GetInstances(APIView):
         data = request.data
         print(data)
 
-        # instances = InstanceData.objects_in(db).filter(onDemandPricePerUnit__ne=None).distinct()\
-        #     .filter(instanceType__ne=None)\
-        #     .only('location', 'instanceType', 'clockSpeed', 'memory', 'vcpu',
-        #           # 'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
-        #           'onDemandPricePerUnit', 'onDemandPriceUnit')\
-
         instances = InstanceData.objects_in(db).distinct()\
             .only('region', 'instanceType', 'clockSpeed', 'memory', 'vcpu', 'pricePerHour', 'priceUpfront')
         # 'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
@@ -83,6 +78,9 @@ class GetInstances(APIView):
         # if data['gcp']: instances = instances.filter()
         # if data['azure']: instances = instances.filter()
         if data['region']: instances = instances.filter(region=data['region'])
+        # if data['price']['price_type']['on_demand']: instances = instances.filter(price_type="On Demand")
+        # if data['price']['price_type']['reserved']: instances = instances.filter(price_type="Reserved")
+        # if data['price']['price_type']['spot']: instances = instances.filter(price_type="Spot")
         instances = instances.filter(
             vcpu__gte=data['vcpus']['min'], vcpu__lte=data['vcpus']['max'],
             memory__gte=data['memory']['min'], memory__lte=data['memory']['max'],
