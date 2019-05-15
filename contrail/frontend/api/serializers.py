@@ -17,8 +17,8 @@ class InstanceDataSerializer(serializers.Serializer):
     memory = serializers.FloatField()
     gpu = serializers.CharField(max_length=127)
 
-    instance_type = serializers.CharField(source='instanceType', allow_blank=True, max_length=127)
-    clock_speed = serializers.FloatField(source='clockSpeed')
+    instanceType = serializers.CharField(allow_blank=True, max_length=127)
+    clockSpeed = serializers.FloatField()
 
     def get_sku(self, obj):
         return 'A1B2C3'

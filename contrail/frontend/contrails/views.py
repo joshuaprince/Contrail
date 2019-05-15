@@ -15,27 +15,6 @@ class HomeView(TemplateView):
     template_name = "home.html"
 
 
-def instanceview(request):
-    """
-    Render Instance Detail page
-    """
-    context = {}
-    params = {}
-    # build request params
-    for discriminator in discriminators['AmazonEC2']:
-        params[discriminator] = request.GET.get(discriminator, None)
-
-    # call rest api
-    url = settings.URL + '/api/getinstancedetail/'
-    r = requests.get(url, params=params)
-    print(r)
-    # context['instance'] = r.json()
-    #
-    # print(context['instance'])
-
-    return render(request, 'instance.html', context)
-
-
 def priceview(request):
     """
     Render Price page
@@ -49,9 +28,9 @@ def priceview(request):
 
             data = {
                 "providers": {
-                    "aws": True,
-                    "gcp": False,
-                    "azure": False
+                    "aws": form.cleaned_data['amazon_web_services'],
+                    "gcp": form.cleaned_data['google_cloud_platform'],
+                    "azure": form.cleaned_data['microsoft_azure']
                  },
                  "vcpus": {
                     "min": int(form.cleaned_data['vcpu_from']),
@@ -75,9 +54,6 @@ def priceview(request):
                  "region": form.cleaned_data['region'],
             }
 
-            # TODO build instance url
-
-
 
             # call rest api
             url = settings.URL + '/api/getinstances/'
@@ -86,7 +62,50 @@ def priceview(request):
             context['instances'] = json.loads(r)['instances']
             print(context['instances'])
 
+            # Build instance url
+            for instance in context['instances']:
+                instance['url'] = "?"
+
+                # if instance['provider'] == 'AmazonEC2':
+                for discriminator in discriminators['AmazonEC2']:
+                    if instance['url'][-1] != '?': instance['url'] += '&'
+                    instance['url'] += discriminator
+                    instance['url'] += '='
+                    instance['url'] += instance[discriminator]
+
+                print(instance['url'])
+
+
+
     return render(request, 'price.html', context)
+
+
+def instanceview(request):
+    """
+    Render Instance Detail page
+    """
+    context = {}
+    params = {}
+
+    # build request params
+    if request.GET.get('provider', None) == 'AmazonEC2':
+        for discriminator in discriminators['AmazonEC2']:
+            params[discriminator] = request.GET.get(discriminator, None)
+
+    elif request.GET.get('provider', None) == 'Azure':
+        for discriminator in discriminators['Azure']:
+            params[discriminator] = request.GET.get(discriminator, None)
+
+
+    # call rest api
+    url = settings.URL + '/api/getinstancedetail/'
+    r = requests.get(url, params=params)
+    print(r)
+    # context['instance'] = r.json()
+    #
+    # print(context['instance'])
+
+    return render(request, 'instance.html', context)
 
 
 def compareview(request):
