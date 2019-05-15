@@ -27,7 +27,7 @@ urlpatterns = [
     path('price/', priceview, name='price'),
     # url(r'^instance/(?P<id>\w+)/$', InstanceView.as_view(), name='instance'),
     path('instance/', instanceview, name='instance'),
-    path('compare/', compareview, name='compare'),
+    path('help/', HelpView.as_view(), name='help'),
     path('api/', include('contrail.frontend.api.urls')),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

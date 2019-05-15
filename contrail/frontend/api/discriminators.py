@@ -3,7 +3,7 @@ discriminators = {
         'provider',
         'instanceType',
         'region',
-        'operatingSystem'
+    #    'operatingSystem'
     ],
     'Azure': [
         'instanceType',
