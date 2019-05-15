@@ -193,7 +193,7 @@
 
           {% for instance in instances %}
             <tr>
-              <td><a href="{% url 'instance' id=instance.sku %}">{{ instance.instance_type }}</a></td>
+              <td><a href="/instance/?provider=AmazonEC2">{{ instance.instance_type }}</a></td>
               <!-- <td>{{ instance.provider }}</td> -->
               <td>{{ instance.region }}</td>
               <td>{{ instance.vcpus }}</td>

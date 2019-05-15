@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
+from contrail.frontend.api.discriminators import *
 from .forms import *
 
 import requests, json
@@ -14,28 +15,25 @@ class HomeView(TemplateView):
     template_name = "home.html"
 
 
-class InstanceView(TemplateView):
+def instanceview(request):
     """
-    Render Home page
+    Render Instance Detail page
     """
-    template_name = "instance.html"
+    context = {}
+    params = {}
+    # build request params
+    for discriminator in discriminators['AmazonEC2']:
+        params[discriminator] = request.GET.get(discriminator, None)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        id = kwargs['id']
+    # call rest api
+    url = settings.URL + '/api/getinstancedetail/'
+    r = requests.get(url, params=params)
+    print(r)
+    # context['instance'] = r.json()
+    #
+    # print(context['instance'])
 
-        data = {'id': 'A1B2C3'}
-        # data = {'sku': id}
-
-        # call rest api
-        url = settings.URL + '/api/getinstancedetail/'
-        headers = {'content-type': 'application/json'}
-        r = requests.get(url, data=json.dumps(data), headers=headers)
-        context['instance'] = r.json()
-
-        print(context['instance'])
-
-        return context
+    return render(request, 'instance.html', context)
 
 
 def priceview(request):
@@ -76,6 +74,9 @@ def priceview(request):
                  },
                  "region": form.cleaned_data['region'],
             }
+
+            # TODO build instance url
+
 
 
             # call rest api

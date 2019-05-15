@@ -1,5 +1,6 @@
 discriminators = {
     'AmazonEC2': [
+        'provider',
         'instanceType',
         'region',
         'operatingSystem'

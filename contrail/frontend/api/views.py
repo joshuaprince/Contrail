@@ -10,6 +10,7 @@ from infi.clickhouse_orm.database import Database
 from config import CLICKHOUSE_DB_NAME, CLICKHOUSE_DB_URL
 from contrail.loader.warehouse import InstanceData
 from .serializers import *
+from pprint import pprint
 
 import json
 
@@ -133,22 +134,25 @@ class GetInstanceDetail(APIView):
         }, ...
     ]
     '''
+
     def get(self, request: Request):
-        data = json.loads(request.body)
-        print(data['id'])
+        # print(request.query_params)
+        instances = list(InstanceData.objects_in(db).filter(**dict(request.GET.items())).order_by('crawlTime'))
+        for inst in instances:
+            print(inst.priceType)
 
         # TODO on_demand_instances = InstanceData.objects_in(db).filter(instanceType__eq=data['id'], priceType__eq='On Demand').distinct() \
 
-        on_demand_instances = InstanceData.objects_in(db).filter(instanceType__ne=data['id']).distinct() \
-            .only('provider', 'region', 'clockSpeed', 'priceType', 'pricePerHour', 'priceUpfront', 'memory', 'vcpu', 'gpu', \
-            'capacityStatus', 'clockSpeedIsUpTo', 'clockSpeed', 'currentGeneration', 'dedicatedEbsThroughputIsUpTo', 'dedicatedEbsThroughput', 'ebsOptimized', \
-            'ecuIsVariable', 'ecu', 'elasticGraphicsType', 'enhancedNetworkingSupported', 'fromLocation', 'fromLocationType', 'gpuMemory', 'group', 'groupDescription', \
-            'instance', 'instanceFamily', 'instanceType', 'intelAvx2Available', 'intelAvxAvailable', 'intelTurboAvailable', 'licenseModel', 'location', 'locationType', \
-            'maxIopsBurstPerformance', 'maxIopsVolume', 'maxThroughputVolume', 'maxVolumeSize', 'networkPerformance', 'normalizationSizeFactor', 'operatingSystem', 'operation', \
-            'physicalCores', 'physicalProcessor', 'preInstalledSw', 'processorArchitecture', 'processorFeatures', 'productFamily', 'provisioned', 'serviceName', \
-            'storageIsEbsOnly', 'storageCount', 'storageCapacity', 'storageType', 'storageMedia', 'tenancy', 'toLocation', 'toLocationType', 'usageType', 'volumeType', \
-            'appliesTo', 'description', 'effectiveDate', 'beginRange', 'endRange', 'leaseContractLength', 'offeringClass', 'purchaseOption', \
-            'meterSubCategory', 'maxResourceVolumeMb', 'osVhdSizeMb', 'hyperVGenerations', 'maxDataDiskCount', 'lowPriorityCapable', 'premiumIo', 'vcpusAvailable', 'vcpusPerCore')\
+        # on_demand_instances = InstanceData.objects_in(db).filter(instanceType__ne=data['id']).distinct() \
+        #     .only('provider', 'region', 'clockSpeed', 'priceType', 'pricePerHour', 'priceUpfront', 'memory', 'vcpu', 'gpu', \
+        #     'capacityStatus', 'clockSpeedIsUpTo', 'clockSpeed', 'currentGeneration', 'dedicatedEbsThroughputIsUpTo', 'dedicatedEbsThroughput', 'ebsOptimized', \
+        #     'ecuIsVariable', 'ecu', 'elasticGraphicsType', 'enhancedNetworkingSupported', 'fromLocation', 'fromLocationType', 'gpuMemory', 'group', 'groupDescription', \
+        #     'instance', 'instanceFamily', 'instanceType', 'intelAvx2Available', 'intelAvxAvailable', 'intelTurboAvailable', 'licenseModel', 'location', 'locationType', \
+        #     'maxIopsBurstPerformance', 'maxIopsVolume', 'maxThroughputVolume', 'maxVolumeSize', 'networkPerformance', 'normalizationSizeFactor', 'operatingSystem', 'operation', \
+        #     'physicalCores', 'physicalProcessor', 'preInstalledSw', 'processorArchitecture', 'processorFeatures', 'productFamily', 'provisioned', 'serviceName', \
+        #     'storageIsEbsOnly', 'storageCount', 'storageCapacity', 'storageType', 'storageMedia', 'tenancy', 'toLocation', 'toLocationType', 'usageType', 'volumeType', \
+        #     'appliesTo', 'description', 'effectiveDate', 'beginRange', 'endRange', 'leaseContractLength', 'offeringClass', 'purchaseOption', \
+        #     'meterSubCategory', 'maxResourceVolumeMb', 'osVhdSizeMb', 'hyperVGenerations', 'maxDataDiskCount', 'lowPriorityCapable', 'premiumIo', 'vcpusAvailable', 'vcpusPerCore')\
             # .order_by('-crawlTime').limit(20)
             # 'crawlTime', 'ephemeralOsDiskSupported', 'acus', 'combinedTempDiskAndCachedReadBytesPerSecond', 'combinedTempDiskAndCachedWriteBytesPerSecond', 'combinedTempDiskAndCachedIOPS', \
             # 'uncachedDiskBytesPerSecond', 'uncachedDiskIOPS', 'cachedDiskBytes', 'maxWriteAcceleratorDisksAllowed')
