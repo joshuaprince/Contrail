@@ -99,41 +99,37 @@ class GetInstances(APIView):
 class GetInstanceDetail(APIView):
     '''
     Given atributes, return instances and their prices
-    Takes in (All fields optional)::
-    {
-        "id":  "A1B2C3"
-    }
 
-    TODO paginate
     Returns (All fields required):
     [
         {
             "sku": "A1B2C3",
-            "provider": "aws",
+            "provider": "AmazonEC2",
             "instance_type": "c4.4xlarge",
             "region": "US East",
             "vcpus": 8,
             "memory": 8,
-            "price": [
-                {
-                    "type": "on_demand"
-                    "hourly": 0.233,
-                    "upfront": 0
-                },
-                {
-                    "type": "reserved"
-                    "hourly": 0.233,
-                    "upfront": 0
-                },
-                {
-                    "type": "reserved",
-                    "hourly": 0.233,
-                    "upfront": 0
-                },
-            ]
+            "priceHistory": {
+                "on_demand": [
+                    {
+                        "hourly": 0.233,
+                        "upfront": 0,
+                        "crawl_time": "...."
+                    },
+                    {
+                        "hourly": 0.233,
+                        "upfront": 0
+                        "crawl_time": "...."
+                    },
+                    {
+                        "hourly": 0.233,
+                        "upfront": 0
+                        "crawl_time": "...."
+                    },
+                ]
+            }
             "networkPerformance": "..."
             ...
-            "priceHistory":
         }, ...
     ]
     '''
