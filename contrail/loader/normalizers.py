@@ -41,7 +41,7 @@ def ecuNormalizer(key, value):
 
 def instanceskuNormalizer(key, value):
     if key == 'instancesku':
-        return ('instanceSKU', value)
+        return None
     else:
         pass
 
@@ -140,52 +140,85 @@ def servicecodeNormalizer(key, value):
     else:
         pass 
 
-def operatingSystem(key, value):
+def operatingSystemNormalizer(key, value):
     if key == 'operatingSystem':
         return (key, value)
+    else:
+        pass
+
+def productFamilyNormalizer(key, value):
+    if key == 'productFamily':
+        if 'Compute' in value:
+            return (key, value)
+        else:
+            return None
+    else:
+        pass
+
+def tenancyNormalizer(key, value):
+    if key == 'tenancy':
+        if value == 'Shared':
+            return (key, value)
+        else:
+            return None
+    else:
+        pass
+
+def preInstalledSwNormalizer(key, value):
+    if key == 'preInstalledSw':
+        if value == 'NA':
+            return (key, value)
+        else:
+            return None
+    else:
+        pass
+
+def ProductDescriptionNormalizer(key, value):
+    if key == 'ProductDescription':
+        return ('operatingSystem', value)
     else:
         pass
 
 def regionNormalizer(key, value):
     if key == 'region':
         regions = {
-        'usgoveast1': 'AWS Gov US East',
-        'usgovewest1': 'AWS Gov US West',
-        'apnortheast1': 'Asia Pacific Northeast 1',
-        'apnortheast2': 'Asia Pacific Northeast 2',
-        'apnortheast3': 'Asia Pacific Northeast 3',
-        'apsoutheast1': 'Asia Pacific Southeast 1',
-        'apsoutheast2': 'Asia Pacific Southeast 2',
-        'asiaeast1': 'Asia East 1',
-        'asiaeast2': 'Asia East 2',
-        'asianortheast1': 'Asia Northeast 1', 
-        'asianortheast2': 'Asia Northeast 2',
-        'asiasouth1': 'Asia South 1',
-        'asiasoutheast1': 'Asia Southeast 1',
-        'australiasoutheast1': 'Australia Southeast 1',
-        'cacentral1': 'Canada 1',
-        'cnnorth1': 'China North 1',
-        'cnnorthwest1': 'China Northwest 1',
-        'eucentral1': 'Europe Central 1',
-        'euwest1': 'Europe West 1',
-        'euwest2': 'Europe West 2',
-        'euwest3': 'Europe West 3',
-        'eunorth1': 'Europe North 1',
-        'europenorth1': 'Europe North 1',
-        'europewest1': 'Europe West 1',
-        'europewest2': 'Europe West 2',
-        'europewest3': 'Europe West 3',
-        'europewest4': 'Europe West 4',
-        'europewest6': 'Europe West 6',
-        'northamericanortheast1': 'North America Northeast 1',
-        'saeast1': 'South America East 1',
-        'southamericaeast1': 'South America East 1',
-        'uscentral1': 'US Central 1',
-        'useast1': 'US East 1',
-        'useast2': 'US East 2',
-        'useast4': 'US East 4',
-        'uswest1': 'US West 1',
-        'uswest2': 'US West 2'
+            'usgoveast1': 'AWS Gov US East',
+            'usgovewest1': 'AWS Gov US West',
+            'apnortheast1': 'Asia Pacific Northeast 1',
+            'apnortheast2': 'Asia Pacific Northeast 2',
+            'apnortheast3': 'Asia Pacific Northeast 3',
+            'apsoutheast1': 'Asia Pacific Southeast 1',
+            'apsoutheast2': 'Asia Pacific Southeast 2',
+            'asiaeast1': 'Asia East 1',
+            'asiaeast2': 'Asia East 2',
+            'asianortheast1': 'Asia Northeast 1', 
+            'asianortheast2': 'Asia Northeast 2',
+            'asiasouth1': 'Asia South 1',
+            'asiasoutheast1': 'Asia Southeast 1',
+            'australiasoutheast1': 'Australia Southeast 1',
+            'cacentral1': 'Canada 1',
+            'cnnorth1': 'China North 1',
+            'cnnorthwest1': 'China Northwest 1',
+            'eucentral1': 'Europe Central 1',
+            'euwest1': 'Europe West 1',
+            'euwest2': 'Europe West 2',
+            'euwest3': 'Europe West 3',
+            'eunorth1': 'Europe North 1',
+            'europenorth1': 'Europe North 1',
+            'europewest1': 'Europe West 1',
+            'europewest2': 'Europe West 2',
+            'europewest3': 'Europe West 3',
+            'europewest4': 'Europe West 4',
+            'europewest6': 'Europe West 6',
+            'northamericanortheast1': 'North America Northeast 1',
+            'saeast1': 'South America East 1',
+            'southamericaeast1': 'South America East 1',
+            'uscentral1': 'US Central 1',
+            'useast1': 'US East 1',
+            'useast2': 'US East 2',
+            'useast4': 'US East 4',
+            'uswest1': 'US West 1',
+            'uswest2': 'US West 2'
         }
         return ('region', value)
     else:
@@ -193,24 +226,28 @@ def regionNormalizer(key, value):
 
 def normalizeData(key, value):
     switcher = {
-    'capacitystatus': capacityStatusNormalizer(key, value),
-    'clockSpeed': clockSpeedNormalizer(key, value),
-    'dedicatedEbsThroughput': dedicatedEbsThroughputNormalizer(key, value),
-    'ecu': ecuNormalizer(key, value),
-    'instancesku': instanceskuNormalizer(key, value),
-    'maxThroughputvolume': maxThroughputvolumeNormalizer(key, value),
-    'maxVolumeSize': maxVolumeSizeNormalizer(key, value),
-    'memory': memoryNormalizer(key, value),
-    'normalizationSizeFactor': normalizationSizeFactorNormalizer(key, value),
-    'servicecode': servicecodeNormalizer(key, value),
-    'servicename': servicenameNormalizer(key, value),
-    'storage': storageNormalizer(key, value),
-    'usagetype': usagetypeNormalizer(key, value),
-    'uSD': USDNormalizer(key, value),
-    'unit': unitNormalizer(key, value),
-    'spotPrice': spotPriceNormalizer(key, value),
-    'region': regionNormalizer(key, value),
-    'operatingSystem': operatingSystem(key, value)
+        'capacitystatus': capacityStatusNormalizer(key, value),
+        'clockSpeed': clockSpeedNormalizer(key, value),
+        'dedicatedEbsThroughput': dedicatedEbsThroughputNormalizer(key, value),
+        'ecu': ecuNormalizer(key, value),
+        'instancesku': instanceskuNormalizer(key, value),
+        'maxThroughputvolume': maxThroughputvolumeNormalizer(key, value),
+        'maxVolumeSize': maxVolumeSizeNormalizer(key, value),
+        'memory': memoryNormalizer(key, value),
+        'normalizationSizeFactor': normalizationSizeFactorNormalizer(key, value),
+        'servicecode': servicecodeNormalizer(key, value),
+        'servicename': servicenameNormalizer(key, value),
+        'storage': storageNormalizer(key, value),
+        'usagetype': usagetypeNormalizer(key, value),
+        'uSD': USDNormalizer(key, value),
+        'unit': unitNormalizer(key, value),
+        'spotPrice': spotPriceNormalizer(key, value),
+        'region': regionNormalizer(key, value),
+        'operatingSystem': operatingSystemNormalizer(key, value),
+        'productFamily': productFamilyNormalizer(key, value),
+        'tenancy': tenancyNormalizer(key, value),
+        'preInstalledSw': preInstalledSwNormalizer(key, value),
+        'ProductDescription': ProductDescriptionNormalizer(key, value)
     }
     func = switcher.get(key, lambda: (key, str(value)))
     try:

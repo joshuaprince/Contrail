@@ -75,8 +75,7 @@ class InstanceData(models.Model):
     instanceCapacityMedium = fields.NullableField(fields.Int32Field())
     instanceCapacityXlarge = fields.NullableField(fields.Int32Field())
     instanceFamily = fields.NullableField(fields.StringField())
-    instanceType = fields.StringField()
-    instanceSKU = fields.NullableField(fields.StringField())
+    instanceType = fields.NullableField(fields.StringField())
     intelAvx2Available = fields.NullableField(BooleanField())
     intelAvxAvailable = fields.NullableField(BooleanField())
     intelTurboAvailable = fields.NullableField(BooleanField())
@@ -89,7 +88,7 @@ class InstanceData(models.Model):
     maxVolumeSize = fields.NullableField(fields.Int32Field())  # in TiB
     networkPerformance = fields.NullableField(fields.StringField())
     normalizationSizeFactor = fields.NullableField(fields.Float32Field())
-    operatingSystem = fields.StringField()
+    operatingSystem = fields.NullableField(fields.StringField())
     operation = fields.NullableField(fields.StringField())
     physicalCores = fields.NullableField(fields.Int32Field())
     physicalProcessor = fields.NullableField(fields.StringField())

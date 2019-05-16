@@ -54,6 +54,7 @@ class Loader:
         for file in BucketIterator(self.s3client, AWS_BUCKET_NAME):
             filename = file['Key']
             last_modified = file['LastModified']
+
             if self.already_loaded(filename):
                 continue
 
