@@ -10,6 +10,7 @@ from infi.clickhouse_orm.database import Database
 from config import CLICKHOUSE_DB_NAME, CLICKHOUSE_DB_URL
 from contrail.loader.warehouse import InstanceData
 from .serializers import *
+from pprint import pprint
 
 import json
 
@@ -133,22 +134,65 @@ class GetInstanceDetail(APIView):
         }, ...
     ]
     '''
+
     def get(self, request: Request):
-        data = json.loads(request.body)
-        print(data['id'])
+        print(request.query_params)
+        instances = InstanceData.objects_in(db).filter(**dict(request.GET.items())).order_by('crawlTime')
+        # instances = InstanceData.objects_in(db).filter(instanceType='A0').distinct()
+        print(instances)
+        on_demand_instances = []
+        one_hourly_reserved_instances = []
+        three_hourly_reserved_instances = []
+        five_hourly_reserved_instances = []
+        one_partial_reserved_instances = []
+        three_partial_reserved_instances = []
+        five_partial_reserved_instances = []
+        one_upfront_reserved_instances = []
+        three_upfront_reserved_instances = []
+        five_upfront_reserved_instances = []
+
+        for instance in list(instances):
+            if instance['priceType'] == 'On Demand':
+                on_demand_instances.append(instance)
+
+            if instance['priceType'] == 'Reserved':
+                if instance['leaseContractLength'] == '1 year':
+                    if instance['reservedType'] == 'hourly':
+                        one_hourly_reserved_instances.append(instance)
+                    if instance['reservedType'] == 'partial':
+                        one_partial_reserved_instances.append(instance)
+                    if instance['reservedType'] == 'upfront':
+                        one_upfront_reserved_instances.append(instance)
+
+                elif instance['leaseContractLength'] == '3 years':
+                    if instance['reservedType'] == 'hourly':
+                        three_hourly_reserved_instances.append(instance)
+                    if instance['reservedType'] == 'partial':
+                        three_partial_reserved_instances.append(instance)
+                    if instance['reservedType'] == 'upfront':
+                        three_upfront_reserved_instances.append(instance)
+
+                elif instance['leaseContractLength'] == '5 years':
+                    if instance['reservedType'] == 'hourly':
+                        five_hourly_reserved_instances.append(instance)
+                    if instance['reservedType'] == 'partial':
+                        five_partial_reserved_instances.append(instance)
+                    if instance['reservedType'] == 'upfront':
+                        five_upfront_reserved_instances.append(instance)
+
 
         # TODO on_demand_instances = InstanceData.objects_in(db).filter(instanceType__eq=data['id'], priceType__eq='On Demand').distinct() \
 
-        on_demand_instances = InstanceData.objects_in(db).filter(instanceType__ne=data['id']).distinct() \
-            .only('provider', 'region', 'clockSpeed', 'priceType', 'pricePerHour', 'priceUpfront', 'memory', 'vcpu', 'gpu', \
-            'capacityStatus', 'clockSpeedIsUpTo', 'clockSpeed', 'currentGeneration', 'dedicatedEbsThroughputIsUpTo', 'dedicatedEbsThroughput', 'ebsOptimized', \
-            'ecuIsVariable', 'ecu', 'elasticGraphicsType', 'enhancedNetworkingSupported', 'fromLocation', 'fromLocationType', 'gpuMemory', 'group', 'groupDescription', \
-            'instance', 'instanceFamily', 'instanceType', 'intelAvx2Available', 'intelAvxAvailable', 'intelTurboAvailable', 'licenseModel', 'location', 'locationType', \
-            'maxIopsBurstPerformance', 'maxIopsVolume', 'maxThroughputVolume', 'maxVolumeSize', 'networkPerformance', 'normalizationSizeFactor', 'operatingSystem', 'operation', \
-            'physicalCores', 'physicalProcessor', 'preInstalledSw', 'processorArchitecture', 'processorFeatures', 'productFamily', 'provisioned', 'serviceName', \
-            'storageIsEbsOnly', 'storageCount', 'storageCapacity', 'storageType', 'storageMedia', 'tenancy', 'toLocation', 'toLocationType', 'usageType', 'volumeType', \
-            'appliesTo', 'description', 'effectiveDate', 'beginRange', 'endRange', 'leaseContractLength', 'offeringClass', 'purchaseOption', \
-            'meterSubCategory', 'maxResourceVolumeMb', 'osVhdSizeMb', 'hyperVGenerations', 'maxDataDiskCount', 'lowPriorityCapable', 'premiumIo', 'vcpusAvailable', 'vcpusPerCore')\
+        # on_demand_instances = InstanceData.objects_in(db).filter(instanceType__ne=data['id']).distinct() \
+        #     .only('provider', 'region', 'clockSpeed', 'priceType', 'pricePerHour', 'priceUpfront', 'memory', 'vcpu', 'gpu', \
+        #     'capacityStatus', 'clockSpeedIsUpTo', 'clockSpeed', 'currentGeneration', 'dedicatedEbsThroughputIsUpTo', 'dedicatedEbsThroughput', 'ebsOptimized', \
+        #     'ecuIsVariable', 'ecu', 'elasticGraphicsType', 'enhancedNetworkingSupported', 'fromLocation', 'fromLocationType', 'gpuMemory', 'group', 'groupDescription', \
+        #     'instance', 'instanceFamily', 'instanceType', 'intelAvx2Available', 'intelAvxAvailable', 'intelTurboAvailable', 'licenseModel', 'location', 'locationType', \
+        #     'maxIopsBurstPerformance', 'maxIopsVolume', 'maxThroughputVolume', 'maxVolumeSize', 'networkPerformance', 'normalizationSizeFactor', 'operatingSystem', 'operation', \
+        #     'physicalCores', 'physicalProcessor', 'preInstalledSw', 'processorArchitecture', 'processorFeatures', 'productFamily', 'provisioned', 'serviceName', \
+        #     'storageIsEbsOnly', 'storageCount', 'storageCapacity', 'storageType', 'storageMedia', 'tenancy', 'toLocation', 'toLocationType', 'usageType', 'volumeType', \
+        #     'appliesTo', 'description', 'effectiveDate', 'beginRange', 'endRange', 'leaseContractLength', 'offeringClass', 'purchaseOption', \
+        #     'meterSubCategory', 'maxResourceVolumeMb', 'osVhdSizeMb', 'hyperVGenerations', 'maxDataDiskCount', 'lowPriorityCapable', 'premiumIo', 'vcpusAvailable', 'vcpusPerCore')\
             # .order_by('-crawlTime').limit(20)
             # 'crawlTime', 'ephemeralOsDiskSupported', 'acus', 'combinedTempDiskAndCachedReadBytesPerSecond', 'combinedTempDiskAndCachedWriteBytesPerSecond', 'combinedTempDiskAndCachedIOPS', \
             # 'uncachedDiskBytesPerSecond', 'uncachedDiskIOPS', 'cachedDiskBytes', 'maxWriteAcceleratorDisksAllowed')
@@ -165,59 +209,59 @@ class GetInstanceDetail(APIView):
 
         serialized_instance = {
 
-            "instance_type": on_demand_instances[0].instanceType,
-            "sku": on_demand_instances[0].sku,
-            "provider": on_demand_instances[0].provider,
-            "region": on_demand_instances[0].region,
-            "vcpus": on_demand_instances[0].vcpu,
-            "memory": on_demand_instances[0].memory,
-            "gpu": on_demand_instances[0].gpu,
-            "price": [
-                {
-                    "type": "on_demand",
-                    "hourly": on_demand_instances[0].pricePerHour,
-                    "upfront": on_demand_instances[0].priceUpfront
-                },
-                # {
-                #     "type": "hourly_reserved",
-                #     "hourly": hourly_reserved_instances[0].pricePerHour,
-                #     "upfront": hourly_reserved_instances[0].priceUpfront,
-                # },
-                # {
-                #     "type": "partial_reserved",
-                #     "hourly": partial_reserved_instances[0].pricePerHour,
-                #     "upfront": partial_reserved_instances[0].priceUpfront,
-                # },
-                # {
-                #     "type": "upfront_reserved",
-                #     "hourly": upfront_reserved_instances[0].pricePerHour,
-                #     "upfront": upfront_reserved_instances[0].priceUpfront,
-                # },
-            ],
-            "capacityStatus": on_demand_instances[0].gpu,
-            "clockSpeedIsUpTo": on_demand_instances[0].clockSpeedIsUpTo,
-            "clockSpeed": on_demand_instances[0].clockSpeed,
-            "currentGeneration": on_demand_instances[0].currentGeneration,
-            "dedicatedEbsThroughputIsUpTo": on_demand_instances[0].dedicatedEbsThroughputIsUpTo,
-            "dedicatedEbsThroughput": on_demand_instances[0].dedicatedEbsThroughput,
-            "ebsOptimized": on_demand_instances[0].ebsOptimized,
-            "ecuIsVariable": on_demand_instances[0].ecuIsVariable,
-            "ecu": on_demand_instances[0].ecu,
-            "elasticGraphicsType": on_demand_instances[0].elasticGraphicsType,
-            "enhancedNetworkingSupported": on_demand_instances[0].enhancedNetworkingSupported,
-            "fromLocation": on_demand_instances[0].fromLocation,
-            "fromLocationType": on_demand_instances[0].fromLocationType,
-            "gpuMemory": on_demand_instances[0].gpuMemory,
-            "group": on_demand_instances[0].group,
-            "groupDescription": on_demand_instances[0].groupDescription,
-            "instance": on_demand_instances[0].instance,
-            "instanceFamily": on_demand_instances[0].instanceFamily,
-            "instanceType": on_demand_instances[0].instanceType,
-            "instanceSKU": on_demand_instances[0].instanceSKU,
-            "intelAvx2Available": on_demand_instances[0].intelAvx2Available,
-            "intelAvxAvailable": on_demand_instances[0].intelAvxAvailable,
-            "capacityStatus": on_demand_instances[0].gpu,
-            "capacityStatus": on_demand_instances[0].gpu,
+            # "instance_type": on_demand_instances[0].instanceType,
+            # "sku": on_demand_instances[0].sku,
+            # "provider": on_demand_instances[0].provider,
+            # "region": on_demand_instances[0].region,
+            # "vcpus": on_demand_instances[0].vcpu,
+            # "memory": on_demand_instances[0].memory,
+            # "gpu": on_demand_instances[0].gpu,
+            # "price": [
+            #     {
+            #         "type": "on_demand",
+            #         "hourly": on_demand_instances[0].pricePerHour,
+            #         "upfront": on_demand_instances[0].priceUpfront
+            #     },
+            #     # {
+            #     #     "type": "hourly_reserved",
+            #     #     "hourly": hourly_reserved_instances[0].pricePerHour,
+            #     #     "upfront": hourly_reserved_instances[0].priceUpfront,
+            #     # },
+            #     # {
+            #     #     "type": "partial_reserved",
+            #     #     "hourly": partial_reserved_instances[0].pricePerHour,
+            #     #     "upfront": partial_reserved_instances[0].priceUpfront,
+            #     # },
+            #     # {
+            #     #     "type": "upfront_reserved",
+            #     #     "hourly": upfront_reserved_instances[0].pricePerHour,
+            #     #     "upfront": upfront_reserved_instances[0].priceUpfront,
+            #     # },
+            # ],
+            # "capacityStatus": on_demand_instances[0].gpu,
+            # "clockSpeedIsUpTo": on_demand_instances[0].clockSpeedIsUpTo,
+            # "clockSpeed": on_demand_instances[0].clockSpeed,
+            # "currentGeneration": on_demand_instances[0].currentGeneration,
+            # "dedicatedEbsThroughputIsUpTo": on_demand_instances[0].dedicatedEbsThroughputIsUpTo,
+            # "dedicatedEbsThroughput": on_demand_instances[0].dedicatedEbsThroughput,
+            # "ebsOptimized": on_demand_instances[0].ebsOptimized,
+            # "ecuIsVariable": on_demand_instances[0].ecuIsVariable,
+            # "ecu": on_demand_instances[0].ecu,
+            # "elasticGraphicsType": on_demand_instances[0].elasticGraphicsType,
+            # "enhancedNetworkingSupported": on_demand_instances[0].enhancedNetworkingSupported,
+            # "fromLocation": on_demand_instances[0].fromLocation,
+            # "fromLocationType": on_demand_instances[0].fromLocationType,
+            # "gpuMemory": on_demand_instances[0].gpuMemory,
+            # "group": on_demand_instances[0].group,
+            # "groupDescription": on_demand_instances[0].groupDescription,
+            # "instance": on_demand_instances[0].instance,
+            # "instanceFamily": on_demand_instances[0].instanceFamily,
+            # "instanceType": on_demand_instances[0].instanceType,
+            # "instanceSKU": on_demand_instances[0].instanceSKU,
+            # "intelAvx2Available": on_demand_instances[0].intelAvx2Available,
+            # "intelAvxAvailable": on_demand_instances[0].intelAvxAvailable,
+            # "capacityStatus": on_demand_instances[0].gpu,
+            # "capacityStatus": on_demand_instances[0].gpu,
 
         }
 

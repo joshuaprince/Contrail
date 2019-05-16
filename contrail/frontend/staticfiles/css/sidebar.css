@@ -117,6 +117,10 @@ ul#subnav > li {
     background: #fff;
 }
 
+#sidebar a {
+  display: block;
+}
+
 /* #sidebar ul li.active>a,
 a[aria-expanded="true"] {
     color: #fff;

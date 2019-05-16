@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
+from contrail.frontend.api.discriminators import *
 from .forms import *
 
 import requests, json
@@ -12,30 +13,6 @@ class HomeView(TemplateView):
     Render Home page
     """
     template_name = "home.html"
-
-
-class InstanceView(TemplateView):
-    """
-    Render Home page
-    """
-    template_name = "instance.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        id = kwargs['id']
-
-        data = {'id': 'A1B2C3'}
-        # data = {'sku': id}
-
-        # call rest api
-        url = settings.URL + '/api/getinstancedetail/'
-        headers = {'content-type': 'application/json'}
-        r = requests.get(url, data=json.dumps(data), headers=headers)
-        context['instance'] = r.json()
-
-        print(context['instance'])
-
-        return context
 
 
 def priceview(request):
@@ -51,9 +28,9 @@ def priceview(request):
 
             data = {
                 "providers": {
-                    "aws": True,
-                    "gcp": False,
-                    "azure": False
+                    "aws": form.cleaned_data['amazon_web_services'],
+                    "gcp": form.cleaned_data['google_cloud_platform'],
+                    "azure": form.cleaned_data['microsoft_azure']
                  },
                  "vcpus": {
                     "min": int(form.cleaned_data['vcpu_from']),
@@ -85,48 +62,54 @@ def priceview(request):
             context['instances'] = json.loads(r)['instances']
             print(context['instances'])
 
+            # Build instance url
+            for instance in context['instances']:
+                instance['url'] = "?"
+
+                # if instance['provider'] == 'AmazonEC2':
+                for discriminator in discriminators['AmazonEC2']:
+                    if instance['url'][-1] != '?': instance['url'] += '&'
+                    instance['url'] += discriminator
+                    instance['url'] += '='
+                    instance['url'] += instance[discriminator]
+
+                print(instance['url'])
+
+
+
     return render(request, 'price.html', context)
 
 
-def compareview(request):
+def instanceview(request):
     """
-    Render Price page
+    Render Instance Detail page
     """
-    context = {'form':PriceForm()}
+    context = {}
+    params = {}
 
-    if request.method == 'POST':
-        form = PriceForm(request.POST)
+    # build request params
+    if request.GET.get('provider', None) == 'AmazonEC2':
+        for discriminator in discriminators['AmazonEC2']:
+            params[discriminator] = request.GET.get(discriminator, None)
 
-        if form.is_valid():
+    elif request.GET.get('provider', None) == 'Azure':
+        for discriminator in discriminators['Azure']:
+            params[discriminator] = request.GET.get(discriminator, None)
 
-            data = {
-                "providers": {
-                    "aws": True,
-                    "gcp": False,
-                    "azure": False
-                 },
-                 "vcpus": {
-                    "min": int(form.cleaned_data['vcpu_from']),
-                    "max": int(form.cleaned_data['vcpu_to'])
-                 },
-                 "memory": {
-                    "min": int(form.cleaned_data['memory_from']),
-                    "max": int(form.cleaned_data['memory_to'])
-                 },
-                 "price": {
-                    "min_hourly": float(form.cleaned_data['pricehr_from']),
-                    "max_hourly": float(form.cleaned_data['pricehr_to']),
-                    "min_upfront": float(form.cleaned_data['price_from']),
-                    "max_upfront": float(form.cleaned_data['price_to'])
-                 },
-                 "region": form.cleaned_data['region'],
-            }
 
-            # call rest api
-            url = settings.URL + '/api/getinstances/'
-            headers = {'content-type': 'application/json'}
-            r = requests.get(url, data=json.dumps(data), headers=headers).content.decode('utf-8')
-            context['instances'] = json.loads(r)['instances']
-            print(context['instances'])
+    # call rest api
+    url = settings.URL + '/api/getinstancedetail/'
+    r = requests.get(url, params=params)
+    print(r)
+    # context['instance'] = r.json()
+    #
+    # print(context['instance'])
 
-    return render(request, 'compare.html', context)
+    return render(request, 'instance.html', context)
+
+
+class HelpView(TemplateView):
+    """
+    Render Help page
+    """
+    template_name = "help.html"
