@@ -15,7 +15,8 @@
   <div class="container">
     <div class="row">
       <div class="col">
-        <h1 style="text-align: center;">Instance {{ instance.instanceType }}</h1>
+        <h1 style="text-align: center;">{{ rawInstanceDetails.provider }} {{ rawInstanceDetails.instanceType }}</h1>
+        <h2 style="text-align: center;">{{ rawInstanceDetails.region }}</h2>
       </div>
     </div>
   </div>
@@ -27,67 +28,24 @@
         <br><br><br>
         <table id="instances" class="table table-striped table-hover table-bordered" style="width:100%">
             <tbody>
-
-              <tr>
-                <th>Provider</th>
-                <td>{{ instance.provider }}</td>
-              </tr>
-
-              <tr>
-                <th>Region</th>
-                <td>{{ instance.region }}</td>
-              </tr>
-
-              <tr>
-                <th>vCPUs</th>
-                <td>{{ instance.vcpus }}</td>
-              </tr>
-
-              <tr>
-                <th>Memory</th>
-                <td>{{ instance.memory }}</td>
-              </tr>
-
-              <tr>
-                <th>GPU</th>
-                <td>{{ instance.gpu }}</td>
-              </tr>
-
-              <tr>
-                <th>Network Performance</th>
-                <td>{{ instance.networkPerformance }}</td>
-              </tr>
-
-              <tr>
-                <th>physicalCores</th>
-                <td>{{ instance.physicalCores }}</td>
-              </tr>
-
-              <tr>
-                <th>Physical Processor</th>
-                <td>{{ instance.physicalProcessor }}</td>
-              </tr>
-
-              <tr>
-                <th>storageIsEbsOnly</th>
-                <td>{{ instance.storageIsEbsOnly }}</td>
-              </tr>
-
-              <tr>
-                <th>Storage Count</th>
-                <td>{{ instance.storageCount }}</td>
-              </tr>
-
-              <tr>
-                <th>Storage Capacity</th>
-                <td>{{ instance.storageCapacity }}</td>
-              </tr>
-
-              <tr>
-                <th>Storage Type</th>
-                <td>{{ instance.storageType }}</td>
-              </tr>
-
+            {% for detail in instanceDetails %}
+                <tr title="{{ detail.hint }}">
+                    <th>
+                        {% if detail.link %}<a href="{{ detail.link }}" target="_blank">{% endif %}
+                            {{ detail.name }}
+                            {% if detail.link %}
+                                &nbsp;&#8599;
+                            {% endif %}
+                            {% if detail.hint %}
+                                &nbsp;&#65533;
+                            {% endif %}
+                        {% if detail.link %}</a>{% endif %}
+                    </th>
+                    <td>
+                        {{ detail.value }} {{ detail.unit }}
+                    </td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
 
