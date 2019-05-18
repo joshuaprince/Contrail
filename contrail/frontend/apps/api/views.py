@@ -8,17 +8,10 @@ from rest_framework.status import (
     HTTP_200_OK
 )
 
-from infi.clickhouse_orm.database import Database
-
-from config import CLICKHOUSE_DB_NAME, CLICKHOUSE_DB_URL
-from contrail.frontend.api.discriminators import discriminators
+from contrail.frontend.query import get_instance_details, check_instance_detail_filters, AmbiguousTimeSeries, \
+    InstanceNotFound, get_instance_price_history
 from contrail.loader.warehouse import InstanceData
 from .serializers import *
-from pprint import pprint
-
-import json
-
-db = Database(CLICKHOUSE_DB_NAME, db_url=CLICKHOUSE_DB_URL, readonly=True)
 
 
 class GetInstances(APIView):
@@ -158,49 +151,18 @@ class GetInstanceDetail(View):
     def get(self, request: HttpRequest):
         filter_parameters = dict(request.GET.items())
 
-        provider = filter_parameters.get('provider')
-
-        if not provider:
-            return JsonResponse({'error': "Must specify a provider."}, status=400)
-
-        if provider not in discriminators:
-            return JsonResponse({'error': "Unknown provider '{}'".format(provider)}, status=400)
-
-        # Queries must specify all discriminators, else returned price history will be ambiguous.
-        for discrim in discriminators[provider]:
-            if discrim not in filter_parameters:
-                return JsonResponse({'error': "Missing required discriminator '{}'".format(discrim)}, status=400)
-
-        price_history_params = ['crawlTime', 'priceType', 'pricePerHour', 'priceUpfront', 'leaseContractLength']
-
-        # Get details about this instance by grabbing the latest crawled instance that matches
+        # Validate the query parameters to ensure they produce exactly one unique instance.
         try:
-            latest_instance = InstanceData.objects_in(db)\
-                .filter(**filter_parameters).order_by('-crawlTime')[0]
-
-            # Filter out null fields and price-related fields from the instance dict
-            latest_instance = {k: v for k, v in latest_instance.to_dict().items() if k not in price_history_params and v is not None}
-        except AttributeError as e:
-            # User used a query string parameter that doesn't exist on the table
+            check_instance_detail_filters(**filter_parameters)
+        except (AttributeError, AmbiguousTimeSeries) as e:
             return JsonResponse({'error': str(e)}, status=400)
-        except StopIteration:
-            # No instances match this query
-            return JsonResponse({'error': "No instances match this query."}, status=400)
+        except InstanceNotFound as e:
+            return JsonResponse({'error': str(e)}, status=404)
 
-        # Get a time series from the last several entries in the database that match this filter
-        price_history = InstanceData.objects_in(db)\
-            .filter(**filter_parameters).distinct().only(*price_history_params).order_by('-crawlTime')[:100]
-
-        # Build our own list of "price history point" dicts, since we don't want to include null or zero fields
-        price_history_points = []
-        for inst in price_history:
-            current_inst = {}
-            for param in price_history_params:
-                if getattr(inst, param):
-                    current_inst[param] = getattr(inst, param)
-            price_history_points.append(current_inst)
+        latest_instance = get_instance_details(**filter_parameters)
+        price_points = get_instance_price_history(**filter_parameters)
 
         return JsonResponse({
             'instanceDetail': latest_instance,
-            'priceHistory': price_history_points
+            'priceHistory': price_points
         })

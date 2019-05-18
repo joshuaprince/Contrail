@@ -1,12 +1,12 @@
+import json
+import requests
+
 from django.conf import settings
 from django.shortcuts import render
-from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import FormView
-from contrail.frontend.api.discriminators import *
+
 from .forms import *
 
-import requests, json
 
 class HomeView(TemplateView):
     """

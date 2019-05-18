@@ -1,4 +1,4 @@
-"""contrails URL Configuration
+"""settings URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.1/topics/http/urls/
@@ -15,19 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.conf import settings
-from django.conf.urls import url
 from django.conf.urls.static import static
 
-from .views import *
+from contrail.frontend.apps.contrailsite.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', HomeView.as_view(), name='home'),
-    path('price/', priceview, name='price'),
-    # url(r'^instance/(?P<id>\w+)/$', InstanceView.as_view(), name='instance'),
-    path('instance/', instanceview, name='instance'),
-    path('help/', HelpView.as_view(), name='help'),
-    path('api/', include('contrail.frontend.api.urls')),
-
+    path('api/', include('contrail.frontend.apps.api.urls')),
+    path('', include('contrail.frontend.apps.contrailsite.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

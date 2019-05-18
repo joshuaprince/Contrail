@@ -26,7 +26,7 @@ def run_initdb(args):
 
 
 def run_frontend(args):
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'contrail.frontend.contrails.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'contrail.frontend.settings.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
