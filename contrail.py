@@ -20,6 +20,11 @@ def run_loader(args):
     loader.load()
 
 
+def run_initdb(args):
+    from contrail.loader.warehouse import create_contrail_table
+    create_contrail_table(True)
+
+
 def run_frontend(args):
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'contrail.frontend.contrails.settings')
     try:
@@ -56,6 +61,9 @@ def main():
 
     parser_test = subparsers.add_parser('test', aliases=['t'])
     parser_test.set_defaults(func=run_tests)
+
+    parser_test = subparsers.add_parser('initdb')
+    parser_test.set_defaults(func=run_initdb)
 
     args, unknown = parser.parse_known_args()
     args.func(args)
