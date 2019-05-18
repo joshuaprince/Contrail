@@ -1,3 +1,6 @@
+from django.http import JsonResponse, HttpRequest
+from django.views import View
+
 from rest_framework.request import Request
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -8,6 +11,7 @@ from rest_framework.status import (
 from infi.clickhouse_orm.database import Database
 
 from config import CLICKHOUSE_DB_NAME, CLICKHOUSE_DB_URL
+from contrail.frontend.api.discriminators import discriminators
 from contrail.loader.warehouse import InstanceData
 from .serializers import *
 from pprint import pprint
@@ -95,174 +99,108 @@ class GetInstances(APIView):
         return Response({'instances': [InstanceDataSerializer(obj).data for obj in instances]}, status=HTTP_200_OK)
 
 
+class GetInstanceDetail(View):
+    """
+    Given attributes, return the details about a single instance, and the price history associated with that instance.
 
+    Requires query string parameters of ``provider`` and ALL discriminators associated with that provider. Example:
+    ``/detail?provider=AmazonEC2&instanceType=c4.4xlarge&region=useast1&operatingSystem=Linux``
 
-class GetInstanceDetail(APIView):
-    '''
-    Given atributes, return instances and their prices
+    Returns a JSON dictionary containing:
+      ``instanceDetail``, which lists ALL fields from the InstanceData table of the most recent entry matching the query
 
-    Returns (All fields required):
-    [
+      ``priceHistory``, a list of price points, each with a crawlTime, priceType, pricePerHour, and priceUpfront
+
+    Example return:
+    {
+      "instanceDetail": {
+        "provider": "AmazonEC2",
+        "processorArchitecture": "64-bit",
+        "tenancy": "Shared",
+        "instanceType": "c4.4xlarge",
+        "usageType": "BoxUsage:c4.4xlarge",
+        "enhancedNetworkingSupported": true,
+        "physicalProcessor": "Intel Xeon E5-2666 v3 (Haswell)",
+        "vcpu": 16,
+        "crawlTime": "2019-05-10T01:44:21Z",
+        "operatingSystem": "Linux",
+        "description": "$0.796 per On Demand Linux c4.4xlarge Instance Hour",
+        "locationType": "AWS Region",
+        "region": "useast1",
+        "location": "US East (N. Virginia)",
+        "productFamily": "Compute Instance",
+        "sku": "ARPJFM962U4P5HAT",
+        "dedicatedEbsThroughput": 2000,
+        "capacityStatus": "Used",
+        "memory": 30.0,
+      },
+      "priceHistory": [
         {
-            "sku": "A1B2C3",
-            "provider": "AmazonEC2",
-            "instance_type": "c4.4xlarge",
-            "region": "US East",
-            "vcpus": 8,
-            "memory": 8,
-            "priceHistory": {
-                "on_demand": [
-                    {
-                        "hourly": 0.233,
-                        "upfront": 0,
-                        "crawl_time": "...."
-                    },
-                    {
-                        "hourly": 0.233,
-                        "upfront": 0
-                        "crawl_time": "...."
-                    },
-                    {
-                        "hourly": 0.233,
-                        "upfront": 0
-                        "crawl_time": "...."
-                    },
-                ]
-            }
-            "networkPerformance": "..."
-            ...
-        }, ...
-    ]
-    '''
+          "crawlTime": "2019-05-10T01:44:21Z",
+          "priceType": "On Demand",
+          "pricePerHour": 0.796
+        },
+        {
+          "crawlTime": "2019-05-10T01:44:21Z",
+          "priceType": "Reserved",
+          "leaseContractLength": "3yr",
+          "pricePerHour": 0.407
+        },
+        {
+          "crawlTime": "2019-05-10T01:44:21Z",
+          "priceType": "Reserved",
+          "leaseContractLength": "3yr",
+          "priceUpfront": 9715.0
+        },
+      ]
+    }
+    """
+    def get(self, request: HttpRequest):
+        filter_parameters = dict(request.GET.items())
 
-    def get(self, request: Request):
-        print(request.query_params)
-        instances = InstanceData.objects_in(db).filter(**dict(request.GET.items())).order_by('crawlTime')
-        # instances = InstanceData.objects_in(db).filter(instanceType='A0').distinct()
-        print(instances)
-        on_demand_instances = []
-        one_hourly_reserved_instances = []
-        three_hourly_reserved_instances = []
-        five_hourly_reserved_instances = []
-        one_partial_reserved_instances = []
-        three_partial_reserved_instances = []
-        five_partial_reserved_instances = []
-        one_upfront_reserved_instances = []
-        three_upfront_reserved_instances = []
-        five_upfront_reserved_instances = []
+        provider = filter_parameters.get('provider')
 
-        for instance in list(instances):
-            if instance['priceType'] == 'On Demand':
-                on_demand_instances.append(instance)
+        if not provider:
+            return JsonResponse({'error': "Must specify a provider."}, status=400)
 
-            if instance['priceType'] == 'Reserved':
-                if instance['leaseContractLength'] == '1 year':
-                    if instance['reservedType'] == 'hourly':
-                        one_hourly_reserved_instances.append(instance)
-                    if instance['reservedType'] == 'partial':
-                        one_partial_reserved_instances.append(instance)
-                    if instance['reservedType'] == 'upfront':
-                        one_upfront_reserved_instances.append(instance)
+        if provider not in discriminators:
+            return JsonResponse({'error': "Unknown provider '{}'".format(provider)}, status=400)
 
-                elif instance['leaseContractLength'] == '3 years':
-                    if instance['reservedType'] == 'hourly':
-                        three_hourly_reserved_instances.append(instance)
-                    if instance['reservedType'] == 'partial':
-                        three_partial_reserved_instances.append(instance)
-                    if instance['reservedType'] == 'upfront':
-                        three_upfront_reserved_instances.append(instance)
+        # Queries must specify all discriminators, else returned price history will be ambiguous.
+        for discrim in discriminators[provider]:
+            if discrim not in filter_parameters:
+                return JsonResponse({'error': "Missing required discriminator '{}'".format(discrim)}, status=400)
 
-                elif instance['leaseContractLength'] == '5 years':
-                    if instance['reservedType'] == 'hourly':
-                        five_hourly_reserved_instances.append(instance)
-                    if instance['reservedType'] == 'partial':
-                        five_partial_reserved_instances.append(instance)
-                    if instance['reservedType'] == 'upfront':
-                        five_upfront_reserved_instances.append(instance)
+        price_history_params = ['crawlTime', 'priceType', 'pricePerHour', 'priceUpfront', 'leaseContractLength']
 
+        # Get details about this instance by grabbing the latest crawled instance that matches
+        try:
+            latest_instance = InstanceData.objects_in(db)\
+                .filter(**filter_parameters).order_by('-crawlTime')[0]
 
-        # TODO on_demand_instances = InstanceData.objects_in(db).filter(instanceType__eq=data['id'], priceType__eq='On Demand').distinct() \
+            # Filter out null fields and price-related fields from the instance dict
+            latest_instance = {k: v for k, v in latest_instance.to_dict().items() if k not in price_history_params and v is not None}
+        except AttributeError as e:
+            # User used a query string parameter that doesn't exist on the table
+            return JsonResponse({'error': str(e)}, status=400)
+        except StopIteration:
+            # No instances match this query
+            return JsonResponse({'error': "No instances match this query."}, status=400)
 
-        # on_demand_instances = InstanceData.objects_in(db).filter(instanceType__ne=data['id']).distinct() \
-        #     .only('provider', 'region', 'clockSpeed', 'priceType', 'pricePerHour', 'priceUpfront', 'memory', 'vcpu', 'gpu', \
-        #     'capacityStatus', 'clockSpeedIsUpTo', 'clockSpeed', 'currentGeneration', 'dedicatedEbsThroughputIsUpTo', 'dedicatedEbsThroughput', 'ebsOptimized', \
-        #     'ecuIsVariable', 'ecu', 'elasticGraphicsType', 'enhancedNetworkingSupported', 'fromLocation', 'fromLocationType', 'gpuMemory', 'group', 'groupDescription', \
-        #     'instance', 'instanceFamily', 'instanceType', 'intelAvx2Available', 'intelAvxAvailable', 'intelTurboAvailable', 'licenseModel', 'location', 'locationType', \
-        #     'maxIopsBurstPerformance', 'maxIopsVolume', 'maxThroughputVolume', 'maxVolumeSize', 'networkPerformance', 'normalizationSizeFactor', 'operatingSystem', 'operation', \
-        #     'physicalCores', 'physicalProcessor', 'preInstalledSw', 'processorArchitecture', 'processorFeatures', 'productFamily', 'provisioned', 'serviceName', \
-        #     'storageIsEbsOnly', 'storageCount', 'storageCapacity', 'storageType', 'storageMedia', 'tenancy', 'toLocation', 'toLocationType', 'usageType', 'volumeType', \
-        #     'appliesTo', 'description', 'effectiveDate', 'beginRange', 'endRange', 'leaseContractLength', 'offeringClass', 'purchaseOption', \
-        #     'meterSubCategory', 'maxResourceVolumeMb', 'osVhdSizeMb', 'hyperVGenerations', 'maxDataDiskCount', 'lowPriorityCapable', 'premiumIo', 'vcpusAvailable', 'vcpusPerCore')\
-            # .order_by('-crawlTime').limit(20)
-            # 'crawlTime', 'ephemeralOsDiskSupported', 'acus', 'combinedTempDiskAndCachedReadBytesPerSecond', 'combinedTempDiskAndCachedWriteBytesPerSecond', 'combinedTempDiskAndCachedIOPS', \
-            # 'uncachedDiskBytesPerSecond', 'uncachedDiskIOPS', 'cachedDiskBytes', 'maxWriteAcceleratorDisksAllowed')
+        # Get a time series from the last several entries in the database that match this filter
+        price_history = InstanceData.objects_in(db)\
+            .filter(**filter_parameters).distinct().only(*price_history_params).order_by('-crawlTime')[:100]
 
+        # Build our own list of "price history point" dicts, since we don't want to include null or zero fields
+        price_history_points = []
+        for inst in price_history:
+            current_inst = {}
+            for param in price_history_params:
+                if getattr(inst, param):
+                    current_inst[param] = getattr(inst, param)
+            price_history_points.append(current_inst)
 
-        # hourly_reserved_instances = InstanceData.objects_in(db).filter(instanceType__ne=data['id'], priceType__eq='Reserved', reservedType__eq='hourly').distinct() \
-        #     .only('crawlTime', 'pricePerHour', 'priceUpfront').order_by('-crawlTime')
-
-        # partial_reserved_instances = InstanceData.objects_in(db).filter(instanceType__ne=data['id'], priceType__eq='Reserved', reservedType__eq='partial').distinct() \
-        #     .only('crawlTime', 'pricePerHour', 'priceUpfront').order_by('-crawlTime')
-
-        # upfront_reserved_instances = InstanceData.objects_in(db).filter(instanceType__ne=data['id'], priceType__eq='Reserved', reservedType__eq='upfront').distinct() \
-        #     .only('crawlTime', 'pricePerHour', 'priceUpfront').order_by('-crawlTime')
-
-        serialized_instance = {
-
-            # "instance_type": on_demand_instances[0].instanceType,
-            # "sku": on_demand_instances[0].sku,
-            # "provider": on_demand_instances[0].provider,
-            # "region": on_demand_instances[0].region,
-            # "vcpus": on_demand_instances[0].vcpu,
-            # "memory": on_demand_instances[0].memory,
-            # "gpu": on_demand_instances[0].gpu,
-            # "price": [
-            #     {
-            #         "type": "on_demand",
-            #         "hourly": on_demand_instances[0].pricePerHour,
-            #         "upfront": on_demand_instances[0].priceUpfront
-            #     },
-            #     # {
-            #     #     "type": "hourly_reserved",
-            #     #     "hourly": hourly_reserved_instances[0].pricePerHour,
-            #     #     "upfront": hourly_reserved_instances[0].priceUpfront,
-            #     # },
-            #     # {
-            #     #     "type": "partial_reserved",
-            #     #     "hourly": partial_reserved_instances[0].pricePerHour,
-            #     #     "upfront": partial_reserved_instances[0].priceUpfront,
-            #     # },
-            #     # {
-            #     #     "type": "upfront_reserved",
-            #     #     "hourly": upfront_reserved_instances[0].pricePerHour,
-            #     #     "upfront": upfront_reserved_instances[0].priceUpfront,
-            #     # },
-            # ],
-            # "capacityStatus": on_demand_instances[0].gpu,
-            # "clockSpeedIsUpTo": on_demand_instances[0].clockSpeedIsUpTo,
-            # "clockSpeed": on_demand_instances[0].clockSpeed,
-            # "currentGeneration": on_demand_instances[0].currentGeneration,
-            # "dedicatedEbsThroughputIsUpTo": on_demand_instances[0].dedicatedEbsThroughputIsUpTo,
-            # "dedicatedEbsThroughput": on_demand_instances[0].dedicatedEbsThroughput,
-            # "ebsOptimized": on_demand_instances[0].ebsOptimized,
-            # "ecuIsVariable": on_demand_instances[0].ecuIsVariable,
-            # "ecu": on_demand_instances[0].ecu,
-            # "elasticGraphicsType": on_demand_instances[0].elasticGraphicsType,
-            # "enhancedNetworkingSupported": on_demand_instances[0].enhancedNetworkingSupported,
-            # "fromLocation": on_demand_instances[0].fromLocation,
-            # "fromLocationType": on_demand_instances[0].fromLocationType,
-            # "gpuMemory": on_demand_instances[0].gpuMemory,
-            # "group": on_demand_instances[0].group,
-            # "groupDescription": on_demand_instances[0].groupDescription,
-            # "instance": on_demand_instances[0].instance,
-            # "instanceFamily": on_demand_instances[0].instanceFamily,
-            # "instanceType": on_demand_instances[0].instanceType,
-            # "instanceSKU": on_demand_instances[0].instanceSKU,
-            # "intelAvx2Available": on_demand_instances[0].intelAvx2Available,
-            # "intelAvxAvailable": on_demand_instances[0].intelAvxAvailable,
-            # "capacityStatus": on_demand_instances[0].gpu,
-            # "capacityStatus": on_demand_instances[0].gpu,
-
-        }
-
-        return Response(serialized_instance, status=HTTP_200_OK)
+        return JsonResponse({
+            'instanceDetail': latest_instance,
+            'priceHistory': price_history_points
+        })

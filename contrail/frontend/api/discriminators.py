@@ -3,20 +3,12 @@ discriminators = {
         'provider',
         'instanceType',
         'region',
-    #    'operatingSystem'
+        'operatingSystem'
     ],
     'Azure': [
+        'provider',
         'instanceType',
         'region',
         'operatingSystem'
     ]
-}
-
-conditions = {
-    'AmazonEC2': {
-        'instanceSKU': [None],
-        'productFamily': ['Compute Instance', 'Compute Instance (bare metal)', '', None],
-        'tenancy': ['Shared'],
-        'preInstalledSw': ['NA']
-    }
 }
