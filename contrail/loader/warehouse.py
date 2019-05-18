@@ -34,6 +34,7 @@ class InstanceData(models.Model):
     provider = fields.StringField()
     crawlTime = fields.DateTimeField()
     region = fields.StringField()
+    operatingSystem = fields.StringField()
 
     priceType = fields.StringField()  # On Demand, Reserved, Spot
     pricePerHour = fields.Float32Field(default=0)
@@ -88,7 +89,6 @@ class InstanceData(models.Model):
     maxVolumeSize = fields.NullableField(fields.Int32Field())  # in TiB
     networkPerformance = fields.NullableField(fields.StringField())
     normalizationSizeFactor = fields.NullableField(fields.Float32Field())
-    operatingSystem = fields.NullableField(fields.StringField())
     operation = fields.NullableField(fields.StringField())
     physicalCores = fields.NullableField(fields.Int32Field())
     physicalProcessor = fields.NullableField(fields.StringField())

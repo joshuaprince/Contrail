@@ -174,7 +174,9 @@ def preInstalledSwNormalizer(key, value):
         pass
 
 def ProductDescriptionNormalizer(key, value):
-    if key == 'ProductDescription':
+    if key == 'productDescription':
+        if value == 'Linux/UNIX':
+            value = 'Linux'
         return ('operatingSystem', value)
     else:
         pass
@@ -247,7 +249,7 @@ def normalizeData(key, value):
         'productFamily': productFamilyNormalizer(key, value),
         'tenancy': tenancyNormalizer(key, value),
         'preInstalledSw': preInstalledSwNormalizer(key, value),
-        'ProductDescription': ProductDescriptionNormalizer(key, value)
+        'productDescription': ProductDescriptionNormalizer(key, value)
     }
     func = switcher.get(key, lambda: (key, str(value)))
     try:

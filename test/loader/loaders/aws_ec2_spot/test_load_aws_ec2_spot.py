@@ -60,6 +60,7 @@ class LoadAmazonEC2SpotTestCase(unittest.TestCase):
         self.assertEqual(m5d12xl.memory, 192)
         self.assertEqual(m5d12xl.clockSpeed, 2.5)
         self.assertEqual(m5d12xl.pricePerHour, 0.9523)
+        self.assertEqual(m5d12xl.operatingSystem, 'Linux')
 
         c52xl = next(i for i in instances if i.instanceType == 'c5.2xlarge')
         self.assertEqual(c52xl.ecu, 34)
@@ -67,6 +68,7 @@ class LoadAmazonEC2SpotTestCase(unittest.TestCase):
         self.assertEqual(c52xl.memory, 16)
         self.assertEqual(c52xl.clockSpeed, 3.0)
         self.assertEqual(c52xl.pricePerHour, 0.1298)
+        self.assertEqual(c52xl.operatingSystem, 'Windows')
 
         for i in instances:
             if not i.instanceType == 't3.nano':

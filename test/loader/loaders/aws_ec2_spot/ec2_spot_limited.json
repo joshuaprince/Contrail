@@ -45,7 +45,7 @@
         "enhancedNetworkingSupported": "Yes",
         "clockSpeed": "3.0 Ghz",
         "servicecode": "AmazonEC2",
-        "ProductDescription": "Linux/UNIX"
+        "ProductDescription": "Windows"
     },
     {
         "instanceType": "t3.nano",
