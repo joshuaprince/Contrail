@@ -29,7 +29,6 @@ class LoadAmazonEC2TestCase(unittest.TestCase):
         Basic tests loading the sample file.
 
         Sample file is formatted to the following specs:
-            - 1 product ('G5FF') referencing another instanceSKU ('VG6Z')
             - 1 product ('VG6Z') with no instanceSKU
             - 2 On Demand terms; one for G5FF, one for VG6Z
             - 12 Reserved terms for VG6Z
@@ -48,7 +47,7 @@ class LoadAmazonEC2TestCase(unittest.TestCase):
 
         instances = list(InstanceData.objects_in(self.test_db))  # type: List[InstanceData]
 
-        self.assertEqual(len(instances), 14)  # 2 on demand + 12 reserved
+        self.assertEqual(len(instances), 13)  # 1 on demand + 12 reserved
 
         # Check for correct hardware/software parameters common to all offers
         for inst in instances:

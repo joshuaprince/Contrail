@@ -48,12 +48,13 @@ class LoadAzureTestCase(unittest.TestCase):
         """
         Helper function to the two above tests. Actually runs the test on the data specified.
 
-        Sample file contains:
-          - 7 meters: 1 is a SQL Database, 2 are Windows machines (not loaded), 4 are the following
-          - M32s Low Priority (does not have a corresponding Capability info)
-          - F2s v2 Low Priority in US West 2 @ 0.017
-          - D32 v3/D32s v3 Low Priority in US Central @ 0.352
-          - F4/F4s in US Gov AZ @ 0.239
+        Sample file contains 7 meters: 1 is a SQL Database (not loaded), 6 are the following:
+          - F2/F2s Windows Low Priority in US West 2 @ 0.0766
+          - M32s Linux Low Priority (does not have a corresponding Capability info, not loaded)
+          - A6 Windows in AP Southeast @ 0.64
+          - F2s v2 Linux Low Priority in US West 2 @ 0.017
+          - D32 v3/D32s v3 Linux Low Priority in US Central @ 0.352
+          - F4/F4s Linux in US Gov AZ @ 0.239
 
         :param file: The file to load, as a dict. May or may not contain Capability information
         """
@@ -65,13 +66,13 @@ class LoadAzureTestCase(unittest.TestCase):
         )
 
         # Make sure that the 'Azure' provider tag is put on each instance
-        self.assertEqual(InstanceData.objects_in(self.test_db).filter(provider='Azure').count(), 3)
+        self.assertEqual(InstanceData.objects_in(self.test_db).filter(provider='Azure').count(), 5)
 
         # Make sure that only the 3 instances that are meant to be loaded were loaded, and no more
-        self.assertEqual(InstanceData.objects_in(self.test_db).filter(instanceType='F2/F2s').count(), 0)  # Windows
+        self.assertEqual(InstanceData.objects_in(self.test_db).filter(instanceType='F2/F2s').count(), 1)
         self.assertEqual(InstanceData.objects_in(self.test_db).filter(instanceType='S3 Secondary DTUs').count(), 0)
         self.assertEqual(InstanceData.objects_in(self.test_db).filter(instanceType='M32s').count(), 0)  # No capabs
-        self.assertEqual(InstanceData.objects_in(self.test_db).filter(instanceType='A6').count(), 0)  # Windows
+        self.assertEqual(InstanceData.objects_in(self.test_db).filter(instanceType='A6 Basic').count(), 1)
         self.assertEqual(InstanceData.objects_in(self.test_db).filter(instanceType='F2s v2').count(), 1)
         self.assertEqual(InstanceData.objects_in(self.test_db).filter(instanceType='D32 v3/D32s v3').count(), 1)
         self.assertEqual(InstanceData.objects_in(self.test_db).filter(instanceType='F4/F4s').count(), 1)

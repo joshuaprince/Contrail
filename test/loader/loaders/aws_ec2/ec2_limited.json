@@ -5,39 +5,6 @@
   "version" : "20190329040654",
   "publicationDate" : "2019-03-29T04:06:54Z",
   "products": {
-      "G5FFNNK98ETA2UBE" : {
-      "sku" : "G5FFNNK98ETA2UBE",
-      "productFamily" : "Compute Instance",
-      "attributes" : {
-        "servicecode" : "AmazonEC2",
-        "location" : "Asia Pacific (Tokyo)",
-        "locationType" : "AWS Region",
-        "instanceType" : "c4.4xlarge",
-        "currentGeneration" : "Yes",
-        "instanceFamily" : "Compute optimized",
-        "vcpu" : "16",
-        "physicalProcessor" : "Intel Xeon E5-2666 v3 (Haswell)",
-        "clockSpeed" : "2.9 GHz",
-        "memory" : "30 GiB",
-        "storage" : "EBS only",
-        "networkPerformance" : "High",
-        "processorArchitecture" : "64-bit",
-        "tenancy" : "Shared",
-        "operatingSystem" : "Linux",
-        "licenseModel" : "No License required",
-        "usagetype" : "APN1-UnusedBox:c4.4xlarge",
-        "operation" : "RunInstances:0004",
-        "capacitystatus" : "UnusedCapacityReservation",
-        "dedicatedEbsThroughput" : "2000 Mbps",
-        "ecu" : "62",
-        "enhancedNetworkingSupported" : "Yes",
-        "instancesku" : "VG6Z5GXNWTRXQJGE",
-        "normalizationSizeFactor" : "32",
-        "preInstalledSw" : "SQL Std",
-        "processorFeatures" : "Intel AVX; Intel AVX2; Intel Turbo",
-        "servicename" : "Amazon Elastic Compute Cloud"
-      }
-    },
     "VG6Z5GXNWTRXQJGE" : {
       "sku" : "VG6Z5GXNWTRXQJGE",
       "productFamily" : "Compute Instance",
@@ -65,7 +32,7 @@
         "ecu" : "62",
         "enhancedNetworkingSupported" : "Yes",
         "normalizationSizeFactor" : "32",
-        "preInstalledSw" : "SQL Std",
+        "preInstalledSw" : "NA",
         "processorFeatures" : "Intel AVX; Intel AVX2; Intel Turbo",
         "servicename" : "Amazon Elastic Compute Cloud"
       }
