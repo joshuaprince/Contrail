@@ -93,6 +93,8 @@ class AzureLoader(BaseLoader):
 
         size, capability_key, is_spot = cls.normalize_meter_name(meter['MeterName'])
         inst.instanceType = size
+        if 'Basic' in meter['MeterSubCategory']:
+            inst.instanceType += ' Basic'
         inst.priceType = ('Spot' if is_spot else 'On Demand')
 
         inst.operatingSystem = 'Windows' if 'Windows' in meter['MeterSubCategory'] else 'Linux'
