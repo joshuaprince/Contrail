@@ -1,12 +1,16 @@
+import json
+import requests
+
 from django.conf import settings
+from django.http import HttpRequest
 from django.shortcuts import render
-from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import FormView
-from contrail.frontend.api.discriminators import *
+
+from contrail.frontend.field_info import FIELD_INFO
+from contrail.frontend.query import check_instance_detail_filters, InstanceNotFound, AmbiguousTimeSeries, \
+    get_instance_details, get_instance_price_history
 from .forms import *
 
-import requests, json
 
 class HomeView(TemplateView):
     """
@@ -15,7 +19,7 @@ class HomeView(TemplateView):
     template_name = "home.html"
 
 
-def priceview(request):
+def price_view(request):
     """
     Render Price page
     """
@@ -80,30 +84,49 @@ def priceview(request):
     return render(request, 'price.html', context)
 
 
-def instanceview(request):
+def instance_view(request: HttpRequest):
     """
     Render Instance Detail page
     """
-    context = {}
-    params = {}
 
-    # build request params
-    if request.GET.get('provider', None) == 'AmazonEC2':
-        for discriminator in discriminators['AmazonEC2']:
-            params[discriminator] = request.GET.get(discriminator, None)
+    filter_parameters = dict(request.GET.items())
 
-    elif request.GET.get('provider', None) == 'Azure':
-        for discriminator in discriminators['Azure']:
-            params[discriminator] = request.GET.get(discriminator, None)
+    try:
+        check_instance_detail_filters(**filter_parameters)
+    except (AttributeError, AmbiguousTimeSeries) as e:
+        return render(request, 'error.html', {'error': str(e)}, status=400)
+    except InstanceNotFound as e:
+        return render(request, 'error.html', {'error': '404: ' + str(e)}, status=404)
 
+    instance_details = get_instance_details(**filter_parameters)  # raw instance details from database
+    displayed_instance_details = []  # formatted instance details
 
-    # call rest api
-    url = settings.URL + '/api/getinstancedetail/'
-    r = requests.get(url, params=params)
-    print(r)
-    # context['instance'] = r.json()
-    #
-    # print(context['instance'])
+    for key, value in instance_details.items():
+        field_info = FIELD_INFO.get(key)
+
+        if field_info and field_info.get('exclude'):
+            continue
+
+        if field_info:
+            displayed_instance_details.append({
+                'key': key,
+                'name': field_info.get('friendlyName') or key,
+                'value': value,
+                'unit': field_info.get('unit') or '',
+                'hint': field_info.get('hint') or '',
+                'link': field_info.get('link') or ''
+            })
+        else:
+            displayed_instance_details.append({'key': key, 'name': key, 'value': value})
+
+    # Sort details by their order in FIELD_INFO, with fields that are not defined in FIELD_INFO last.
+    displayed_instance_details.sort(key=lambda detail: list(FIELD_INFO.keys()).index(detail['key']) if detail['key'] in FIELD_INFO.keys() else 999)
+
+    context = {
+        'rawInstanceDetails': instance_details,
+        'instanceDetails': displayed_instance_details,
+        'priceHistory': get_instance_price_history(**filter_parameters)
+    }
 
     return render(request, 'instance.html', context)
 

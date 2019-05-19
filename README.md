@@ -53,11 +53,9 @@ your own data](#collecting-your-own-data) below.
 ### Start Django
 Make sure you are in the main Contrail folder and the virtual environment is activated.
 
-Collect static files and set up the database:
+Collect static files:
 ```
 python contrail.py frontend collectstatic
-python contrail.py frontend makemigrations
-python contrail.py frontend migrate
 ```
 
 Start the Django server:
