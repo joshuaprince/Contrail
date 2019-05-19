@@ -1,21 +1,13 @@
 from django.http import JsonResponse, HttpRequest
+from django.urls import reverse
+from django.utils.http import urlencode
 from django.views import View
 
-from rest_framework.request import Request
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.status import (
-    HTTP_200_OK
-)
-
-from contrail.frontend.query import get_instance_details, check_instance_detail_filters, AmbiguousTimeSeries, \
-    InstanceNotFound, get_instance_price_history
-from contrail.loader.warehouse import InstanceData
-from .serializers import *
+from contrail.frontend.query import *
 
 
-class GetInstances(APIView):
-    '''
+class GetInstances(View):
+    """
     Given atributes, return instances and their prices
     Takes in (All fields optional)::
     {
@@ -61,35 +53,17 @@ class GetInstances(APIView):
             "priceUpfront": 0
         }, ...
     ]
-    '''
-    def post(self, request: Request):
-        data = request.data
-        print(data)
+    """
+    def get(self, request: HttpRequest):
+        filter_parameters = {k: v for k, v in request.GET.items() if k != 'page'}
+        page_num = request.GET.get('page', 0)
 
-        instances = InstanceData.objects_in(db).distinct()\
-            .only('region', 'instanceType', 'clockSpeed', 'memory', 'vcpu', 'pricePerHour', 'priceUpfront')
-        # 'onDemandEffectiveDate', 'reservedEffectiveDate', 'spotTimestamp',
+        instances = list_instances(page_num, **filter_parameters)
 
-        # if request has a value, filter original query
-        # TODO
-        # if data['aws']: instances = instances.filter()
-        # if data['gcp']: instances = instances.filter()
-        # if data['azure']: instances = instances.filter()
-        if data['region']: instances = instances.filter(region=data['region'])
-        # if data['price']['price_type']['on_demand']: instances = instances.filter(price_type="On Demand")
-        # if data['price']['price_type']['reserved']: instances = instances.filter(price_type="Reserved")
-        # if data['price']['price_type']['spot']: instances = instances.filter(price_type="Spot")
-        instances = instances.filter(
-            vcpu__gte=data['vcpus']['min'], vcpu__lte=data['vcpus']['max'],
-            memory__gte=data['memory']['min'], memory__lte=data['memory']['max'],
-            pricePerHour__gte=data['price']['min_hourly'], pricePerHour__lte=data['price']['max_hourly'],
-            priceUpfront__gte=data['price']['min_upfront'], priceUpfront__lte=data['price']['max_upfront']
-        )
+        for instance in instances:
+            instance['href'] = reverse('getinstancedetail') + '?' + urlencode(generate_detail_link_dict(instance))
 
-        # truncate query
-        instances = instances.paginate(page_num=1, page_size=100).objects
-
-        return Response({'instances': [InstanceDataSerializer(obj).data for obj in instances]}, status=HTTP_200_OK)
+        return JsonResponse({'instances': instances})
 
 
 class GetInstanceDetail(View):

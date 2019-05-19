@@ -188,14 +188,13 @@
         <table id="instances" class="table table-striped table-bordered" style="width:100%">
           <thead>
               <tr>
-                  <th>Instance</th>
-                  <!-- <th>Provider</th> -->
+                  <th>Provider</th>
+                  <th>Instance Type</th>
                   <th>Region</th>
+                  <th>OS</th>
                   <th>vCPUs</th>
                   <th>Memory (GiB)</th>
-                  <th>Clock Speed</th>
                   <th>Price Type</th>
-                  <th>Price Upfront</th>
                   <th>Price Per Hour</th>
               </tr>
           </thead>
@@ -203,14 +202,14 @@
 
           {% for instance in instances %}
             <tr>
+              <td><a href="{{ instance.url }}">{{ instance.provider }}</a></td>
               <td><a href="{{ instance.url }}">{{ instance.instanceType }}</a></td>
-              <!-- <td>{{ instance.provider }}</td> -->
               <td>{{ instance.region }}</td>
-              <td>{{ instance.vcpus }}</td>
+              <td>{{ instance.operatingSystem }}</td>
+              <td>{{ instance.vcpu }}</td>
               <td>{{ instance.memory }}</td>
-              <td>{{ instance.clockSpeed }}</td>
               <td>{{ instance.priceType }}</td>
-              <td>{% if instance.priceUpfront %}${{ instance.priceUpfront | floatformat:3 }}{% else %}none{% endif %}</td>
+{#              <td>{% if instance.priceUpfront %}${{ instance.priceUpfront | floatformat:3 }}{% else %}none{% endif %}</td>#}
               <td>${{ instance.pricePerHour }}</td>
             </tr>
             {% endfor %}
@@ -218,16 +217,14 @@
           </tbody>
           <tfoot>
               <tr>
-                <th>Instance</th>
-                <!-- <th>Provider</th> -->
-                <th>Region</th>
-                <th>Operating System</th>
-                <th>VCPUs</th>
-                <th>Memory</th>
-                <!-- <th>ECU</th> -->
-                <th>Price Type</th>
-                <th>Price</th>
-                <th>Price Unit</th>
+                  <th>Provider</th>
+                  <th>Instance</th>
+                  <th>Region</th>
+                  <th>OS</th>
+                  <th>vCPUs</th>
+                  <th>Memory (GiB)</th>
+                  <th>Price Type</th>
+                  <th>Price Per Hour</th>
               </tr>
           </tfoot>
       </table>
@@ -333,6 +330,7 @@
 <script src="{% static 'js/priceHourlySlider.js' %}" ></script>
 <script src="{% static 'js/memorySlider.js' %}" ></script>
 <script src="{% static 'js/vcpuSlider.js' %}" ></script>
+<script src="//cdn.datatables.net/plug-ins/1.10.19/sorting/currency.js" ></script>
 
 
 
@@ -347,11 +345,11 @@
             {"type": "string"},
             {"type": "string"},
             {"type": "string"},
+            {"type": "string"},
             {"type": "num"},
             {"type": "num"},
             {"type": "string"},
-            {"type": "num"},
-            {"type": "string"},
+            {"type": "currency"},
         ]
     } );
   } );

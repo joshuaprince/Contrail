@@ -1,15 +1,12 @@
-import json
-import requests
-
-from django.conf import settings
 from django.http import HttpRequest
 from django.shortcuts import render
+from django.urls import reverse
+from django.utils.http import urlencode
 from django.views.generic.base import TemplateView
 
+from contrail.frontend.apps.contrailsite.forms import PriceForm
 from contrail.frontend.field_info import FIELD_INFO
-from contrail.frontend.query import check_instance_detail_filters, InstanceNotFound, AmbiguousTimeSeries, \
-    get_instance_details, get_instance_price_history
-from .forms import *
+from contrail.frontend.query import *
 
 
 class HomeView(TemplateView):
@@ -23,7 +20,7 @@ def price_view(request):
     """
     Render Price page
     """
-    context = {'form':PriceForm()}
+    context = {'form': PriceForm()}
 
     if request.method == 'POST':
         form = PriceForm(request.POST)
@@ -58,30 +55,13 @@ def price_view(request):
                  "region": form.cleaned_data['region'],
             }
 
+            instances = list_instances(0)  # TODO properly paginate
+            for instance in instances:
+                instance['url'] = reverse('instance') + '?' + urlencode(generate_detail_link_dict(instance))
 
-            # call rest api
-            url = settings.URL + '/api/getinstances/'
-            headers = {'content-type': 'application/json'}
-            r = requests.post(url, data=json.dumps(data), headers=headers).content.decode('utf-8')
-            context['instances'] = json.loads(r)['instances']
-            print(context['instances'])
+            context['instances'] = instances
 
-            # Build instance url
-            for instance in context['instances']:
-                instance['url'] = "?"
-
-                # if instance['provider'] == 'AmazonEC2':
-                for discriminator in discriminators['AmazonEC2']:
-                    if instance['url'][-1] != '?': instance['url'] += '&'
-                    instance['url'] += discriminator
-                    instance['url'] += '='
-                    instance['url'] += instance[discriminator]
-
-                print(instance['url'])
-
-
-
-    return render(request, 'price.html', context)
+    return render(request, 'list.html', context)
 
 
 def instance_view(request: HttpRequest):

@@ -4,7 +4,7 @@ SELECT
     maxMerge(max_crawlTime) AS crawlTime,
     region,
     operatingSystem,
-    argMaxMerge(priceType) AS priceType,
+    priceType,
     argMaxMerge(pricePerHour) AS pricePerHour,
     argMaxMerge(priceUpfront) AS priceUpfront,
     argMaxMerge(vcpu) AS vcpu, 
@@ -80,12 +80,17 @@ SELECT
     argMaxMerge(effectiveDate) AS effectiveDate,
     argMaxMerge(beginRange) AS beginRange,
     argMaxMerge(endRange) AS endRange,
-    argMaxMerge(leaseContractLength) AS leaseContractLength,
+    leaseContractLength,
     argMaxMerge(offeringClass) AS offeringClass,
-    argMaxMerge(purchaseOption) AS purchaseOption
+    purchaseOption
 FROM instancedata_last_point_aws
-GROUP BY 
+WHERE (leaseContractLength IS NULL OR leaseContractLength == '' OR leaseContractLength == '1yr')
+AND (purchaseOption IS NULL OR purchaseOption == '' OR purchaseOption == 'No Upfront')
+GROUP BY
     provider,
     instanceType,
     region, 
-    operatingSystem
+    operatingSystem,
+    priceType,
+    leaseContractLength,
+    purchaseOption

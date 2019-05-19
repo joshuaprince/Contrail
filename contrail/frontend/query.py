@@ -8,6 +8,10 @@ from contrail.loader.warehouse import InstanceData
 db = Database(CLICKHOUSE_DB_NAME, db_url=CLICKHOUSE_DB_URL, readonly=True)
 
 
+LIST_QUERY_SIZE = 1000
+"""Number of instances to list on a single page"""
+
+
 DISCRIMINATORS = {
     'AmazonEC2': [
         'provider',
@@ -36,7 +40,29 @@ excluded from instance details.
 """
 
 
-def list_instances(**kwargs) -> List:
+def generate_detail_link_dict(instance: Dict) -> Dict:
+    """
+    Generate a dictionary that consists of this instance's provider discriminators, so that we can convert it to a link
+    to the instance detail page.
+
+    :param instance: A dict representing an instance, that contains `provider` keys and keys for all discriminators of
+    that provider.
+
+    :return: e.g.   {
+                        'provider': 'AmazonEC2',
+                        'instanceType': 'c4.xlarge',
+                        'operatingSystem': 'Linux',
+                        'region': 'apeast1'
+                    }
+    """
+    provider = instance['provider']
+
+    details = {discriminator: instance[discriminator] for discriminator in DISCRIMINATORS[provider]}
+
+    return details
+
+
+def list_instances(page, **kwargs) -> List:
     """
     List known instances satisfying the filter provided.
 
@@ -44,7 +70,15 @@ def list_instances(**kwargs) -> List:
 
     :return: TODO
     """
-    return []  # TODO
+
+    # TODO!! Sanitize query
+    instances = db.select("""
+        SELECT provider, instanceType, region, operatingSystem, vcpu, memory, priceType, pricePerHour
+        FROM $db.instancedata_last_point_aws_v
+        LIMIT {per_page} OFFSET {offset}
+    """.format(per_page=LIST_QUERY_SIZE, offset=int(page) * LIST_QUERY_SIZE))
+
+    return [instance.to_dict() for instance in instances]
 
 
 def get_instance_details(**kwargs) -> Dict:

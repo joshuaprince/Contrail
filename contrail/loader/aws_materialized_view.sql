@@ -6,7 +6,7 @@ SELECT
     maxState(crawlTime) AS max_crawlTime,
     region,
     operatingSystem,
-    argMaxState(priceType, crawlTime) AS priceType,
+    priceType,
     argMaxState(pricePerHour, crawlTime) AS pricePerHour,
     argMaxState(priceUpfront, crawlTime) AS priceUpfront,
     argMaxState(vcpu, crawlTime) AS vcpu, 
@@ -82,12 +82,17 @@ SELECT
     argMaxState(effectiveDate, crawlTime) AS effectiveDate,
     argMaxState(beginRange, crawlTime) AS beginRange,
     argMaxState(endRange, crawlTime) AS endRange,
-    argMaxState(leaseContractLength, crawlTime) AS leaseContractLength,
+    leaseContractLength,
     argMaxState(offeringClass, crawlTime) AS offeringClass,
-    argMaxState(purchaseOption, crawlTime) AS purchaseOption
+    purchaseOption
 FROM instancedata
-GROUP BY 
+WHERE (leaseContractLength IS NULL OR leaseContractLength == '' OR leaseContractLength == '1yr')
+AND (purchaseOption IS NULL OR purchaseOption == '' OR purchaseOption == 'No Upfront')
+GROUP BY
     provider,
     instanceType,
     region, 
-    operatingSystem
+    operatingSystem,
+    priceType,
+    leaseContractLength,
+    purchaseOption
