@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
+{% load contrail %}
+
+{% block title %}{{ rawInstanceDetails.instanceType }} - {% firstof rawInstanceDetails.location rawInstanceDetails.region %} - CONTRAIL{% endblock %}
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
@@ -16,7 +19,7 @@
     <div class="row">
       <div class="col">
         <h1 style="text-align: center;">{{ rawInstanceDetails.provider }} {{ rawInstanceDetails.instanceType }}</h1>
-        <h2 style="text-align: center;">{{ rawInstanceDetails.region }}</h2>
+        <h2 style="text-align: center;">{% firstof rawInstanceDetails.location rawInstanceDetails.region %}</h2>
       </div>
     </div>
   </div>
@@ -49,73 +52,71 @@
             </tbody>
         </table>
 
-        <br><h2 style="text-align:center;">Pricing</h2>
-
-        <table id="instances" class="table table-striped table-hover table-bordered" style="width:100%">
-          <tbody>
-
-            <tr>
-              <th>Price Type</th>
-              <td>{{ instance.price.type }}</td>
-            </tr>
-
-            <tr>
-              <th>Price</th>
-              <td>{{ instance.price.hourly }}</td>
-            </tr>
-
-          </tbody>
-        </table>
-
+        <br><h2 style="text-align:center;">Pricing</h2><br>
 
         <div class="row">
+          {% if rawInstanceDetails.provider == 'AmazonEC2' %}
+          <div class="col-sm-4">
+          {% else %}
           <div class="col-sm-6">
+          {% endif %}
             <div class="card">
               <div class="card-body">
                 <h4 class="card-title">On Demand</h4><hr>
-                <h5 class="card-title"><span style="font-size: 3em;">${{ instance.price.0.hourly }}</span> per hour</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                <h5 class="card-title"><span style="font-size: 3em;">${{ priceHistory.onDemand.0.pricePerHour }}</span><br>per hour</h5>
+                <p class="card-text">{{ priceHistory.onDemand.0.pricePerHour|hourly_to_monthly }} per month</p>
+{#                <a href="#" class="btn btn-primary">Go somewhere</a>#}
               </div>
             </div>
           </div>
-          <div class="col-sm-6">
+          {% if rawInstanceDetails.provider == 'AmazonEC2' %}
+          <div class="col-sm-4">
             <div class="card">
               <div class="card-body">
                 <h4 class="card-title">Reserved</h4><hr>
 
-                <a data-toggle="collapse" href="#one" aria-expanded="false" aria-controls="one"><h5>One Year</h5></a>
+                <a data-toggle="collapse" href="#one" aria-expanded="false" aria-controls="one"><h5>One Year &#x2C5;</h5></a>
                 <div class="collapse multi-collapse" id="one">
                   <div class="card card-body">
-                    <h5 class="card-title"><span style="font-size: 1.2em;">$5,000</span> upfront</h5>
+                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved1yrFullUpfront.0.priceUpfront|price }}</span> upfront</h5>
                     <p class="card-text">Full Upfront</p><hr style="margin-top: 0px;">
-                    <h5 class="card-title"><span style="font-size: 1.2em;">$5,000</span> upfront</h5>
-                    <h5 class="card-title"><span style="font-size: 1.2em;">$0.5</span> per hour</h5>
+                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved1yrPartialUpfront.0.priceUpfront|price }}</span> upfront</h5>
+                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved1yrPartialUpfront.0.pricePerHour|price }}</span> per hour</h5>
                     <p class="card-text">Partial Upfront</p><hr style="margin-top: 0px;">
-                    <h5 class="card-title"><span style="font-size: 1.2em;">$0.5</span> per hour</h5>
+                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved1yrNoUpfront.0.pricePerHour|price }}</span> per hour</h5>
                     <p class="card-text">No Upfront</p>
-
                   </div>
                 </div><br>
 
-                <a data-toggle="collapse" href="#three" aria-expanded="false" aria-controls="three"><h5>Three years</h5></a>
+                <a data-toggle="collapse" href="#three" aria-expanded="false" aria-controls="three"><h5>Three Years &#x2C5;</h5></a>
                 <div class="collapse multi-collapse" id="three">
                   <div class="card card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved3yrFullUpfront.0.priceUpfront|price }}</span> upfront</h5>
+                    <p class="card-text">Full Upfront</p><hr style="margin-top: 0px;">
+                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved3yrPartialUpfront.0.priceUpfront|price }}</span> upfront</h5>
+                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved3yrPartialUpfront.0.pricePerHour|price }}</span> per hour</h5>
+                    <p class="card-text">Partial Upfront</p><hr style="margin-top: 0px;">
+                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved3yrNoUpfront.0.pricePerHour|price }}</span> per hour</h5>
+                    <p class="card-text">No Upfront</p>
                   </div>
                 </div><br>
 
-                <a data-toggle="collapse" href="#five" aria-expanded="false" aria-controls="five"><h5>Five Years</h5></a>
-                <div class="collapse multi-collapse" id="five">
-                  <div class="card card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-                  </div>
-                </div><br>
-
-
-
-
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+{#                <a href="#" class="btn btn-primary">Go somewhere</a>#}
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          {% if rawInstanceDetails.provider == 'AmazonEC2' %}
+          <div class="col-sm-4">
+          {% else %}
+          <div class="col-sm-6">
+          {% endif %}
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Spot</h4><hr>
+                <h5 class="card-title"><span style="font-size: 3em;">${{ priceHistory.spot.0.pricePerHour }}</span><br>per hour</h5>
+                <p class="card-text">{{ priceHistory.spot.0.pricePerHour|hourly_to_monthly }} per month</p>
+{#                <a href="#" class="btn btn-primary">Go somewhere</a>#}
               </div>
             </div>
           </div>
