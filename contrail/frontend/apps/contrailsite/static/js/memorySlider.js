@@ -2378,7 +2378,7 @@ var $range = $(".memory-range-slider"),
     $inputTo = $(".memory-input-to"),
     instance,
     min = 0,
-    max = 1000,
+    max = 128,
     from = 0,
     to = 0;
 
@@ -2387,7 +2387,7 @@ $range.ionRangeSlider({
     min: min,
     max: max,
     from: 0,
-    to: 500,
+    to: 128,
     prefix: '',
     onStart: updateInputs,
     onChange: updateInputs,

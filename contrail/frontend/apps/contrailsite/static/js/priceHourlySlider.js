@@ -2378,7 +2378,7 @@ var $range = $(".pricehr-range-slider"),
     $inputTo = $(".pricehr-input-to"),
     instance,
     min = 0,
-    max = 6,
+    max = 2,
     from = 0,
     to = 0;
 

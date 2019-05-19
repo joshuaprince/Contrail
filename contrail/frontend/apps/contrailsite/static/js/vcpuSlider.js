@@ -2378,7 +2378,7 @@ var $range = $(".vcpu-range-slider"),
     $inputTo = $(".vcpu-input-to"),
     instance,
     min = 0,
-    max = 150,
+    max = 48,
     from = 0,
     to = 0;
 
@@ -2387,7 +2387,7 @@ $range.ionRangeSlider({
     min: min,
     max: max,
     from: 0,
-    to: 100,
+    to: 48,
     prefix: '',
     onStart: updateInputs,
     onChange: updateInputs,
