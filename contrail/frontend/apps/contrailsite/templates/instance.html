@@ -28,32 +28,7 @@
 
   <div class="container">
 
-        <br><br><br>
-        <table id="instances" class="table table-striped table-hover table-bordered" style="width:100%">
-            <tbody>
-            {% for detail in instanceDetails %}
-                <tr title="{{ detail.hint }}">
-                    <th>
-                        {% if detail.link %}<a href="{{ detail.link }}" target="_blank">{% endif %}
-                            {{ detail.name }}
-                            {% if detail.link %}
-                                &nbsp;&#8599;
-                            {% endif %}
-                            {% if detail.hint %}
-                                &nbsp;&#65533;
-                            {% endif %}
-                        {% if detail.link %}</a>{% endif %}
-                    </th>
-                    <td>
-                        {{ detail.value }} {{ detail.unit }}
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-
-        <br><h2 style="text-align:center;">Pricing</h2><br>
-
+    <br><br>
         <div class="row">
           {% if rawInstanceDetails.provider == 'AmazonEC2' %}
           <div class="col-sm-4">
@@ -78,12 +53,12 @@
                 <a data-toggle="collapse" href="#one" aria-expanded="false" aria-controls="one"><h5>One Year &#x2C5;</h5></a>
                 <div class="collapse multi-collapse" id="one">
                   <div class="card card-body">
-                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved1yrFullUpfront.0.priceUpfront|price }}</span> upfront</h5>
+                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved1yrFullUpfront.0.priceUpfront|price }}</span> up front</h5>
                     <p class="card-text">Full Upfront</p><hr style="margin-top: 0px;">
-                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved1yrPartialUpfront.0.priceUpfront|price }}</span> upfront</h5>
-                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved1yrPartialUpfront.0.pricePerHour|price }}</span> per hour</h5>
+                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved1yrPartialUpfront.0.priceUpfront|price }}</span> up front</h5>
+                    <h5 class="card-title"><span style="font-size: 1.2em;">${{ priceHistory.reserved1yrPartialUpfront.0.pricePerHour }}</span> per hour</h5>
                     <p class="card-text">Partial Upfront</p><hr style="margin-top: 0px;">
-                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved1yrNoUpfront.0.pricePerHour|price }}</span> per hour</h5>
+                    <h5 class="card-title"><span style="font-size: 1.2em;">${{ priceHistory.reserved1yrNoUpfront.0.pricePerHour }}</span> per hour</h5>
                     <p class="card-text">No Upfront</p>
                   </div>
                 </div><br>
@@ -91,12 +66,12 @@
                 <a data-toggle="collapse" href="#three" aria-expanded="false" aria-controls="three"><h5>Three Years &#x2C5;</h5></a>
                 <div class="collapse multi-collapse" id="three">
                   <div class="card card-body">
-                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved3yrFullUpfront.0.priceUpfront|price }}</span> upfront</h5>
+                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved3yrFullUpfront.0.priceUpfront|price }}</span> up front</h5>
                     <p class="card-text">Full Upfront</p><hr style="margin-top: 0px;">
-                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved3yrPartialUpfront.0.priceUpfront|price }}</span> upfront</h5>
-                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved3yrPartialUpfront.0.pricePerHour|price }}</span> per hour</h5>
+                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved3yrPartialUpfront.0.priceUpfront|price }}</span> up front</h5>
+                    <h5 class="card-title"><span style="font-size: 1.2em;">${{ priceHistory.reserved3yrPartialUpfront.0.pricePerHour }}</span> per hour</h5>
                     <p class="card-text">Partial Upfront</p><hr style="margin-top: 0px;">
-                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved3yrNoUpfront.0.pricePerHour|price }}</span> per hour</h5>
+                    <h5 class="card-title"><span style="font-size: 1.2em;">${{ priceHistory.reserved3yrNoUpfront.0.pricePerHour }}</span> per hour</h5>
                     <p class="card-text">No Upfront</p>
                   </div>
                 </div><br>
@@ -122,11 +97,37 @@
           </div>
         </div>
 
+
+        <br><br>
+        <table id="instances" class="table table-striped table-hover table-bordered" style="width:100%">
+            <tbody>
+            {% for detail in instanceDetails %}
+                <tr title="{{ detail.hint }}">
+                    <th>
+                        {% if detail.link %}<a href="{{ detail.link }}" target="_blank">{% endif %}
+                            {{ detail.name }}
+                            {% if detail.link %}
+                                &nbsp;&#8599;
+                            {% endif %}
+                            {% if detail.hint %}
+                                &nbsp;&#65533;
+                            {% endif %}
+                        {% if detail.link %}</a>{% endif %}
+                    </th>
+                    <td>
+                        {{ detail.value }} {{ detail.unit }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
       <div class="line"></div>
 
       <h2 style="text-align:center;">Price History</h2>
 
       <canvas id="canvas" style="display: block; width: 621px; height: 310px;" width="621" height="310" class="chartjs-render-monitor"></canvas>
+      <br><br><br><br>
 </div>
 
 
@@ -150,7 +151,7 @@
 <!-- CHART.JS -->
 <script>
   // https://www.chartjs.org/samples/latest/scales/time/line.html
-		var timeFormat = 'MM/DD/YYYY HH:mm';
+		var timeFormat = 'YYYY-MM-DDTHH:MM:SS+';
 
 		function newDate(days) {
 			return moment().add(days, 'd').toDate();
@@ -165,13 +166,13 @@
 			type: 'line',
 			data: {
 				labels: [ // Date Objects
-					newDate(0),
+					/*newDate(0),
 					newDate(1),
 					newDate(2),
 					newDate(3),
 					newDate(4),
 					newDate(5),
-					newDate(6)
+					newDate(6)*/
 				],
 				datasets: [{
 					label: 'On Demand',
@@ -179,46 +180,30 @@
 					borderColor: window.chartColors.red,
 					fill: false,
 					data: [
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor()
-					],
+                        {% for price in priceHistory.onDemand %}
+                        {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
+                        {% endfor %}
+                    ],
 				}, {
-					label: 'Reserved',
+					label: 'Reserved (1yr, no up front)',
 					backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
 					borderColor: window.chartColors.blue,
 					fill: false,
 					data: [
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor()
+                        {% for price in priceHistory.reserved1yrNoUpfront %}
+                        {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
+                        {% endfor %}
 					],
 				}, {
 					label: 'Spot',
 					backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
 					borderColor: window.chartColors.green,
 					fill: false,
-					data: [{
-						x: newDateString(0),
-						y: randomScalingFactor()
-					}, {
-						x: newDateString(5),
-						y: randomScalingFactor()
-					}, {
-						x: newDateString(7),
-						y: randomScalingFactor()
-					}, {
-						x: newDateString(15),
-						y: randomScalingFactor()
-					}],
+					data: [
+                        {% for price in priceHistory.spot %}
+                        {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
+                        {% endfor %}
+					],
 				}]
 			},
 			options: {
@@ -229,7 +214,7 @@
 					xAxes: [{
 						type: 'time',
 						time: {
-							parser: timeFormat,
+							// parser: timeFormat,
 							// round: 'day'
 							tooltipFormat: 'll HH:mm'
 						},
@@ -241,8 +226,11 @@
 					yAxes: [{
 						scaleLabel: {
 							display: true,
-							labelString: 'value'
-						}
+							labelString: 'Price per Hour'
+						},
+                        ticks: {
+						    beginAtZero: true
+                        }
 					}]
 				},
 			}

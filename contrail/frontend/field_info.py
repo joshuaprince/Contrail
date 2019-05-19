@@ -30,7 +30,7 @@ FIELD_INFO['operatingSystem'] = {
 }
 
 FIELD_INFO['vcpu'] = {
-    'friendlyName': 'VCPUs',
+    'friendlyName': 'vCPUs',
     'hint': 'Number of Virtual CPUs allotted to this instance.'
 }
 
