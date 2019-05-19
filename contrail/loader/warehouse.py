@@ -1,3 +1,5 @@
+import os
+
 from infi.clickhouse_orm import models, fields, engines
 from infi.clickhouse_orm.database import Database
 from infi.clickhouse_orm.fields import Field
@@ -27,7 +29,6 @@ class BooleanField(Field):
     def to_db_string(self, value, quote=True):
         # The value was already converted by to_python, so it's a bool
         return '1' if value else '0'
-
 
 class InstanceData(models.Model):
     # Universal fields ---------------------------------------------------------
@@ -76,7 +77,7 @@ class InstanceData(models.Model):
     instanceCapacityMedium = fields.NullableField(fields.Int32Field())
     instanceCapacityXlarge = fields.NullableField(fields.Int32Field())
     instanceFamily = fields.NullableField(fields.StringField())
-    instanceType = fields.NullableField(fields.StringField())
+    instanceType = fields.StringField()
     intelAvx2Available = fields.NullableField(BooleanField())
     intelAvxAvailable = fields.NullableField(BooleanField())
     intelTurboAvailable = fields.NullableField(BooleanField())
@@ -167,3 +168,5 @@ def create_contrail_table(recreate=False):
 
     db.create_table(InstanceData)
     db.create_table(LoadedFile)
+    os.system('cat aws_materialized_view.sql | clickhouse-client -mn -d \'contrail\'')
+    os.system('cat aws_view.sql | clickhouse-client -mn -d \'contrail\'')
