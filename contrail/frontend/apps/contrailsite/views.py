@@ -20,42 +20,26 @@ def price_view(request):
     """
     Render Price page
     """
-    context = {'form': PriceForm()}
+    context = {'form': PriceForm(), 'regions': (x for x in map(lambda i: i.region, InstanceData.objects_in(db).distinct().only('region')))}
 
     if request.method == 'POST':
         form = PriceForm(request.POST)
 
         if form.is_valid():
+            instances = list_instances(
+                page=0,
+                amazonec2=bool(form.cleaned_data['amazon_web_services']),
+                azure=bool(form.cleaned_data['microsoft_azure']),
+                os=form.cleaned_data['operating_system'],
+                region=form.cleaned_data['region'],
+                onDemand=bool(form.cleaned_data['on_demand']),
+                reserved=bool(form.cleaned_data['reserved']),
+                spot=bool(form.cleaned_data['spot']),
+                memory=(float(form.cleaned_data['memory_from']), float(form.cleaned_data['memory_to'])),
+                vcpus=(int(form.cleaned_data['vcpu_from']), int(form.cleaned_data['vcpu_to'])),
+                pricePerHour=(float(form.cleaned_data['pricehr_from']), float(form.cleaned_data['pricehr_to'])),
+            )  # TODO properly paginate
 
-            data = {
-                "providers": {
-                    "aws": form.cleaned_data['amazon_web_services'],
-                    "gcp": form.cleaned_data['google_cloud_platform'],
-                    "azure": form.cleaned_data['microsoft_azure']
-                 },
-                 "vcpus": {
-                    "min": int(form.cleaned_data['vcpu_from']),
-                    "max": int(form.cleaned_data['vcpu_to'])
-                 },
-                 "memory": {
-                    "min": int(form.cleaned_data['memory_from']),
-                    "max": int(form.cleaned_data['memory_to'])
-                 },
-                 "price": {
-                    "price_type": {
-                        "on_demand": form.cleaned_data['on_demand'],
-                        "reserved": form.cleaned_data['reserved'],
-                        "spot": form.cleaned_data['spot'],
-                    },
-                    "min_hourly": float(form.cleaned_data['pricehr_from']),
-                    "max_hourly": float(form.cleaned_data['pricehr_to']),
-                    "min_upfront": float(form.cleaned_data['price_from']),
-                    "max_upfront": float(form.cleaned_data['price_to'])
-                 },
-                 "region": form.cleaned_data['region'],
-            }
-
-            instances = list_instances(0)  # TODO properly paginate
             for instance in instances:
                 instance['url'] = reverse('instance') + '?' + urlencode(generate_detail_link_dict(instance))
 

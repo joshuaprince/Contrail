@@ -22,16 +22,7 @@
         <div id="div_id_amazon_web_services" class="form-check">
           <label for="id_amazon_web_services" class="form-check-label">
             <input type="checkbox" name="amazon_web_services" class="checkboxinput form-check-input" id="id_amazon_web_services" checked="">
-            Amazon web services
-          </label>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div id="div_id_google_cloud_platform" class="form-check">
-          <label for="id_google_cloud_platform" class="form-check-label">
-            <input type="checkbox" name="google_cloud_platform" class="checkboxinput form-check-input" disabled="" id="id_google_cloud_platform">
-            Google cloud platform
+            Amazon Web Services
           </label>
         </div>
       </div>
@@ -39,8 +30,8 @@
       <div class="form-group">
         <div id="div_id_microsoft_azure" class="form-check">
           <label for="id_microsoft_azure" class="form-check-label">
-            <input type="checkbox" name="microsoft_azure" class="checkboxinput form-check-input" disabled="" id="id_microsoft_azure">
-            Microsoft azure
+            <input type="checkbox" name="microsoft_azure" class="checkboxinput form-check-input" id="id_microsoft_azure" checked>
+            Microsoft Azure
           </label>
         </div>
       </div>
@@ -50,7 +41,10 @@
                 Operating system
         </label>
         <div class="">
-          <select name="operating_system" class="select form-control" id="id_operating_system"> <option value="" selected="">All</option> <option value="Linux">Linux</option> <option value="RHEL">RHEL</option> <option value="SLES">SLES</option> <option value="Windows">Windows</option> <option value="Windows with SQL Standard">Windows with SQL Standard</option> <option value="Windows with SQL Web">Windows with SQL Web</option> <option value="Windows with SQL Enterprise">Windows with SQL Enterprise</option> <option value="Linux with SQL Standard">Linux with SQL Standard</option> <option value="Linux with SQL Web">Linux with SQL Web</option> <option value="Linux with SQL Enterprise">Linux with SQL Enterprise</option>
+          <select name="operating_system" class="select form-control" id="id_operating_system">
+              <option value="" selected="">All</option>
+              <option value="Linux">Linux</option>
+              <option value="Windows">Windows</option>
           </select>
         </div>
       </div>
@@ -60,7 +54,10 @@
            Region
         </label>
         <div class="">
-          <select name="region" class="select form-control" id="id_region"> <option value="" selected="">All</option> <option value="US East (N. Virgina)">US East (N. Virgina)</option> <option value="US East (Ohio)">US East (Ohio)</option> <option value="US West (Norther California)">US West (Norther California)</option> <option value="US West (Oregon)">US West (Oregon)</option> <option value="Asia Pacific (Mumbai)">Asia Pacific (Mumbai)</option> <option value="Asia Pacific (Seoul)">Asia Pacific (Seoul)</option> <option value="Asia Pacific (Singapore)">Asia Pacific (Singapore)</option> <option value="Asia Pacific (Sydney)">Asia Pacific (Sydney)</option> <option value="Asia Pacific (Tokyo)">Asia Pacific (Tokyo)</option> <option value="Canada (Central)">Canada (Central)</option> <option value="EU (Frankfurt)">EU (Frankfurt)</option> <option value="EU (Ireland)">EU (Ireland)</option> <option value="EU (London)">EU (London)</option> <option value="EU (Paris)">EU (Paris)</option> <option value="EU (Stockholm)">EU (Stockholm)</option> <option value="South America (Sao Paulo)">South America (Sao Paulo)</option> <option value="AWS GovCloud (US-East)">AWS GovCloud (US-East)</option> <option value="AWS GovCloud (US-West)">AWS GovCloud (US-West)</option>
+          <select name="region" class="select form-control" id="id_region"> <option value="" selected="">All</option>
+              {% for r in regions %}
+              <option value="{{ r }}">{{ r }}</option>
+              {% endfor %}
           </select>
         </div>
       </div>
@@ -71,7 +68,7 @@
         <div id="div_id_on_demand" class="form-check">
           <label for="id_on_demand" class="form-check-label">
             <input type="checkbox" name="on_demand" class="checkboxinput form-check-input" id="id_on_demand" checked="">
-                On demand
+                On Demand
           </label>
         </div>
       </div>
@@ -124,20 +121,20 @@
         </div>
       </div><br>
 
-      <label for="id_price" class="col-form-label ">
-          Price Upfront
-      </label>
-      <div class="range-slider">
-          <input type="text" class="price-range-slider" value="" />
-      </div><br>
-
-      <div class="extra-controls form-inline">
-        <div class="form-group">
-          <input type="text" id="id_price_from" class="price-input-from form-control" name="price_from" value="0" style="width: 80px; margin-right: 30px;" />
-          <input type="text" id="id_price_to" class="price-input-to form-control" name="price_to" value="0" style="width: 80px;" />
-        </div>
-      </div>
-
+{#      <label for="id_price" class="col-form-label ">#}
+{#          Price Upfront#}
+{#      </label>#}
+{#      <div class="range-slider">#}
+{#          <input type="text" class="price-range-slider" value="" />#}
+{#      </div><br>#}
+{##}
+{#      <div class="extra-controls form-inline">#}
+{#        <div class="form-group">#}
+{#          <input type="text" id="id_price_from" class="price-input-from form-control" name="price_from" value="0" style="width: 80px; margin-right: 30px;" />#}
+{#          <input type="text" id="id_price_to" class="price-input-to form-control" name="price_to" value="0" style="width: 80px;" />#}
+{#        </div>#}
+{#      </div>#}
+{##}
 
       <label for="id_pricehr" class="col-form-label ">
           Price Hourly
