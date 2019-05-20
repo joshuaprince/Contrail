@@ -45,6 +45,15 @@ def instanceskuNormalizer(key, value):
     else:
         pass
 
+def licenseModelNormalizer(key, value):
+    if key == 'licenseModel':
+        if value == 'Bring your own license':
+            return None
+        else:
+            return (key, value)
+    else:
+        pass
+
 def maxThroughputvolumeNormalizer(key, value):
     if key == 'maxThroughputvolume':
         return ('maxThroughputVolume', value)
@@ -233,6 +242,7 @@ def normalizeData(key, value):
         'dedicatedEbsThroughput': dedicatedEbsThroughputNormalizer(key, value),
         'ecu': ecuNormalizer(key, value),
         'instancesku': instanceskuNormalizer(key, value),
+        'licenseModel': licenseModelNormalizer(key, value),
         'maxThroughputvolume': maxThroughputvolumeNormalizer(key, value),
         'maxVolumeSize': maxVolumeSizeNormalizer(key, value),
         'memory': memoryNormalizer(key, value),
@@ -253,10 +263,11 @@ def normalizeData(key, value):
     }
     func = switcher.get(key, lambda: (key, str(value)))
     try:
-        if func() == None:
+        r = func()
+        if r == None:
             pass
         else:
-            return func()
+            return r
     except(TypeError):
         if func == None:
             pass
