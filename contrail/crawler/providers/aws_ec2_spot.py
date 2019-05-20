@@ -65,7 +65,7 @@ class AmazonEC2Spot(BaseProvider):
             self.logger.info("Got all instances in this batch. Finalizing batch for upload.")
             self.store_provider_data(region=self.region, data=self.instance_list)
             self.instance_list.clear()
-            return datetime.timedelta(minutes=10)
+            return datetime.timedelta(minutes=60)
 
         response = self.client.describe_spot_price_history(
             NextToken=self.next_token,
