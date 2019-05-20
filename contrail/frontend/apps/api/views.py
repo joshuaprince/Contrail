@@ -8,55 +8,39 @@ from contrail.frontend.query import *
 
 class GetInstances(View):
     """
-    Given atributes, return instances and their prices
-    Takes in (All fields optional)::
-    {
-        "providers": {
-            "aws": true,
-            "gcp": false,
-            "azure": false
-        },
-        "vcpus": {
-            "min": 0,
-            "max": 10
-        },
-        "memory": {
-            "min": 0,
-            "max": 10
-        },
-        "gpus": {
-            "min": 0,
-            "max": 10
-        },
-        "price": {
-            "price_type": "On Demand"
-            "min_hourly": 0,
-            "max_hourly": 10,
-            "min_upfront": 0,
-            "max_upfront": 10
-        },
-        "regions": ["us-west-1"],
-    }
+    Given filter parameters in querystring in the format accepted by Infi Clickhouse, return a paginated list of
+    instances.
 
-    TODO paginate
-    Returns (All fields required):
-    [
+    Example querystring:
+    ``/instances?page=1&vcpu__gte=2&provider=Azure&region__ne=uswest1``
+    Returns only instances with at least 2 vCPUs and that use Azure, but none that are in region uswest1.
+
+    Example JSON return:
+    {
+      "instances": [
         {
-            "sku": "A1B2C3",
-            "provider": "aws",
-            "instanceType": "c4.4xlarge",
-            "region": "US East",
-            "vcpus": 8,
-            "memory": 8,
-            "priceType": "On Demand",
-            "priceHourly": 0.233,
-            "priceUpfront": 0
-        }, ...
-    ]
+          "priceType": "Reserved",
+          "location": "US East (Ohio)",
+          "sku": "PUVQARX8GDMUJC2E",
+          "gpu": 0,
+          "instanceType": "r5a.large",
+          "provider": "AmazonEC2",
+          "href": "/api/getinstancedetail/?instanceType=r5a.large&operatingSystem=Linux&region=useast2&provider=AmazonEC2",
+          "operatingSystem": "Linux",
+          "pricePerHour": 0.082,
+          "priceUpfront": 0.0,
+          "memory": 16.0,
+          "crawlTime": "2019-05-19T03:15:38Z",
+          "region": "useast2",
+          "vcpu": 2
+        },
+        ...
+      }
+    }
     """
     def get(self, request: HttpRequest):
         filter_parameters = {k: v for k, v in request.GET.items() if k != 'page'}
-        page_num = request.GET.get('page', 0)
+        page_num = int(request.GET.get('page', 1))
 
         instances = list_instances(page_num, **filter_parameters)
 

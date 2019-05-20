@@ -1,10 +1,9 @@
-import re
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 from infi.clickhouse_orm.database import Database
 
 from config import CLICKHOUSE_DB_NAME, CLICKHOUSE_DB_URL
-from contrail.loader.warehouse import InstanceData
+from contrail.loader.warehouse import InstanceData, InstanceDataLastPointView
 
 db = Database(CLICKHOUSE_DB_NAME, db_url=CLICKHOUSE_DB_URL, readonly=True)
 
@@ -63,45 +62,17 @@ def generate_detail_link_dict(instance: Dict) -> Dict:
     return details
 
 
-def list_instances(page, amazonec2: bool, azure: bool, os: str, region: str, onDemand: bool, reserved: bool, spot: bool,
-                   memory: Tuple[float, float], vcpus: Tuple[int, int], pricePerHour: Tuple[float, float]) -> List:
+def list_instances(page, **kwargs) -> List[Dict]:
     """
     List known instances satisfying the filter provided.
+
+    :param kwargs: A set of filters to search for instances. These should follow Infi ORM query parameters:
+                   https://github.com/Infinidat/infi.clickhouse_orm/blob/develop/docs/querysets.md#filtering
 
     :return: List of instance dicts
     """
 
-    # TODO This is probably some of the worst code I've written. If you're reading this, I'm sorry.
-
-    # "Sanitize" input - definitely not 100% safe or clean but oh well
-    # Please don't try to refactor this. Just delete it and fix it properly
-    for var in list(locals().values()):
-        if not re.match('^[\w\s.(),]*$', str(var)):
-            print('Blocked query: contains "{}"'.format(str(var)))
-            return []
-
-    query = """
-        SELECT provider, instanceType, region, operatingSystem, vcpu, memory, priceType, pricePerHour
-        FROM $db.instancedata_last_point_aws_v
-        WHERE 1=1
-          AND (provider != 'AmazonEC2' OR '{amazonec2}' = 'True')
-          AND (provider != 'Azure' OR '{azure}' = 'True')
-          AND ('{os}' = '' OR operatingSystem = '{os}')
-          AND ('{region}' = '' OR region = '{region}')
-          AND (priceType != 'On Demand' OR '{onDemand}' = 'True')
-          AND (priceType != 'Reserved' OR '{reserved}' = 'True')
-          AND (priceType != 'Spot' OR '{spot}' = 'True')
-          AND (memory >= {memory_min} AND memory <= {memory_max})
-          AND (vcpu >= {vcpus_min} AND vcpu <= {vcpus_max})
-          AND (pricePerHour >= {pph_min} AND pricePerHour <= {pph_max})
-        LIMIT {per_page} OFFSET {offset}
-    """.format(amazonec2=amazonec2, azure=azure, os=os, region=region,
-               onDemand=onDemand, reserved=reserved, spot=spot,
-               memory_min=memory[0], memory_max=memory[1], vcpus_min=vcpus[0], vcpus_max=vcpus[1],
-               pph_min=pricePerHour[0], pph_max=pricePerHour[1],
-               per_page=LIST_QUERY_SIZE, offset=int(page) * LIST_QUERY_SIZE)
-
-    instances = db.select(query)
+    instances = InstanceDataLastPointView.objects_in(db).filter(**kwargs).paginate(page, LIST_QUERY_SIZE)[0]
 
     return [instance.to_dict() for instance in instances]
 

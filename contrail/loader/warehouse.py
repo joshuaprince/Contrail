@@ -1,5 +1,3 @@
-import os
-
 from infi.clickhouse_orm import models, fields, engines
 from infi.clickhouse_orm.database import Database
 from infi.clickhouse_orm.fields import Field
@@ -29,6 +27,7 @@ class BooleanField(Field):
     def to_db_string(self, value, quote=True):
         # The value was already converted by to_python, so it's a bool
         return '1' if value else '0'
+
 
 class InstanceData(models.Model):
     # Universal fields ---------------------------------------------------------
@@ -145,6 +144,7 @@ class InstanceData(models.Model):
     # InstanceData ClickHouse configuration ====================================
     engine = engines.MergeTree('crawlTime', order_by=['provider', 'region', 'crawlTime'])
 
+
 class LoadedFile(models.Model):
     """
     Table that holds the full S3 path names of each file that has already been loaded, so that we don't load the
@@ -154,6 +154,29 @@ class LoadedFile(models.Model):
     time_loaded = fields.DateTimeField()
 
     engine = engines.MergeTree('time_loaded', ('filename', 'time_loaded'))
+
+
+class InstanceDataLastPointView(models.Model):
+    """
+    Model that we can use to query the aggregated "latest points" of each instance. This is a "fake model" in that it
+    wraps a view, and therefore cannot be created with create_table or the like, and must be set up with the raw SQL in
+    the `create_contrail_table` function.
+    """
+    crawlTime = fields.DateTimeField()
+    provider = fields.StringField()
+    region = fields.StringField()
+    operatingSystem = fields.StringField()
+    instanceType = fields.StringField()
+
+    priceType = fields.StringField()
+    pricePerHour = fields.Float32Field()
+    priceUpfront = fields.Float32Field()
+
+    vcpu = fields.Int32Field()
+    memory = fields.Float32Field()
+    gpu = fields.Int32Field()
+    location = fields.StringField()
+    sku = fields.StringField()
 
 
 def create_contrail_table(recreate=False):
@@ -166,7 +189,72 @@ def create_contrail_table(recreate=False):
     if db.does_table_exist(LoadedFile):
         db.drop_table(LoadedFile)
 
+    db.raw("DROP TABLE IF EXISTS instancedata_last_point_aws")
+    db.raw("DROP TABLE IF EXISTS instancedatalastpointview")
+
     db.create_table(InstanceData)
     db.create_table(LoadedFile)
-    os.system('cat aws_materialized_view.sql | clickhouse-client -mn -d \'contrail\'')
-    os.system('cat aws_view.sql | clickhouse-client -mn -d \'contrail\'')
+
+    db.raw("""
+        CREATE MATERIALIZED VIEW instancedata_last_point_aws
+        ENGINE = AggregatingMergeTree() PARTITION BY tuple()
+        ORDER BY (provider, operatingSystem, region, instanceType, priceType) POPULATE AS
+        SELECT
+            provider,
+            maxState(crawlTime) AS max_crawlTime,
+            region,
+            operatingSystem,
+            priceType,
+            argMaxState(pricePerHour, crawlTime) AS pricePerHour,
+            argMaxState(priceUpfront, crawlTime) AS priceUpfront,
+            argMaxState(vcpu, crawlTime) AS vcpu,
+            argMaxState(memory, crawlTime) AS memory,
+            argMaxState(gpu, crawlTime) AS gpu,
+            instanceType,
+            argMaxState(location, crawlTime) AS location,
+            argMaxState(sku, crawlTime) AS sku,
+            leaseContractLength,
+            purchaseOption
+        FROM instancedata
+        WHERE (leaseContractLength IS NULL OR leaseContractLength == '' OR leaseContractLength == '1yr')
+        AND (purchaseOption IS NULL OR purchaseOption == '' OR purchaseOption == 'No Upfront')
+        GROUP BY
+            provider,
+            instanceType,
+            region,
+            operatingSystem,
+            priceType,
+            leaseContractLength,
+            purchaseOption
+    """)
+
+    db.raw("""
+        CREATE VIEW instancedatalastpointview AS
+        SELECT 
+            provider,
+            maxMerge(max_crawlTime) AS crawlTime,
+            region,
+            operatingSystem,
+            priceType,
+            argMaxMerge(pricePerHour) AS pricePerHour,
+            argMaxMerge(priceUpfront) AS priceUpfront,
+            argMaxMerge(vcpu) AS vcpu, 
+            argMaxMerge(memory) AS memory,
+            argMaxMerge(gpu) AS gpu,
+            instanceType,
+            argMaxMerge(location) AS location,
+            argMaxMerge(sku) AS sku,
+            leaseContractLength,
+            purchaseOption
+        FROM instancedata_last_point_aws
+        WHERE (leaseContractLength IS NULL OR leaseContractLength == '' OR leaseContractLength == '1yr')
+        AND (purchaseOption IS NULL OR purchaseOption == '' OR purchaseOption == 'No Upfront')
+        GROUP BY
+            provider,
+            instanceType,
+            region, 
+            operatingSystem,
+            priceType,
+            leaseContractLength,
+            purchaseOption
+    """)

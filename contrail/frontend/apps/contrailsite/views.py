@@ -26,19 +26,42 @@ def price_view(request):
         form = PriceForm(request.POST)
 
         if form.is_valid():
-            instances = list_instances(
-                page=0,
-                amazonec2=bool(form.cleaned_data['amazon_web_services']),
-                azure=bool(form.cleaned_data['microsoft_azure']),
-                os=form.cleaned_data['operating_system'],
-                region=form.cleaned_data['region'],
-                onDemand=bool(form.cleaned_data['on_demand']),
-                reserved=bool(form.cleaned_data['reserved']),
-                spot=bool(form.cleaned_data['spot']),
-                memory=(float(form.cleaned_data['memory_from']), float(form.cleaned_data['memory_to'])),
-                vcpus=(int(form.cleaned_data['vcpu_from']), int(form.cleaned_data['vcpu_to'])),
-                pricePerHour=(float(form.cleaned_data['pricehr_from']), float(form.cleaned_data['pricehr_to'])),
-            )  # TODO properly paginate
+            instance_filters = {'provider__in': [], 'priceType__in': []}
+            
+            if form.cleaned_data['amazon_web_services']:
+                instance_filters['provider__in'].append('AmazonEC2')
+            if form.cleaned_data['microsoft_azure']:
+                instance_filters['provider__in'].append('Azure')
+                
+            if form.cleaned_data['on_demand']:
+                instance_filters['priceType__in'].append('On Demand')
+            if form.cleaned_data['reserved']:
+                instance_filters['priceType__in'].append('Reserved')
+            if form.cleaned_data['spot']:
+                instance_filters['priceType__in'].append('Spot')
+
+            if form.cleaned_data['operating_system']:
+                instance_filters['operatingSystem'] = form.cleaned_data['operating_system']
+
+            if form.cleaned_data['region']:
+                instance_filters['region'] = form.cleaned_data['region']
+
+            if form.cleaned_data['memory_from']:
+                instance_filters['memory__gte'] = form.cleaned_data['memory_from']
+            if form.cleaned_data['memory_to']:
+                instance_filters['memory__lte'] = form.cleaned_data['memory_to']
+
+            if form.cleaned_data['vcpu_from']:
+                instance_filters['vcpu__gte'] = form.cleaned_data['vcpu_from']
+            if form.cleaned_data['vcpu_to']:
+                instance_filters['vcpu__lte'] = form.cleaned_data['vcpu_to']
+
+            if form.cleaned_data['pricehr_from']:
+                instance_filters['pricePerHour__gte'] = form.cleaned_data['pricehr_from']
+            if form.cleaned_data['pricehr_to']:
+                instance_filters['pricePerHour__lte'] = form.cleaned_data['pricehr_to']
+
+            instances = list_instances(page=1, **instance_filters)  # TODO properly paginate
 
             for instance in instances:
                 instance['url'] = reverse('instance') + '?' + urlencode(generate_detail_link_dict(instance))
