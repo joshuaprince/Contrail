@@ -26,6 +26,8 @@ def price_view(request):
         form = PriceForm(request.POST)
 
         if form.is_valid():
+            context['form'] = form
+
             instance_filters = {'provider__in': [], 'priceType__in': []}
             
             if form.cleaned_data['amazon_web_services']:
@@ -61,7 +63,10 @@ def price_view(request):
             if form.cleaned_data['pricehr_to']:
                 instance_filters['pricePerHour__lte'] = form.cleaned_data['pricehr_to']
 
-            instances = list_instances(page=1, **instance_filters)  # TODO properly paginate
+            if [] in instance_filters.values():
+                instances = []
+            else:
+                instances = list_instances(page=1, **instance_filters)  # TODO properly paginate
 
             for instance in instances:
                 instance['url'] = reverse('instance') + '?' + urlencode(generate_detail_link_dict(instance))

@@ -21,7 +21,7 @@
       <div class="form-group">
         <div id="div_id_amazon_web_services" class="form-check">
           <label for="id_amazon_web_services" class="form-check-label">
-            <input type="checkbox" name="amazon_web_services" class="checkboxinput form-check-input" id="id_amazon_web_services" checked="">
+            <input type="checkbox" name="amazon_web_services" class="checkboxinput form-check-input" id="id_amazon_web_services" {% if form.amazon_web_services.data %}checked{% endif %}>
             Amazon Web Services
           </label>
         </div>
@@ -30,7 +30,7 @@
       <div class="form-group">
         <div id="div_id_microsoft_azure" class="form-check">
           <label for="id_microsoft_azure" class="form-check-label">
-            <input type="checkbox" name="microsoft_azure" class="checkboxinput form-check-input" id="id_microsoft_azure" checked>
+            <input type="checkbox" name="microsoft_azure" class="checkboxinput form-check-input" id="id_microsoft_azure" {% if form.microsoft_azure.data %}checked{% endif %}>
             Microsoft Azure
           </label>
         </div>
@@ -42,9 +42,9 @@
         </label>
         <div class="">
           <select name="operating_system" class="select form-control" id="id_operating_system">
-              <option value="" selected="">All</option>
-              <option value="Linux">Linux</option>
-              <option value="Windows">Windows</option>
+              <option value="" {% if form.operating_system.data == '' %}selected{% endif %}>All</option>
+              <option value="Linux" {% if form.operating_system.data == 'Linux' %}selected{% endif %}>Linux</option>
+              <option value="Windows" {% if form.operating_system.data == 'Windows' %}selected{% endif %}>Windows</option>
           </select>
         </div>
       </div>
@@ -56,7 +56,7 @@
         <div class="">
           <select name="region" class="select form-control" id="id_region"> <option value="" selected="">All</option>
               {% for r in regions %}
-              <option value="{{ r }}">{{ r }}</option>
+              <option value="{{ r }}" {% if form.region.data == r %}selected{% endif %}>{{ r }}</option>
               {% endfor %}
           </select>
         </div>
@@ -67,7 +67,7 @@
       <div class="form-group">
         <div id="div_id_on_demand" class="form-check">
           <label for="id_on_demand" class="form-check-label">
-            <input type="checkbox" name="on_demand" class="checkboxinput form-check-input" id="id_on_demand" checked="">
+            <input type="checkbox" name="on_demand" class="checkboxinput form-check-input" id="id_on_demand" {% if form.on_demand.data %}checked{% endif %}>
                 On Demand
           </label>
         </div>
@@ -76,7 +76,7 @@
       <div class="form-group">
         <div id="div_id_reserved" class="form-check">
           <label for="id_reserved" class="form-check-label">
-            <input type="checkbox" name="reserved" class="checkboxinput form-check-input" id="id_reserved" checked="">
+            <input type="checkbox" name="reserved" class="checkboxinput form-check-input" id="id_reserved" {% if form.reserved.data %}checked{% endif %}>
                 Reserved
           </label>
         </div>
@@ -85,7 +85,7 @@
       <div class="form-group">
         <div id="div_id_spot" class="form-check">
           <label for="id_spot" class="form-check-label">
-            <input type="checkbox" name="spot" class="checkboxinput form-check-input" id="id_spot" checked="">
+            <input type="checkbox" name="spot" class="checkboxinput form-check-input" id="id_spot" {% if form.spot.data %}checked{% endif %}>
                     Spot
           </label>
         </div>
