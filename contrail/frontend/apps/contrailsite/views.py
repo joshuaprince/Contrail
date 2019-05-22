@@ -16,11 +16,19 @@ class HomeView(TemplateView):
     template_name = "home.html"
 
 
+_region_cache = []
+
+
 def price_view(request):
     """
     Render Price page
     """
-    context = {'form': PriceForm(), 'regions': (x for x in map(lambda i: i.region, InstanceData.objects_in(db).distinct().only('region')))}
+
+    global _region_cache
+    if not _region_cache:
+        _region_cache = (x for x in map(lambda i: i.region, InstanceData.objects_in(db).distinct().only('region')))
+
+    context = {'form': PriceForm(), 'regions': _region_cache}
 
     if request.method == 'POST':
         form = PriceForm(request.POST)
