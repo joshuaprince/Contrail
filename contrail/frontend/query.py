@@ -96,9 +96,11 @@ def get_instance_details(**kwargs) -> Dict:
     return latest_instance
 
 
-def get_instance_price_history(**kwargs) -> Dict[str, List[Dict]]:
+def get_instance_price_history(record_count=100, **kwargs) -> Dict[str, List[Dict]]:
     """
     Get a set of time series, each containing price history points for a given instance and its pricing mode.
+
+    :param record_count: Number of history points to retrieve per pricing mode.
 
     :param kwargs: A set of filters used to identify the desired instance. Must at least consist of the fields specified
                    by this provider's DISCRIMINATORS.
@@ -114,12 +116,12 @@ def get_instance_price_history(**kwargs) -> Dict[str, List[Dict]]:
     price_history = {
         'onDemand': base_query.filter(priceType='On Demand')[:100],
         'spot': base_query.filter(priceType='Spot')[:100],
-        'reserved1yrFullUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='All Upfront')[:100],
-        'reserved1yrPartialUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='Partial Upfront')[:100],
-        'reserved1yrNoUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='No Upfront')[:100],
-        'reserved3yrFullUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='All Upfront')[:100],
-        'reserved3yrPartialUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='Partial Upfront')[:100],
-        'reserved3yrNoUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='No Upfront')[:100],
+        'reserved1yrFullUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='All Upfront')[:record_count],
+        'reserved1yrPartialUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='Partial Upfront')[:record_count],
+        'reserved1yrNoUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='No Upfront')[:record_count],
+        'reserved3yrFullUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='All Upfront')[:record_count],
+        'reserved3yrPartialUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='Partial Upfront')[:record_count],
+        'reserved3yrNoUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='No Upfront')[:record_count],
     }
 
     # Build our own list of "price history point" dicts, since we don't want to include null or zero fields

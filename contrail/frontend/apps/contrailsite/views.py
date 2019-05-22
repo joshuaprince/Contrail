@@ -117,10 +117,30 @@ def instance_view(request: HttpRequest):
     context = {
         'rawInstanceDetails': instance_details,
         'instanceDetails': displayed_instance_details,
-        'priceHistory': get_instance_price_history(**filter_parameters)
+        'priceHistory': get_instance_price_history(record_count=1, **filter_parameters)
     }
 
     return render(request, 'instance.html', context)
+
+
+def history_graph_view(request: HttpRequest):
+    """
+    Render price history graph asynchronously
+    """
+    filter_parameters = dict(request.GET.items())
+
+    try:
+        check_instance_detail_filters(**filter_parameters)
+    except (AttributeError, AmbiguousTimeSeries) as e:
+        return render(request, 'error.html', {'error': str(e)}, status=400)
+    except InstanceNotFound as e:
+        return render(request, 'error.html', {'error': '404: ' + str(e)}, status=404)
+
+    context = {
+        'priceHistory': get_instance_price_history(**filter_parameters)
+    }
+
+    return render(request, 'history_graph.html', context)
 
 
 class HelpView(TemplateView):

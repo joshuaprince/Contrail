@@ -126,7 +126,7 @@
 
       <h2 style="text-align:center;">Price History</h2>
 
-      <canvas id="canvas" style="display: block; width: 621px; height: 310px;" width="621" height="310" class="chartjs-render-monitor"></canvas>
+      <div id="pricehistorygraph">Loading...</div>
       <br><br><br><br>
 </div>
 
@@ -139,109 +139,10 @@
 <!-- BOOTSTRAP TABLE -->
 <script type="text/javascript">
   $(document).ready(function() {
-    $('#instances').DataTable( {
-        // "paging":   false,
-        "ordering": true,
-        // "info":     false,
-        "columns": []
-    } );
-  } );
+    $.get('{% url 'historygraph' %}' + location.search,  function (data) {
+        $('#pricehistorygraph').html(data);
+    });
+  });
 </script>
-
-<!-- CHART.JS -->
-<script>
-  // https://www.chartjs.org/samples/latest/scales/time/line.html
-		var timeFormat = 'YYYY-MM-DDTHH:MM:SS+';
-
-		function newDate(days) {
-			return moment().add(days, 'd').toDate();
-		}
-
-		function newDateString(days) {
-			return moment().add(days, 'd').format(timeFormat);
-		}
-
-		var color = Chart.helpers.color;
-		var config = {
-			type: 'line',
-			data: {
-				labels: [ // Date Objects
-					/*newDate(0),
-					newDate(1),
-					newDate(2),
-					newDate(3),
-					newDate(4),
-					newDate(5),
-					newDate(6)*/
-				],
-				datasets: [{
-					label: 'On Demand',
-					backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
-					borderColor: window.chartColors.red,
-					fill: false,
-					data: [
-                        {% for price in priceHistory.onDemand %}
-                        {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
-                        {% endfor %}
-                    ],
-				}, {
-					label: 'Reserved (1yr, no up front)',
-					backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
-					borderColor: window.chartColors.blue,
-					fill: false,
-					data: [
-                        {% for price in priceHistory.reserved1yrNoUpfront %}
-                        {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
-                        {% endfor %}
-					],
-				}, {
-					label: 'Spot',
-					backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
-					borderColor: window.chartColors.green,
-					fill: false,
-					data: [
-                        {% for price in priceHistory.spot %}
-                        {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
-                        {% endfor %}
-					],
-				}]
-			},
-			options: {
-				title: {
-					text: 'Chart.js Time Scale'
-				},
-				scales: {
-					xAxes: [{
-						type: 'time',
-						time: {
-							// parser: timeFormat,
-							// round: 'day'
-							tooltipFormat: 'll HH:mm'
-						},
-						scaleLabel: {
-							display: true,
-							labelString: 'Date'
-						}
-					}],
-					yAxes: [{
-						scaleLabel: {
-							display: true,
-							labelString: 'Price per Hour'
-						},
-                        ticks: {
-						    beginAtZero: true
-                        }
-					}]
-				},
-			}
-		};
-
-		window.onload = function() {
-			var ctx = document.getElementById('canvas').getContext('2d');
-			window.myLine = new Chart(ctx, config);
-
-		};
-
-	</script>
 
 {% endblock %}
