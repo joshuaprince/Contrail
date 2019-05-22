@@ -28,7 +28,15 @@ def price_view(request):
     if not _region_cache:
         _region_cache = (x for x in map(lambda i: i.region, InstanceData.objects_in(db).distinct().only('region')))
 
-    context = {'form': PriceForm(), 'regions': _region_cache}
+    context = {'form': PriceForm({
+        'amazon_web_services': True,
+        'microsoft_azure': True,
+        'on_demand': True,
+        'reserved': True,
+        'spot': True,
+    }), 'regions': _region_cache}
+
+    instance_filters = {}
 
     if request.method == 'POST':
         form = PriceForm(request.POST)
@@ -71,15 +79,15 @@ def price_view(request):
             if form.cleaned_data['pricehr_to']:
                 instance_filters['pricePerHour__lte'] = form.cleaned_data['pricehr_to']
 
-            if [] in instance_filters.values():
-                instances = []
-            else:
-                instances = list_instances(page=1, **instance_filters)  # TODO properly paginate
+    if [] in instance_filters.values():
+        instances = []
+    else:
+        instances = list_instances(page=1, **instance_filters)  # TODO properly paginate
 
-            for instance in instances:
-                instance['url'] = reverse('instance') + '?' + urlencode(generate_detail_link_dict(instance))
+    for instance in instances:
+        instance['url'] = reverse('instance') + '?' + urlencode(generate_detail_link_dict(instance))
 
-            context['instances'] = instances
+    context['instances'] = instances
 
     return render(request, 'list.html', context)
 
