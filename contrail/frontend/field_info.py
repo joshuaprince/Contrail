@@ -98,6 +98,7 @@ FIELD_INFO['nerworkPerformance'] = {
 
 FIELD_INFO['normalizationSizeFactor'] = {
     'friendlyName': 'Normalization Size Factor',
+    'link': 'https://aws.amazon.com/blogs/aws/new-instance-size-flexibility-for-ec2-reserved-instances/'
 }
 
 FIELD_INFO['operation'] = {
@@ -109,7 +110,7 @@ FIELD_INFO['physicalProcessor'] = {
 }
 
 FIELD_INFO['preInstalledSw'] = {
-    'friendlyName': 'Preinstalled Sw',
+    'friendlyName': 'Preinstalled SW',
 }
 
 FIELD_INFO['processorArchitecture'] = {
@@ -130,6 +131,7 @@ FIELD_INFO['storageIsEbsOnly'] = {
 
 FIELD_INFO['usageType'] = {
     'friendlyName': 'Usage Type',
+    'link': 'https://aws.amazon.com/about-aws/whats-new/2016/09/new-filtering-options-for-aws-cost-explorer/'
 }
 
 FIELD_INFO['ecuIsVariable'] = {
