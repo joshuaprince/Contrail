@@ -60,6 +60,86 @@ FIELD_INFO['sku'] = {
     'hint': 'A unique serial number for this instance.'
 }
 
+FIELD_INFO['clockSpeedIsUpTo'] = {
+    'friendlyName': 'Clock Speed Is Up To',
+}
+
+FIELD_INFO['currentGeneration'] = {
+    'friendlyName': 'Current Generation',
+}
+
+FIELD_INFO['dedicatedEbsThroughputIsUpTo'] = {
+    'friendlyName': 'Dedicated Ebs Throughput Is Up To',
+}
+
+FIELD_INFO['dedicatedEbsThroughput'] = {
+    'friendlyName': 'Dedicated Ebs Throughput',
+}
+
+FIELD_INFO['ecu Is Variable'] = {
+    'friendlyName': 'ecu Is Variable',
+}
+
+FIELD_INFO['licenseModel'] = {
+    'friendlyName': 'License Model',
+}
+
+FIELD_INFO['location'] = {
+    'friendlyName': 'Location',
+}
+
+FIELD_INFO['locationType'] = {
+    'friendlyName': 'Location Type',
+}
+
+FIELD_INFO['nerworkPerformance'] = {
+    'friendlyName': 'Network Performance',
+}
+
+FIELD_INFO['normalizationSizeFactor'] = {
+    'friendlyName': 'Normalization Size Factor',
+}
+
+FIELD_INFO['operation'] = {
+    'friendlyName': 'Operation',
+}
+
+FIELD_INFO['physicalProcessor'] = {
+    'friendlyName': 'Physical Processor',
+}
+
+FIELD_INFO['preInstalledSw'] = {
+    'friendlyName': 'Preinstalled Sw',
+}
+
+FIELD_INFO['processorArchitecture'] = {
+    'friendlyName': 'Processor Architecture',
+}
+
+FIELD_INFO['productFamily'] = {
+    'friendlyName': 'Product Family',
+}
+
+FIELD_INFO['serviceName'] = {
+    'friendlyName': 'Service Name',
+}
+
+FIELD_INFO['storageIsEbsOnly'] = {
+    'friendlyName': 'Storage Is Ebs Only',
+}
+
+FIELD_INFO['usageType'] = {
+    'friendlyName': 'Usage Type',
+}
+
+FIELD_INFO['ecuIsVariable'] = {
+    'friendlyName': 'ECU Is Variable',
+}
+
+FIELD_INFO['networkPerformance'] = {
+    'friendlyName': 'Network Performance',
+}
+
 for field in ['capacityStatus', 'effectiveDate', 'beginRange', 'endRange', 'tenancy', 'appliesTo', 'description']:
     FIELD_INFO[field] = {'exclude': True}
 
@@ -78,4 +158,36 @@ FIELD_INFO['vcpusPerCore'] = {
 
 FIELD_INFO['meterId'] = {
     'exclude': True
+}
+
+FIELD_INFO['meterSubCategory'] = {
+    'friendlyName': 'Meter Sub Category',
+}
+
+FIELD_INFO['maxResourceVolumeMb'] = {
+    'friendlyName': 'Max Resource Volume Mb',
+}
+
+FIELD_INFO['osVhdSizeMb'] = {
+    'friendlyName': 'OS Vhd Size Mb',
+}
+
+FIELD_INFO['hyperVGenerations'] = {
+    'friendlyName': 'Hyper V Generations',
+}
+
+FIELD_INFO['maxDataDiskCount'] = {
+    'friendlyName': 'Max Data Disk Count',
+}
+
+FIELD_INFO['lowPriorityCapable'] = {
+    'friendlyName': 'Low Priority Capable',
+}
+
+FIELD_INFO['premiumIo'] = {
+    'friendlyName': 'Premium IO',
+}
+
+FIELD_INFO['ephemeralOsDiskSupported'] = {
+    'friendlyName': 'Ephemeral OS Disk Supported',
 }

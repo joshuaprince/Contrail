@@ -93,6 +93,9 @@ def get_instance_details(**kwargs) -> Dict:
     latest_instance = {k: v for k, v in latest_instance.to_dict().items()
                        if k not in PRICE_HISTORY_PARAMS and v is not None}
 
+    for k, v in latest_instance.items():
+        print(k, v)
+
     return latest_instance
 
 

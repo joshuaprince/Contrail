@@ -45,12 +45,12 @@ def price_view(request):
             context['form'] = form
 
             instance_filters = {'provider__in': [], 'priceType__in': []}
-            
+
             if form.cleaned_data['amazon_web_services']:
                 instance_filters['provider__in'].append('AmazonEC2')
             if form.cleaned_data['microsoft_azure']:
                 instance_filters['provider__in'].append('Azure')
-                
+
             if form.cleaned_data['on_demand']:
                 instance_filters['priceType__in'].append('On Demand')
             if form.cleaned_data['reserved']:
