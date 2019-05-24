@@ -30,7 +30,7 @@
 
     <br><br>
         <div class="row">
-          {% if rawInstanceDetails.provider == 'AmazonEC2' %}
+          {% if rawInstanceDetails.provider == 'AmazonEC2' and priceHistory.spot.0.pricePerHour %}
           <div class="col-sm-4">
           {% else %}
           <div class="col-sm-6">
@@ -40,61 +40,70 @@
                 <h4 class="card-title">On Demand</h4><hr>
                 <h5 class="card-title"><span style="font-size: 3em;">${{ priceHistory.onDemand.0.pricePerHour }}</span><br>per hour</h5>
                 <p class="card-text">{{ priceHistory.onDemand.0.pricePerHour|hourly_to_monthly }} per month</p>
-{#                <a href="#" class="btn btn-primary">Go somewhere</a>#}
               </div>
             </div>
           </div>
+
+
           {% if rawInstanceDetails.provider == 'AmazonEC2' %}
-          <div class="col-sm-4">
-            <div class="card">
-              <div class="card-body">
-                <h4 class="card-title">Reserved</h4><hr>
 
-                <a data-toggle="collapse" href="#one" aria-expanded="false" aria-controls="one"><h5>One Year &#x2C5;</h5></a>
-                <div class="collapse multi-collapse" id="one">
-                  <div class="card card-body">
-                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved1yrFullUpfront.0.priceUpfront|price }}</span> up front</h5>
-                    <p class="card-text">Full Upfront</p><hr style="margin-top: 0px;">
-                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved1yrPartialUpfront.0.priceUpfront|price }}</span> up front</h5>
-                    <h5 class="card-title"><span style="font-size: 1.2em;">${{ priceHistory.reserved1yrPartialUpfront.0.pricePerHour }}</span> per hour</h5>
-                    <p class="card-text">Partial Upfront</p><hr style="margin-top: 0px;">
-                    <h5 class="card-title"><span style="font-size: 1.2em;">${{ priceHistory.reserved1yrNoUpfront.0.pricePerHour }}</span> per hour</h5>
-                    <p class="card-text">No Upfront</p>
-                  </div>
-                </div><br>
+            {% if priceHistory.spot.0.pricePerHour %}
+            <div class="col-sm-4">
+            {% else %}
+            <div class="col-sm-6">
+            {% endif %}
 
-                <a data-toggle="collapse" href="#three" aria-expanded="false" aria-controls="three"><h5>Three Years &#x2C5;</h5></a>
-                <div class="collapse multi-collapse" id="three">
-                  <div class="card card-body">
-                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved3yrFullUpfront.0.priceUpfront|price }}</span> up front</h5>
-                    <p class="card-text">Full Upfront</p><hr style="margin-top: 0px;">
-                    <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved3yrPartialUpfront.0.priceUpfront|price }}</span> up front</h5>
-                    <h5 class="card-title"><span style="font-size: 1.2em;">${{ priceHistory.reserved3yrPartialUpfront.0.pricePerHour }}</span> per hour</h5>
-                    <p class="card-text">Partial Upfront</p><hr style="margin-top: 0px;">
-                    <h5 class="card-title"><span style="font-size: 1.2em;">${{ priceHistory.reserved3yrNoUpfront.0.pricePerHour }}</span> per hour</h5>
-                    <p class="card-text">No Upfront</p>
-                  </div>
-                </div><br>
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Reserved</h4><hr>
 
-{#                <a href="#" class="btn btn-primary">Go somewhere</a>#}
+                  <a data-toggle="collapse" href="#one" aria-expanded="false" aria-controls="one"><h5>One Year &#x2C5;</h5></a>
+                  <div class="collapse multi-collapse" id="one">
+                    <div class="card card-body">
+                      <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved1yrFullUpfront.0.priceUpfront|price }}</span> up front</h5>
+                      <p class="card-text">Full Upfront</p><hr style="margin-top: 0px;">
+                      <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved1yrPartialUpfront.0.priceUpfront|price }}</span> up front</h5>
+                      <h5 class="card-title"><span style="font-size: 1.2em;">${{ priceHistory.reserved1yrPartialUpfront.0.pricePerHour }}</span> per hour</h5>
+                      <p class="card-text">Partial Upfront</p><hr style="margin-top: 0px;">
+                      <h5 class="card-title"><span style="font-size: 1.2em;">${{ priceHistory.reserved1yrNoUpfront.0.pricePerHour }}</span> per hour</h5>
+                      <p class="card-text">No Upfront</p>
+                    </div>
+                  </div><br>
+
+                  <a data-toggle="collapse" href="#three" aria-expanded="false" aria-controls="three"><h5>Three Years &#x2C5;</h5></a>
+                  <div class="collapse multi-collapse" id="three">
+                    <div class="card card-body">
+                      <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved3yrFullUpfront.0.priceUpfront|price }}</span> up front</h5>
+                      <p class="card-text">Full Upfront</p><hr style="margin-top: 0px;">
+                      <h5 class="card-title"><span style="font-size: 1.2em;">{{ priceHistory.reserved3yrPartialUpfront.0.priceUpfront|price }}</span> up front</h5>
+                      <h5 class="card-title"><span style="font-size: 1.2em;">${{ priceHistory.reserved3yrPartialUpfront.0.pricePerHour }}</span> per hour</h5>
+                      <p class="card-text">Partial Upfront</p><hr style="margin-top: 0px;">
+                      <h5 class="card-title"><span style="font-size: 1.2em;">${{ priceHistory.reserved3yrNoUpfront.0.pricePerHour }}</span> per hour</h5>
+                      <p class="card-text">No Upfront</p>
+                    </div>
+                  </div><br>
+
+                </div>
               </div>
             </div>
-          </div>
           {% endif %}
-          {% if rawInstanceDetails.provider == 'AmazonEC2' %}
-          <div class="col-sm-4">
-          {% else %}
-          <div class="col-sm-6">
-          {% endif %}
-            <div class="card">
-              <div class="card-body">
-                <h4 class="card-title">Spot</h4><hr>
-                <h5 class="card-title"><span style="font-size: 3em;">${{ priceHistory.spot.0.pricePerHour }}</span><br>per hour</h5>
-                <p class="card-text">{{ priceHistory.spot.0.pricePerHour|hourly_to_monthly }} per month</p>
-{#                <a href="#" class="btn btn-primary">Go somewhere</a>#}
+
+          {% if priceHistory.spot.0.pricePerHour %}
+
+            {% if rawInstanceDetails.provider == 'AmazonEC2' %}
+            <div class="col-sm-4">
+            {% else %}
+            <div class="col-sm-6">
+            {% endif %}
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Spot</h4><hr>
+                  <h5 class="card-title"><span style="font-size: 3em;">${{ priceHistory.spot.0.pricePerHour }}</span><br>per hour</h5>
+                  <p class="card-text">{{ priceHistory.spot.0.pricePerHour|hourly_to_monthly }} per month</p>
+                </div>
               </div>
             </div>
-          </div>
+          {% endif %}
         </div>
 
 
