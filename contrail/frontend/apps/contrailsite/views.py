@@ -16,17 +16,10 @@ class HomeView(TemplateView):
     template_name = "home.html"
 
 
-_region_cache = []
-
-
 def price_view(request):
     """
     Render Price page
     """
-
-    global _region_cache
-    if not _region_cache:
-        _region_cache = (x for x in map(lambda i: i.region, InstanceData.objects_in(db).distinct().only('region')))
 
     context = {'form': PriceForm({
         'amazon_web_services': True,
@@ -34,7 +27,7 @@ def price_view(request):
         'on_demand': True,
         'reserved': True,
         'spot': True,
-    }), 'regions': _region_cache}
+    }), 'regions': list_regions()}
 
     instance_filters = {}
 

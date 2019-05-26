@@ -1,5 +1,6 @@
 from typing import Dict, List
 
+from cachetools import cached, TTLCache
 from infi.clickhouse_orm.database import Database
 
 from config import CLICKHOUSE_DB_NAME, CLICKHOUSE_DB_URL
@@ -60,6 +61,14 @@ def generate_detail_link_dict(instance: Dict) -> Dict:
     details = {discriminator: instance[discriminator] for discriminator in DISCRIMINATORS[provider]}
 
     return details
+
+
+@cached(cache=TTLCache(maxsize=1, ttl=86400))
+def list_regions() -> List[str]:
+    """
+    List all regions found in the  `region` column of InstanceDataLastPointView.
+    """
+    return list(map(lambda i: i.region, InstanceData.objects_in(db).distinct().only('region')))
 
 
 def list_instances(page, **kwargs) -> List[Dict]:
