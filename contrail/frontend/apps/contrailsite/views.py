@@ -126,7 +126,7 @@ def instance_view(request: HttpRequest):
     context = {
         'rawInstanceDetails': instance_details,
         'instanceDetails': displayed_instance_details,
-        'priceHistory': get_instance_price_history(record_count=1, **filter_parameters)
+        'currentPrices': get_instance_current_prices(**filter_parameters)
     }
 
     return render(request, 'instance.html', context)

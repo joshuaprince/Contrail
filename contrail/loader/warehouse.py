@@ -173,6 +173,18 @@ class InstanceDataLastPointView(InstanceData):
     Model that we can use to query the aggregated "latest points" of each instance. This is a "fake model" in that it
     wraps a view, and therefore cannot be created with create_table or the like, and must be set up with the raw SQL in
     the `create_contrail_table` function.
+
+    **This view ONLY CONTAINS 1yr/no upfront variants of reserved models.**
+    """
+    # Extends InstanceData. Contains ALL fields of InstanceData, instead queries from the view instancedatalastpointview
+    engine = None
+
+
+class InstanceDataLastPointViewAllReserved(InstanceData):
+    """
+    Model that we can use to query the aggregated "latest points" of each instance. This is a "fake model" in that it
+    wraps a view, and therefore cannot be created with create_table or the like, and must be set up with the raw SQL in
+    the `create_contrail_table` function.
     """
     # Extends InstanceData. Contains ALL fields of InstanceData, instead queries from the view instancedatalastpointview
     engine = None
@@ -189,21 +201,25 @@ def create_contrail_table(recreate=False):
         db.drop_table(LoadedFile)
 
     db.raw("DROP TABLE IF EXISTS instancedata_last_point_aws")
+    db.raw("DROP TABLE IF EXISTS instancedata_last_point_aws_all_reserved")
     db.raw("DROP TABLE IF EXISTS instancedatalastpointview")
+    db.raw("DROP TABLE IF EXISTS instancedatalastpointviewallreserved")
 
     db.create_table(InstanceData)
     db.create_table(LoadedFile)
 
-    db.raw(_generate_materialized_view_sql())
-    db.raw(_generate_view_sql())
+    db.raw(_generate_materialized_view_sql(True))
+    db.raw(_generate_view_sql(True))
+    db.raw(_generate_materialized_view_sql(False))
+    db.raw(_generate_view_sql(False))
 
 
 GROUPED_COLS = ['provider', 'region', 'operatingSystem', 'priceType', 'instanceType',
-                'leaseContractLength', 'purchaseOption']
+                'leaseContractLength', 'purchaseOption', 'offeringClass']
 """InstanceData columns that should be part of the GROUP BY clause in the last point view"""
 
 
-def _generate_materialized_view_sql():
+def _generate_materialized_view_sql(limit_reserved: bool):
     """
     Generate the SQL used to generate the materialized view used by the last point view
     :return:
@@ -221,21 +237,29 @@ def _generate_materialized_view_sql():
     # {selects} -> provider, argMaxState(vcpu, crawlTime) AS vcpu, ...
     # {groups} -> provider, region, ...
     return """
-        CREATE MATERIALIZED VIEW instancedata_last_point_aws
+        CREATE MATERIALIZED VIEW {table_name}
         ENGINE = AggregatingMergeTree() PARTITION BY tuple()
         ORDER BY (provider, operatingSystem, region, instanceType, priceType) POPULATE AS
         SELECT
             maxState(crawlTime) AS max_crawlTime,
             {selects}
         FROM instancedata
-        WHERE (leaseContractLength IS NULL OR leaseContractLength == '' OR leaseContractLength == '1yr')
-        AND (purchaseOption IS NULL OR purchaseOption == '' OR purchaseOption == 'No Upfront')
+        WHERE (offeringClass IS NULL OR offeringClass = '' OR offeringClass = 'standard')
+            {reserved_filter}
         GROUP BY
             {groups}
-    """.format(selects=',\n'.join(selects), groups=',\n'.join(GROUPED_COLS))
+    """.format(
+        table_name='instancedata_last_point_aws' if limit_reserved else 'instancedata_last_point_aws_all_reserved',
+        selects=',\n'.join(selects),
+        groups=',\n'.join(GROUPED_COLS),
+        reserved_filter="""
+            AND (leaseContractLength IS NULL OR leaseContractLength == '' OR leaseContractLength == '1yr')
+            AND (purchaseOption IS NULL OR purchaseOption == '' OR purchaseOption == 'No Upfront')
+        """ if limit_reserved else ""
+    )
 
 
-def _generate_view_sql():
+def _generate_view_sql(limit_reserved: bool):
     """
     Generate the SQL query required to create the InstanceDataLastPointView view
     """
@@ -250,13 +274,16 @@ def _generate_view_sql():
             selects.append("argMaxMerge({0}) AS {0}".format(field))
 
     return """
-        CREATE VIEW instancedatalastpointview AS
+        CREATE VIEW {table_name} AS
         SELECT
             maxMerge(max_crawlTime) AS crawlTime,
             {selects}
-        FROM instancedata_last_point_aws
-        WHERE (leaseContractLength IS NULL OR leaseContractLength == '' OR leaseContractLength == '1yr')
-        AND (purchaseOption IS NULL OR purchaseOption == '' OR purchaseOption == 'No Upfront')
+        FROM {source_table}
         GROUP BY
             {groups}
-    """.format(selects=',\n'.join(selects), groups=',\n'.join(GROUPED_COLS))
+    """.format(
+        table_name='instancedatalastpointview' if limit_reserved else 'instancedatalastpointviewallreserved',
+        source_table='instancedata_last_point_aws' if limit_reserved else 'instancedata_last_point_aws_all_reserved',
+        selects=',\n'.join(selects),
+        groups=',\n'.join(GROUPED_COLS)
+    )

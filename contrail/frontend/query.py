@@ -4,7 +4,7 @@ from cachetools import cached, TTLCache
 from infi.clickhouse_orm.database import Database
 
 from config import CLICKHOUSE_DB_NAME, CLICKHOUSE_DB_URL
-from contrail.loader.warehouse import InstanceData, InstanceDataLastPointView
+from contrail.loader.warehouse import InstanceData, InstanceDataLastPointView, InstanceDataLastPointViewAllReserved
 
 db = Database(CLICKHOUSE_DB_NAME, db_url=CLICKHOUSE_DB_URL, readonly=True)
 
@@ -111,6 +111,55 @@ def get_instance_details(**kwargs) -> Dict:
     return instance_details
 
 
+def get_instance_current_prices(**kwargs) -> Dict[str, Dict]:
+    """
+    Get a set of time series, each containing price history points for a given instance and its pricing mode.
+
+    :param record_count: Number of history points to retrieve per pricing mode.
+
+    :param kwargs: A set of filters used to identify the desired instance. Must at least consist of the fields specified
+                   by this provider's DISCRIMINATORS.
+
+    :return: A dict mapping a pricing mode (i.e. 'onDemand' or 'reserved1yrFullUpfront') to a "history point",
+             where each history point is a dictionary consisting of crawlTime, priceType, and optionally pricePerHour,
+             priceUpfront, and leaseContractLength.
+    """
+
+    base_query = InstanceDataLastPointViewAllReserved.objects_in(db).filter(**kwargs).distinct().only(*PRICE_HISTORY_PARAMS).order_by('-crawlTime')
+
+    # Get a time series from the last several entries in the database that match this filter
+    price_history = {
+        'onDemand': base_query.filter(priceType='On Demand')[:100],
+        'spot': base_query.filter(priceType='Spot')[:100],
+        'reserved1yrFullUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='All Upfront')[:1],
+        'reserved1yrPartialUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='Partial Upfront')[:1],
+        'reserved1yrNoUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='No Upfront')[:1],
+        'reserved3yrFullUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='All Upfront')[:1],
+        'reserved3yrPartialUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='Partial Upfront')[:1],
+        'reserved3yrNoUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='No Upfront')[:1],
+    }
+
+    # price_history_points = {k: [] for k, v in price_history.items() if v}
+    # for price_mode, price_entry in price_history.items():
+    #     current_inst = {}
+    #     for param in PRICE_HISTORY_PARAMS:
+    #         if getattr(price_mode, param) is not None:
+    #             current_inst[param] = getattr(price_entry, param)
+    #     price_history_points[price_mode] = current_inst
+
+    # Build our own list of "price history point" dicts, since we don't want to include null or zero fields
+    price_history_points = {k: [] for k, v in price_history.items() if v}
+    for price_mode in price_history.keys():
+        for inst in price_history[price_mode]:
+            current_inst = {}
+            for param in PRICE_HISTORY_PARAMS:
+                if getattr(inst, param) is not None:
+                    current_inst[param] = getattr(inst, param)
+            price_history_points[price_mode].append(current_inst)
+
+    return price_history_points
+
+
 def get_instance_price_history(record_count=100, **kwargs) -> Dict[str, List[Dict]]:
     """
     Get a set of time series, each containing price history points for a given instance and its pricing mode.
@@ -175,7 +224,7 @@ def check_instance_detail_filters(**kwargs):
             raise AmbiguousTimeSeries("Missing discriminator: " + discriminator)
 
     try:
-        InstanceData.objects_in(db).filter(**kwargs).order_by('-crawlTime')[0]
+        InstanceDataLastPointView.objects_in(db).filter(**kwargs).order_by('-crawlTime')[0]
     except AttributeError:
         raise
     except StopIteration:
