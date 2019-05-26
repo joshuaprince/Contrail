@@ -103,7 +103,7 @@ class AzureLoader(BaseLoader):
         if not capabilities:
             # Not all instance sizes seem to have a corresponding capabilities lookup.
             # For now, just don't load these instances (this makes up ~3% of all instances, all of them are M or N type)
-            logger.warning("Couldn't get capabilities for instance size {} ({})".format(size, meter['MeterId']))
+            # logger.warning("Couldn't get capabilities for instance size {} ({})".format(size, meter['MeterId']))
             return None
 
         inst.vcpu = capabilities['vCPUs']

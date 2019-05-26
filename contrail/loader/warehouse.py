@@ -1,3 +1,5 @@
+from typing import List
+
 from infi.clickhouse_orm import models, fields, engines
 from infi.clickhouse_orm.database import Database
 from infi.clickhouse_orm.fields import Field
@@ -142,7 +144,17 @@ class InstanceData(models.Model):
     maxWriteAcceleratorDisksAllowed = fields.NullableField(fields.StringField())
 
     # InstanceData ClickHouse configuration ====================================
-    engine = engines.MergeTree('crawlTime', order_by=['provider', 'region', 'crawlTime'])
+    engine = engines.MergeTree(
+        date_col='crawlTime',
+        order_by=[
+            'provider',
+            'region',
+            'instanceType',
+            'operatingSystem',
+            'priceType',
+            'crawlTime'
+        ]
+    )
 
 
 class LoadedFile(models.Model):
@@ -156,27 +168,14 @@ class LoadedFile(models.Model):
     engine = engines.MergeTree('time_loaded', ('filename', 'time_loaded'))
 
 
-class InstanceDataLastPointView(models.Model):
+class InstanceDataLastPointView(InstanceData):
     """
     Model that we can use to query the aggregated "latest points" of each instance. This is a "fake model" in that it
     wraps a view, and therefore cannot be created with create_table or the like, and must be set up with the raw SQL in
     the `create_contrail_table` function.
     """
-    crawlTime = fields.DateTimeField()
-    provider = fields.StringField()
-    region = fields.StringField()
-    operatingSystem = fields.StringField()
-    instanceType = fields.StringField()
-
-    priceType = fields.StringField()
-    pricePerHour = fields.Float32Field()
-    priceUpfront = fields.Float32Field()
-
-    vcpu = fields.Int32Field()
-    memory = fields.Float32Field()
-    gpu = fields.Int32Field()
-    location = fields.StringField()
-    sku = fields.StringField()
+    # Extends InstanceData. Contains ALL fields of InstanceData, instead queries from the view instancedatalastpointview
+    engine = None
 
 
 def create_contrail_table(recreate=False):
@@ -195,66 +194,69 @@ def create_contrail_table(recreate=False):
     db.create_table(InstanceData)
     db.create_table(LoadedFile)
 
-    db.raw("""
+    db.raw(_generate_materialized_view_sql())
+    db.raw(_generate_view_sql())
+
+
+GROUPED_COLS = ['provider', 'region', 'operatingSystem', 'priceType', 'instanceType',
+                'leaseContractLength', 'purchaseOption']
+"""InstanceData columns that should be part of the GROUP BY clause in the last point view"""
+
+
+def _generate_materialized_view_sql():
+    """
+    Generate the SQL used to generate the materialized view used by the last point view
+    :return:
+    """
+    selects = []  # type: List[str]
+
+    for field in InstanceData.fields():
+        if field == 'crawlTime':
+            continue
+        elif field in GROUPED_COLS:
+            selects.append(field)
+        else:
+            selects.append("argMaxState({0}, crawlTime) AS {0}".format(field))
+
+    # {selects} -> provider, argMaxState(vcpu, crawlTime) AS vcpu, ...
+    # {groups} -> provider, region, ...
+    return """
         CREATE MATERIALIZED VIEW instancedata_last_point_aws
         ENGINE = AggregatingMergeTree() PARTITION BY tuple()
         ORDER BY (provider, operatingSystem, region, instanceType, priceType) POPULATE AS
         SELECT
-            provider,
             maxState(crawlTime) AS max_crawlTime,
-            region,
-            operatingSystem,
-            priceType,
-            argMaxState(pricePerHour, crawlTime) AS pricePerHour,
-            argMaxState(priceUpfront, crawlTime) AS priceUpfront,
-            argMaxState(vcpu, crawlTime) AS vcpu,
-            argMaxState(memory, crawlTime) AS memory,
-            argMaxState(gpu, crawlTime) AS gpu,
-            instanceType,
-            argMaxState(location, crawlTime) AS location,
-            argMaxState(sku, crawlTime) AS sku,
-            leaseContractLength,
-            purchaseOption
+            {selects}
         FROM instancedata
         WHERE (leaseContractLength IS NULL OR leaseContractLength == '' OR leaseContractLength == '1yr')
         AND (purchaseOption IS NULL OR purchaseOption == '' OR purchaseOption == 'No Upfront')
         GROUP BY
-            provider,
-            instanceType,
-            region,
-            operatingSystem,
-            priceType,
-            leaseContractLength,
-            purchaseOption
-    """)
+            {groups}
+    """.format(selects=',\n'.join(selects), groups=',\n'.join(GROUPED_COLS))
 
-    db.raw("""
+
+def _generate_view_sql():
+    """
+    Generate the SQL query required to create the InstanceDataLastPointView view
+    """
+    selects = []  # type: List[str]
+
+    for field in InstanceData.fields():
+        if field == 'crawlTime':
+            continue
+        elif field in GROUPED_COLS:
+            selects.append(field)
+        else:
+            selects.append("argMaxMerge({0}) AS {0}".format(field))
+
+    return """
         CREATE VIEW instancedatalastpointview AS
-        SELECT 
-            provider,
+        SELECT
             maxMerge(max_crawlTime) AS crawlTime,
-            region,
-            operatingSystem,
-            priceType,
-            argMaxMerge(pricePerHour) AS pricePerHour,
-            argMaxMerge(priceUpfront) AS priceUpfront,
-            argMaxMerge(vcpu) AS vcpu, 
-            argMaxMerge(memory) AS memory,
-            argMaxMerge(gpu) AS gpu,
-            instanceType,
-            argMaxMerge(location) AS location,
-            argMaxMerge(sku) AS sku,
-            leaseContractLength,
-            purchaseOption
+            {selects}
         FROM instancedata_last_point_aws
         WHERE (leaseContractLength IS NULL OR leaseContractLength == '' OR leaseContractLength == '1yr')
         AND (purchaseOption IS NULL OR purchaseOption == '' OR purchaseOption == 'No Upfront')
         GROUP BY
-            provider,
-            instanceType,
-            region, 
-            operatingSystem,
-            priceType,
-            leaseContractLength,
-            purchaseOption
-    """)
+            {groups}
+    """.format(selects=',\n'.join(selects), groups=',\n'.join(GROUPED_COLS))

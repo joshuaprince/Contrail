@@ -87,13 +87,19 @@ def get_instance_details(**kwargs) -> Dict:
     :return: All known, most up-to-date details about the instance being queried.
     """
 
-    latest_instance = InstanceData.objects_in(db).filter(**kwargs).order_by('-crawlTime')[0]
+    query = InstanceDataLastPointView.objects_in(db).distinct().filter(**kwargs)
 
-    # Filter out null fields and price-related fields from the instance dict
-    latest_instance = {k: v for k, v in latest_instance.to_dict().items()
-                       if k not in PRICE_HISTORY_PARAMS and v is not None}
+    instance_details = {}
 
-    return latest_instance
+    # Collect all details from all versions of this instance, because the "On Demand" record might know more details
+    #   than the "Spot" record, for example.
+    for record in query:
+        for k, v in record.to_dict().items():
+            # Filter out null fields and price-related fields from the instance dict
+            if k not in PRICE_HISTORY_PARAMS and bool(v):
+                instance_details[k] = v
+
+    return instance_details
 
 
 def get_instance_price_history(record_count=100, **kwargs) -> Dict[str, List[Dict]]:
