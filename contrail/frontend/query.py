@@ -34,7 +34,7 @@ series requires that we filter by at least those fields.
 """
 
 
-PRICE_HISTORY_PARAMS = ['crawlTime', 'priceType', 'pricePerHour', 'priceUpfront', 'leaseContractLength']
+PRICE_HISTORY_PARAMS = ['crawlTime', 'priceType', 'pricePerHour', 'priceUpfront', 'leaseContractLength', 'purchaseOption']
 """
 The set of fields that vary over an instance's time series, and therefore should be included in price history data and
 excluded from instance details.
@@ -113,51 +113,39 @@ def get_instance_details(**kwargs) -> Dict:
 
 def get_instance_current_prices(**kwargs) -> Dict[str, Dict]:
     """
-    Get a set of time series, each containing price history points for a given instance and its pricing mode.
-
-    :param record_count: Number of history points to retrieve per pricing mode.
+    Get a dict of current pricing modes for this instance.
 
     :param kwargs: A set of filters used to identify the desired instance. Must at least consist of the fields specified
                    by this provider's DISCRIMINATORS.
 
-    :return: A dict mapping a pricing mode (i.e. 'onDemand' or 'reserved1yrFullUpfront') to a "history point",
-             where each history point is a dictionary consisting of crawlTime, priceType, and optionally pricePerHour,
-             priceUpfront, and leaseContractLength.
+    :return: A dict mapping a pricing mode (i.e. 'onDemand' or 'reserved1yrFullUpfront') to a price dict that consists
+    of crawlTime and pricePerHour, and priceUpfront if nonzero.
     """
 
-    base_query = InstanceDataLastPointViewAllReserved.objects_in(db).filter(**kwargs).distinct().only(*PRICE_HISTORY_PARAMS).order_by('-crawlTime')
+    query = InstanceDataLastPointViewAllReserved.objects_in(db).filter(**kwargs)\
+                .distinct().only(*PRICE_HISTORY_PARAMS).order_by('crawlTime')
 
-    # Get a time series from the last several entries in the database that match this filter
-    price_history = {
-        'onDemand': base_query.filter(priceType='On Demand')[:100],
-        'spot': base_query.filter(priceType='Spot')[:100],
-        'reserved1yrFullUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='All Upfront')[:1],
-        'reserved1yrPartialUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='Partial Upfront')[:1],
-        'reserved1yrNoUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='No Upfront')[:1],
-        'reserved3yrFullUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='All Upfront')[:1],
-        'reserved3yrPartialUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='Partial Upfront')[:1],
-        'reserved3yrNoUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='No Upfront')[:1],
-    }
+    price_modes = {}
 
-    # price_history_points = {k: [] for k, v in price_history.items() if v}
-    # for price_mode, price_entry in price_history.items():
-    #     current_inst = {}
-    #     for param in PRICE_HISTORY_PARAMS:
-    #         if getattr(price_mode, param) is not None:
-    #             current_inst[param] = getattr(price_entry, param)
-    #     price_history_points[price_mode] = current_inst
+    for record in query:  # type: InstanceData
+        price_dict = {'crawlTime': record.crawlTime, 'pricePerHour': record.pricePerHour}
+        if record.priceType == 'On Demand':
+            price_modes['onDemand'] = price_dict
+        elif record.priceType == 'Spot':
+            price_modes['spot'] = price_dict
+        else:
+            # Reserved price
+            if record.purchaseOption == 'All Upfront':
+                price_dict['priceUpfront'] = record.priceUpfront
+                price_modes['reserved{}FullUpfront'.format(record.leaseContractLength)] = price_dict
+            elif record.purchaseOption == 'Partial Upfront':
+                price_dict['priceUpfront'] = record.priceUpfront
+                price_modes['reserved{}PartialUpfront'.format(record.leaseContractLength)] = price_dict
+            elif record.purchaseOption == 'No Upfront':
+                price_dict['priceUpfront'] = record.priceUpfront
+                price_modes['reserved{}NoUpfront'.format(record.leaseContractLength)] = price_dict
 
-    # Build our own list of "price history point" dicts, since we don't want to include null or zero fields
-    price_history_points = {k: [] for k, v in price_history.items() if v}
-    for price_mode in price_history.keys():
-        for inst in price_history[price_mode]:
-            current_inst = {}
-            for param in PRICE_HISTORY_PARAMS:
-                if getattr(inst, param) is not None:
-                    current_inst[param] = getattr(inst, param)
-            price_history_points[price_mode].append(current_inst)
-
-    return price_history_points
+    return price_modes
 
 
 def get_instance_price_history(record_count=100, **kwargs) -> Dict[str, List[Dict]]:
