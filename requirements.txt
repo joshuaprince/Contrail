@@ -2,7 +2,6 @@ boto3==1.9.156
 cachetools==3.1.1
 copyingmock==0.2
 Django==2.2.1
-djangorestframework==3.9.4
 django-crispy-forms==1.7.2
 infi.clickhouse_orm==1.0.4
 requests==2.22.0

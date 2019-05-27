@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'contrail.frontend.apps.api',
     'contrail.frontend.apps.contrailsite',
-    'rest_framework',
     'crispy_forms'
 ]
 
