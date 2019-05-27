@@ -81,9 +81,13 @@ def list_instances(page, **kwargs) -> List[Dict]:
     :return: List of instance dicts
     """
 
-    instances = InstanceDataLastPointView.objects_in(db).filter(**kwargs).paginate(page, LIST_QUERY_SIZE)[0]
+    # Only query for the fields we need on an instance list
+    fields = ['crawlTime', 'provider', 'instanceType', 'region', 'operatingSystem', 'vcpu', 'memory', 'priceType',
+              'pricePerHour', 'priceUpfront', 'gpu', 'location']
 
-    return [instance.to_dict() for instance in instances]
+    instances = InstanceDataLastPointView.objects_in(db).filter(**kwargs).only(*fields).paginate(page, LIST_QUERY_SIZE)[0]
+
+    return [{k: v for k, v in instance.to_dict().items() if v} for instance in instances]
 
 
 def get_instance_details(**kwargs) -> Dict:
