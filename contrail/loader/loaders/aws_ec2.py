@@ -126,7 +126,7 @@ class AmazonEC2Loader(BaseLoader):
     @classmethod
     def load(cls, filename: str, json: dict, last_modified: str, db: Database):
         logger.info("Loading {} into ClickHouse.".format(filename.split('/')[-1]))
-        region = "{}".format(filename.split('/')[1]).replace('-', "")
+        region = "{}".format(filename.split('/')[1])
         k, v = normalizeData('region', region)
         product_dict, on_demand_dict, reserved_dict, product_keys, on_demand_keys, reserved_keys = getAllAttributes(json)
         product_attribute_data = getData(product_dict, product_keys)
