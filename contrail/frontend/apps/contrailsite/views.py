@@ -55,7 +55,7 @@ def price_view(request):
                 instance_filters['operatingSystem'] = form.cleaned_data['operating_system']
 
             if form.cleaned_data['region']:
-                instance_filters['region'] = form.cleaned_data['region']
+                instance_filters['region__in'] = form.cleaned_data['region']
 
             if form.cleaned_data['memory_from']:
                 instance_filters['memory__gte'] = form.cleaned_data['memory_from']

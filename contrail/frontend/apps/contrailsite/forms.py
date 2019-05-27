@@ -20,7 +20,7 @@ class PriceForm(forms.Form):
     microsoft_azure = forms.BooleanField(required=False, initial=True)
 
     operating_system = forms.ChoiceField(choices=OPSYS_CHOICES, required=False)
-    region = forms.ChoiceField(choices=REGION_CHOICES, required=False)
+    region = forms.MultipleChoiceField(choices=REGION_CHOICES, required=False)
     memory_from = forms.FloatField(required=False)
     memory_to = forms.FloatField(required=False)
 
