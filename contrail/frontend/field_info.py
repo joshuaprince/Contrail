@@ -142,6 +142,30 @@ FIELD_INFO['networkPerformance'] = {
     'friendlyName': 'Network Performance',
 }
 
+FIELD_INFO['processorFeatures'] = {
+    'friendlyName': 'Processor Features',
+}
+
+FIELD_INFO['storageCount'] = {
+    'friendlyName': 'Storage Count',
+}
+
+FIELD_INFO['storageCapacity'] = {
+    'friendlyName': 'Storage Capacity',
+}
+
+FIELD_INFO['storageType'] = {
+    'friendlyName': 'Storage Type',
+}
+
+FIELD_INFO['storageClass'] = {
+    'friendlyName': 'Storage Class',
+}
+
+FIELD_INFO['offeringClass'] = {
+    'friendlyName': 'Offering Class',
+}
+
 for field in ['capacityStatus', 'effectiveDate', 'beginRange', 'endRange', 'tenancy', 'appliesTo', 'description']:
     FIELD_INFO[field] = {'exclude': True}
 
@@ -192,4 +216,32 @@ FIELD_INFO['premiumIo'] = {
 
 FIELD_INFO['ephemeralOsDiskSupported'] = {
     'friendlyName': 'Ephemeral OS Disk Supported',
+}
+
+FIELD_INFO['combinedTempDiskAndCachedReadBytesPerSecond'] = {
+    'friendlyName': 'Combined Temp Disk And Cached Read Bytes Per Second',
+}
+
+FIELD_INFO['combinedTempDiskAndCachedWriteBytesPerSecond'] = {
+    'friendlyName': 'Combined Temp Disk And Cached Write Bytes Per Second',
+}
+
+FIELD_INFO['combinedTempDiskAndCachedIOPS'] = {
+    'friendlyName': 'Combined Temp Disk And Cached IOPS',
+}
+
+FIELD_INFO['uncachedDiskBytesPerSecond'] = {
+    'friendlyName': 'Uncached Disk Bytes Per Second',
+}
+
+FIELD_INFO['uncachedDiskIOPS'] = {
+    'friendlyName': 'Uncached Disk IOPS',
+}
+
+FIELD_INFO['cachedDiskBytes'] = {
+    'friendlyName': 'Cached Disk Bytes',
+}
+
+FIELD_INFO['maxWriteAcceleratorDisksAllowed'] = {
+    'friendlyName': 'Max Write Accelerator Disks Allowed',
 }

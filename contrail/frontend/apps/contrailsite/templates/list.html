@@ -56,7 +56,7 @@
            Region
         </label>
         <div class="">
-          <select name="region" class="select form-control" id="id_region" multiple> <option value="" selected="">All</option>
+          <select name="region" class="select form-control" id="id_region" multiple>
               {% for r in regions %}
               <option value="{{ r }}" {% if form.region.data == r %}selected{% endif %}>{{ r }}</option>
               {% endfor %}
