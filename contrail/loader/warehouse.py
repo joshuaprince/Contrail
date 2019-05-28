@@ -33,6 +33,7 @@ class BooleanField(Field):
 
 class InstanceData(models.Model):
     # Universal fields ---------------------------------------------------------
+    productFamily = fields.StringField(default='VM')  # VM, Storage
     provider = fields.StringField()
     crawlTime = fields.DateTimeField()
     region = fields.StringField()
@@ -97,7 +98,6 @@ class InstanceData(models.Model):
     preInstalledSw = fields.NullableField(fields.StringField())
     processorArchitecture = fields.NullableField(fields.StringField())
     processorFeatures = fields.NullableField(fields.StringField())
-    productFamily = fields.NullableField(fields.StringField())
     provisioned = fields.NullableField(BooleanField())
     serviceName = fields.NullableField(fields.StringField())
     sku = fields.NullableField(fields.StringField())
@@ -147,6 +147,7 @@ class InstanceData(models.Model):
     engine = engines.MergeTree(
         date_col='crawlTime',
         order_by=[
+            'productFamily',
             'provider',
             'region',
             'instanceType',
@@ -214,7 +215,7 @@ def create_contrail_table(recreate=False):
     db.raw(_generate_view_sql(False))
 
 
-GROUPED_COLS = ['provider', 'region', 'operatingSystem', 'priceType', 'instanceType',
+GROUPED_COLS = ['productFamily', 'provider', 'region', 'operatingSystem', 'priceType', 'instanceType',
                 'leaseContractLength', 'purchaseOption', 'offeringClass']
 """InstanceData columns that should be part of the GROUP BY clause in the last point view"""
 

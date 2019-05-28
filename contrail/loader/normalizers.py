@@ -158,7 +158,9 @@ def operatingSystemNormalizer(key, value):
 def productFamilyNormalizer(key, value):
     if key == 'productFamily':
         if 'Compute' in value:
-            return (key, value)
+            return (key, 'VM')
+        elif value == 'Storage':
+            return (key, 'Storage')
         else:
             return None
     else:
