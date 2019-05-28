@@ -43,8 +43,6 @@ def getSpotData(d, last_modified, region):
         values += [('priceType', 'Spot'), ('crawlTime', str(last_modified)), (k, v), ['provider', 'AmazonEC2']]
 
         instanceType = [val for val in values if val[0] == 'instanceType'][0][1]
-        sku = 'ec2sp-' + region + '-' + instanceType
-        values += [('sku', sku)]
 
         data.append(values)
     return data
@@ -55,7 +53,7 @@ class AmazonEC2SpotLoader(BaseLoader):
     @classmethod
     def load(cls, filename: str, json: dict, last_modified: str, db: Database):
         logger.info("Loading {} into ClickHouse.".format(filename.split('/')[-1]))
-        region = "{}".format(filename.split('/')[1]).replace('-', "")
+        region = "{}".format(filename.split('/')[1])
         spot_data = getSpotData(json, last_modified, region)
 
         instances = []

@@ -85,7 +85,7 @@ def list_instances(page, **kwargs) -> List[Dict]:
     fields = ['crawlTime', 'provider', 'instanceType', 'region', 'operatingSystem', 'vcpu', 'memory', 'priceType',
               'pricePerHour', 'priceUpfront', 'gpu', 'location']
 
-    instances = InstanceDataLastPointView.objects_in(db).filter(**kwargs).only(*fields).paginate(page, LIST_QUERY_SIZE)[0]
+    instances = InstanceDataLastPointView.objects_in(db).filter(productFamily='VM', **kwargs).only(*fields).paginate(page, LIST_QUERY_SIZE)[0]
 
     return [{k: v for k, v in instance.to_dict().items() if v} for instance in instances]
 

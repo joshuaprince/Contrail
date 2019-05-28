@@ -158,7 +158,9 @@ def operatingSystemNormalizer(key, value):
 def productFamilyNormalizer(key, value):
     if key == 'productFamily':
         if 'Compute' in value:
-            return (key, value)
+            return (key, 'VM')
+        elif value == 'Storage':
+            return (key, 'Storage')
         else:
             return None
     else:
@@ -193,45 +195,30 @@ def ProductDescriptionNormalizer(key, value):
 def regionNormalizer(key, value):
     if key == 'region':
         regions = {
-            'usgoveast1': 'AWS Gov US East',
-            'usgovewest1': 'AWS Gov US West',
-            'apnortheast1': 'Asia Pacific Northeast 1',
-            'apnortheast2': 'Asia Pacific Northeast 2',
-            'apnortheast3': 'Asia Pacific Northeast 3',
-            'apsoutheast1': 'Asia Pacific Southeast 1',
-            'apsoutheast2': 'Asia Pacific Southeast 2',
-            'asiaeast1': 'Asia East 1',
-            'asiaeast2': 'Asia East 2',
-            'asianortheast1': 'Asia Northeast 1', 
-            'asianortheast2': 'Asia Northeast 2',
-            'asiasouth1': 'Asia South 1',
-            'asiasoutheast1': 'Asia Southeast 1',
-            'australiasoutheast1': 'Australia Southeast 1',
-            'cacentral1': 'Canada 1',
-            'cnnorth1': 'China North 1',
-            'cnnorthwest1': 'China Northwest 1',
-            'eucentral1': 'Europe Central 1',
-            'euwest1': 'Europe West 1',
-            'euwest2': 'Europe West 2',
-            'euwest3': 'Europe West 3',
-            'eunorth1': 'Europe North 1',
-            'europenorth1': 'Europe North 1',
-            'europewest1': 'Europe West 1',
-            'europewest2': 'Europe West 2',
-            'europewest3': 'Europe West 3',
-            'europewest4': 'Europe West 4',
-            'europewest6': 'Europe West 6',
-            'northamericanortheast1': 'North America Northeast 1',
-            'saeast1': 'South America East 1',
-            'southamericaeast1': 'South America East 1',
-            'uscentral1': 'US Central 1',
-            'useast1': 'US East 1',
-            'useast2': 'US East 2',
-            'useast4': 'US East 4',
-            'uswest1': 'US West 1',
-            'uswest2': 'US West 2'
+            'us-gov-east-1': 'AWS GovCloud (US-East)',
+            'us-gov-west-1': 'AWS GovCloud (US)',
+            'ap-east-1': 'Asia Pacific (Hong Kong)',
+            'ap-northeast-1': 'Asia Pacific (Tokyo)',
+            'ap-northeast-2': 'Asia Pacific (Seoul)',
+            'ap-northeast-3': 'Asia Pacific (Osaka-Local)',
+            'ap-south-1': 'Asia Pacific (Mumbai)',
+            'ap-southeast-1': 'Asia Pacific (Singapore)',
+            'ap-southeast-2': 'Asia Pacific (Sydney)',
+            'ca-central-1': 'Canada (Central)',
+            'cn-north-1': 'China (Beijing)',
+            'cn-northwest-1': 'China (Ningxia)',
+            'eu-central-1': 'EU (Frankfurt)',
+            'eu-west-1': 'EU (Ireland)',
+            'eu-west-2': 'EU (London)',
+            'eu-west-3': 'EU (Paris)',
+            'eu-north-1': 'EU (Stockholm)',
+            'sa-east-1': 'South America (Sao Paulo)',
+            'us-east-1': 'US East (N. Virginia)',
+            'us-east-2': 'US East (Ohio)',
+            'us-west-1': 'US West (N. California)',
+            'us-west-2': 'US West (Oregon)'
         }
-        return ('region', value)
+        return ('region', regions.get(value, value))
     else:
         pass
 
