@@ -215,6 +215,28 @@ def create_contrail_table(recreate=False):
     db.raw(_generate_view_sql(False))
 
 
+def fix_aggregated_data():
+    """
+    There's a strange bug involving materialized views, where the data isn't reflected correctly in materialized views
+    after insertion. It can be fixed by deleting and recreating the materialized view.
+    """
+    # Default 60-second timeout isn't enough, this operation takes a while
+    db_long = Database(CLICKHOUSE_DB_NAME, db_url=CLICKHOUSE_DB_URL, timeout=99999)
+
+    db_long.raw("DROP TABLE IF EXISTS instancedata_last_point_aws")
+    db_long.raw("DROP TABLE IF EXISTS instancedata_last_point_aws_all_reserved")
+    db_long.raw("DROP TABLE IF EXISTS instancedatalastpointview")
+    db_long.raw("DROP TABLE IF EXISTS instancedatalastpointviewallreserved")
+
+    print("Fixing materialized view data. This will take a while, be patient.")
+    db_long.raw(_generate_materialized_view_sql(True))
+    db_long.raw(_generate_view_sql(True))
+    print("Halfway done....")
+    db_long.raw(_generate_materialized_view_sql(False))
+    db_long.raw(_generate_view_sql(False))
+    print("Done.")
+
+
 GROUPED_COLS = ['productFamily', 'provider', 'region', 'operatingSystem', 'priceType', 'instanceType',
                 'leaseContractLength', 'purchaseOption', 'offeringClass', 'storageMedia', 'volumeType']
 """InstanceData columns that should be part of the GROUP BY clause in the last point view"""

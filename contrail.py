@@ -25,6 +25,11 @@ def run_initdb(args):
     create_contrail_table(True)
 
 
+def run_fixdb(args):
+    from contrail.loader.warehouse import fix_aggregated_data
+    fix_aggregated_data()
+
+
 def run_frontend(args):
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'contrail.frontend.settings.settings')
     try:
@@ -62,8 +67,11 @@ def main():
     parser_test = subparsers.add_parser('test', aliases=['t'])
     parser_test.set_defaults(func=run_tests)
 
-    parser_test = subparsers.add_parser('initdb')
-    parser_test.set_defaults(func=run_initdb)
+    parser_init = subparsers.add_parser('initdb')
+    parser_init.set_defaults(func=run_initdb)
+
+    parser_fix = subparsers.add_parser('fixdb')
+    parser_fix.set_defaults(func=run_fixdb)
 
     args, unknown = parser.parse_known_args()
     args.func(args)
