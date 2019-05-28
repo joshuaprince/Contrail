@@ -187,14 +187,14 @@
         <table id="instances" class="table table-striped table-bordered" style="width:100%">
           <thead>
               <tr>
-                  <th>Provider</th>
-                  <th>Instance Type</th>
-                  <th>Region</th>
-                  <th>OS</th>
-                  <th>vCPUs</th>
-                  <th>Memory (GB)</th>
-                  <th>Price Type</th>
-                  <th>Price Per Hour</th>
+                  <th>Provider <a href="#" class="sort-by"></a></th>
+                  <th>Instance Type <a href="#" class="sort-by"></a></th>
+                  <th>Region <a href="#" class="sort-by"></a></th>
+                  <th>OS <a href="#" class="sort-by"></a></th>
+                  <th>vCPUs <a href="#" class="sort-by"></a></th>
+                  <th>Memory (GB) <a href="#" class="sort-by"></a></th>
+                  <th>Price Type <a href="#" class="sort-by"></a></th>
+                  <th>Price Per Hour <a href="#" class="sort-by"></a></th>
               </tr>
           </thead>
           <tbody>
@@ -216,14 +216,14 @@
           </tbody>
           <tfoot>
               <tr>
-                  <th>Provider</th>
-                  <th>Instance</th>
-                  <th>Region</th>
-                  <th>OS</th>
-                  <th>vCPUs</th>
-                  <th>Memory (GiB)</th>
-                  <th>Price Type</th>
-                  <th>Price Per Hour</th>
+                <th>Provider <a href="#" class="sort-by"></a></th>
+                <th>Instance Type <a href="#" class="sort-by"></a></th>
+                <th>Region <a href="#" class="sort-by"></a></th>
+                <th>OS <a href="#" class="sort-by"></a></th>
+                <th>vCPUs <a href="#" class="sort-by"></a></th>
+                <th>Memory (GB) <a href="#" class="sort-by"></a></th>
+                <th>Price Type <a href="#" class="sort-by"></a></th>
+                <th>Price Per Hour <a href="#" class="sort-by"></a></th>
               </tr>
           </tfoot>
       </table>
@@ -243,53 +243,29 @@
             <thead>
               <tr>
                 <th style="width:40%">Provider</th>
-                <td></td>
-                <td></td>
-                <td></td>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <th>Instance Type</th>
-                <td></td>
-                <td></td>
-                <td></td>
               </tr>
               <tr>
                 <th>Region</th>
-                <td></td>
-                <td></td>
-                <td></td>
               </tr>
               <tr>
                 <th>Operating System</th>
-                <td></td>
-                <td></td>
-                <td></td>
               </tr>
               <tr>
                 <th>vCPUs</th>
-                <td></td>
-                <td></td>
-                <td></td>
               </tr>
               <tr>
                 <th>Memory (GB)</th>
-                <td></td>
-                <td></td>
-                <td></td>
               </tr>
               <tr>
                 <th>Price Type</th>
-                <td></td>
-                <td></td>
-                <td></td>
               </tr>
               <tr>
                 <th>Price Per Hour</th>
-                <td></td>
-                <td></td>
-                <td></td>
               </tr>
             </tbody>
         </table>
@@ -384,6 +360,7 @@
   var span = document.getElementsByClassName("close")[0];
   var compareTable = document.getElementById('instancesComp');
   var numSpecs = document.getElementById('instances').rows[0].cells.length;
+
   btn.onclick = function() {
     comparePop.style.display = "block";
     var selectedRows = document.querySelectorAll(".selected");
@@ -396,35 +373,37 @@
     else {
       for (var i = 1; i <= numSelected; i++) {
         for (var j = 0; j < numSpecs; j++) {
-          compareTable.rows[j].cells[i].append(selectedRows[i-1].cells[j].innerText);
+          var newCell = document.createElement('td');
+          newCell.innerHTML = selectedRows[i-1].cells[j].innerText;
+          compareTable.rows[j].appendChild(newCell);
         }
       }
     }
  }
+
   span.onclick = function() {
     comparePop.style.display = "none";
-    var selectedRows = document.querySelectorAll(".selected");
-    var numSelected = selectedRows.length;
-    for (var i = 1; i <= numSelected; i++) {
-      for (var j = 0; j < numSpecs; j++) {
-        compareTable.rows[j].cells[i].innerHTML = "";
+    var numCol = compareTable.rows[0].cells.length;
+    for (var i = 0; i < numSpecs; i++) {
+      for (var j = 1; j < numCol; j++) {
+         compareTable.rows[i].deleteCell(1);
       }
     }
   }
+
   window.onclick = function(event) {
     if (event.target == comparePop) {
-    comparePop.style.display = "none";
-      var selectedRows = document.querySelectorAll(".selected");
-      var numSelected = selectedRows.length;
-      for (var i = 1; i <= numSelected; i++) {
-        for (var j = 0; j < numSpecs; j++) {
-          compareTable.rows[j].cells[i].innerHTML = "";
+      comparePop.style.display = "none";
+      var numCol = compareTable.rows[0].cells.length;
+      for (var i = 0; i < numSpecs; i++) {
+        for (var j = 1; j < numCol; j++) {
+           compareTable.rows[i].deleteCell(1);
         }
       }
     }
   }
-</script>
 
+</script>
 
 
 {% endblock %}

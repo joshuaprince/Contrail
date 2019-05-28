@@ -106,13 +106,13 @@ ul#subnav > li {
     padding: 10px;
 }
 
-#sidebar ul li a {
+#sidebar ul li a .dropdown .dropbtn {
     padding: 10px;
     font-size: 1.1em;
     display: block;
 }
 
-#sidebar ul li a:hover {
+#sidebar ul li a:hover .dropdown .dropbtn {
     color: #7386D5;
     background: #fff;
 }
@@ -157,7 +157,7 @@ ul.CTAs a {
     margin-bottom: 5px;
 }
 
-a.download {
+a.download .dropdown .dropbtn {
     background: #fff;
     color: #7386D5;
 }
@@ -240,6 +240,17 @@ a.article:hover {
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
+}
+
+/* Add an active class to the active dropdown button */
+.active {
+  color: white;
+}
+
+/* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
+.dropdown-content {
+  display: none;
+  padding-left: 20px;
 }
 
 #sidebarCollapse {

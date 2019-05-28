@@ -17,6 +17,12 @@
       <div class="sidenav">
         <a href="#about" class="col-form-label ">About</a>
         <a href="#providers" class="col-form-label ">Cloud Providers</a>
+        <a href="#" class="col-form-label dropdown" <i class="fa fa-caret-right"></i> Quick Start </a>
+        <div class="dropdown-content">
+          <a href="#" class="col-form-label ">Get Prices</a>
+          <a href="#" class="col-form-label ">Sort Results</a>
+          <a href="#" class="col-form-label ">Compare Prices</a>
+        </div>
         <a href="#plans" class="col-form-label ">Payment Plans</a>
         <a href="#features" class="col-form-label ">Features</a>
         <a href="#github" class="col-form-label ">GitHub</a>
@@ -33,6 +39,8 @@
       <p>Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
       <p>Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
     </div>
+
+
 
 </div>
 
@@ -57,6 +65,25 @@
             $('a[aria-expanded=true]').attr('aria-expanded', 'false');
         });
     });
+</script>
+
+
+<!-- DROPDOWN -->
+<script>
+  var dropdown = document.getElementsByClassName("dropdown");
+  var i;
+
+  for (i = 0; i < dropdown.length; i++) {
+    dropdown[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var dropdownContent = this.nextElementSibling;
+      if (dropdownContent.style.display === "block") {
+        dropdownContent.style.display = "none";
+      } else {
+        dropdownContent.style.display = "block";
+      }
+    });
+  }
 </script>
 
 {% endblock %}
