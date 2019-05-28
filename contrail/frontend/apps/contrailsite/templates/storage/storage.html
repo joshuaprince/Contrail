@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+  <br><br><br><br><br>
+  <div class="container">
+    <h2>Storage Pricing</h2>
+    <h4>All prices are <b>per GB per month</b>.</h4>
+    <br>
+    <table id="instances" class="table table-striped table-bordered" style="width:100%">
+      <thead>
+        <tr>
+          <th></th>
+          {% for header in headers %}
+          <th>{{ header }} <a href="#" class="sort-by"></a></th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+
+      {% regroup allInstances by region as regionList %}
+      {% for region in regionList %}
+        <tr>
+          <th>{{ region.grouper }}</th>
+        {% for price in region.list %}
+          <td>${{ price.pricePerGbMonth }}</td>
+        {% endfor %}
+        </tr>
+      {% endfor %}
+
+      </tbody>
+      <tfoot>
+        <tr>
+          {% for header in storageTypes %}
+          <th>{{ header }} <a href="#" class="sort-by"></a></th>
+          {% endfor %}
+        </tr>
+      </tfoot>
+    </table>
+
+  </div>
+{% endblock %}

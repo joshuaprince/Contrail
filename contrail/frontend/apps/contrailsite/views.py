@@ -157,3 +157,23 @@ class HelpView(TemplateView):
     Render Help page
     """
     template_name = "help.html"
+
+
+def storage_view(request: HttpRequest):
+    all_instances = list_storage()
+
+    for instance_dict in all_instances:
+        instance_dict['header'] = instance_dict.get('storageMedia') + ' ' + instance_dict.get('volumeType')
+
+    all_instances.sort(key=lambda i: (i['region'], i['header']))
+    headers = []
+    for inst in all_instances:
+        if inst['header'] not in headers:
+            headers.append(inst['header'])
+
+    context = {
+        'headers': headers,
+        'allInstances': all_instances,
+    }
+
+    return render(request, 'storage/storage.html', context)

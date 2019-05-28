@@ -235,3 +235,24 @@ class InstanceNotFound(LookupError):
     Error raised if attempting to query a single instance, but no such instance exists.
     """
     pass
+
+
+def list_storage():
+    """
+    List all current storage options and their prices.
+    :return:
+    """
+    fields = ['crawlTime', 'provider', 'region', 'pricePerHour', 'maxThroughputVolume', 'storageMedia', 'volumeType']
+    instances = InstanceDataLastPointView.objects_in(db).filter(productFamily='Storage').only(*fields).distinct()
+
+    instance_dicts = []
+    for instance in instances:
+        instance_dict = {}
+        for k, v in instance.to_dict().items():
+            if k == 'pricePerHour':
+                k = 'pricePerGbMonth'
+            if v:
+                instance_dict[k] = v
+        instance_dicts.append(instance_dict)
+
+    return instance_dicts

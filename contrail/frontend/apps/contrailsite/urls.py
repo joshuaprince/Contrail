@@ -10,5 +10,6 @@ urlpatterns = [
     path('instance/', instance_view, name='instance'),
     path('historygraph/', history_graph_view, name='historygraph'),
     path('help/', HelpView.as_view(), name='help'),
+    path('storage/', storage_view, name='storage'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

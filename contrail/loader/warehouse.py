@@ -216,7 +216,7 @@ def create_contrail_table(recreate=False):
 
 
 GROUPED_COLS = ['productFamily', 'provider', 'region', 'operatingSystem', 'priceType', 'instanceType',
-                'leaseContractLength', 'purchaseOption', 'offeringClass']
+                'leaseContractLength', 'purchaseOption', 'offeringClass', 'storageMedia', 'volumeType']
 """InstanceData columns that should be part of the GROUP BY clause in the last point view"""
 
 
@@ -240,7 +240,7 @@ def _generate_materialized_view_sql(limit_reserved: bool):
     return """
         CREATE MATERIALIZED VIEW {table_name}
         ENGINE = AggregatingMergeTree() PARTITION BY tuple()
-        ORDER BY (provider, operatingSystem, region, instanceType, priceType) POPULATE AS
+        ORDER BY (productFamily, provider, operatingSystem, region, instanceType, priceType) POPULATE AS
         SELECT
             maxState(crawlTime) AS max_crawlTime,
             {selects}
