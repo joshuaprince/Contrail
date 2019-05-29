@@ -16,13 +16,13 @@
   <nav id="sidebar">
       <div class="sidenav">
         <a href="#about" class="col-form-label ">About</a>
-        <a href="#providers" class="col-form-label ">Cloud Providers</a>
-        <a href="#" class="col-form-label dropdown" <i class="fa fa-caret-right"></i> Quick Start </a>
+        <a href="#quickstart" class="col-form-label dropdown" <i class="fa fa-caret-right"></i> Quick Start </a>
         <div class="dropdown-content">
-          <a href="#" class="col-form-label ">Get Prices</a>
-          <a href="#" class="col-form-label ">Sort Results</a>
-          <a href="#" class="col-form-label ">Compare Prices</a>
+          <a href="#getprices" class="col-form-label ">Get Prices</a>
+          <a href="#sortprices" class="col-form-label ">Sort Prices</a>
+          <a href="#compareprices" class="col-form-label ">Compare Prices</a>
         </div>
+        <a href="#providers" class="col-form-label ">Cloud Providers</a>
         <a href="#plans" class="col-form-label ">Payment Plans</a>
         <a href="#features" class="col-form-label ">Features</a>
         <a href="#github" class="col-form-label ">GitHub</a>
@@ -31,15 +31,101 @@
 
     <div id="content">
       <br><br>
-      <h2>Documentation</h2>
-      <p>Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-      <p>Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-      <p>Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-      <p>Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-      <p>Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-      <p>Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-    </div>
 
+      <div id="about">
+        <h2>What is Contrail?</h2>
+        Contrail tracks cloud prices by pulling pricing data into a data warehouse to be able to answer common questions about pricing. Users can compare VM prices across multiple regions and cloud providers, compare payment options, and track the cost of a particular VM over time. Users can also track the change of pricing when changing a VM’s characteristics, such as increasing network bandwidth, doubling RAM, etc.
+
+        <br><br><br>
+
+        <h3> Quick Start Guides to help you get started </h3>
+        <div>
+          <ul>
+            <li><a href="#getprices" class="links">Get Prices</a></li>
+            <li><a href="#sortprices" class="links">Sort Prices</a></li>
+            <li><a href="#compareprices" class="links">Compare Prices</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <br><br><br>
+
+      <div id="quickstart">
+        <div id="getprices">
+          <h3> Get Prices </h3>
+          <ol>
+            <li>
+              Navigate to the tab “Get Prices” or click on the designated “Get Prices button on our home page.
+            </li>
+            <li>
+              In the sidebar, set attributes if desired before clicking on the “Submit” button at the bottom of the sidebar to search for an instance with any specifications of your liking to narrow down the results in any way.
+            </li>
+            <li>
+              You can adjust the number of entries shown per page to the top left of the table or use the search bar to find a specific instance to the top right of the table.
+            </li>
+            <li>
+              Click on a particular instance type to be led to a detailed instance page depicting payment plans, pricing over time, and etc.
+            </li>
+          </ol>
+        </div>
+
+        <br><br><br>
+
+        <div id="sortprices">
+          <h3> Sort Prices </h3>
+          <ol>
+            <li>
+              Click on any tab of the data table to sort by that specification.
+            </li>
+            <li>
+              Filter further by adjusting any of the attributes on the side bar.
+            </li>
+            <li>
+              Search any particular instances by using the search bar to the top right corner of the table.
+            </li>
+          </ol>
+        </div>
+
+        <br><br><br>
+
+        <div id="compareprices">
+          <h3> Compare Prices </h3>
+          <ol>
+            <li>
+              To compare prices of certain instances, check any of the boxes to the left of the instance rows on the table. You may select up to 3 instances to be compared.
+            </li>
+            <li>
+              Once you’re satisfied with your selection, click on the “Compare” button to the bottom left of the table to view a pop-up of a closer comparison chart of the specified instances.
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <br><br><br>
+
+      <div id="providers">
+        <h3>Cloud Providers</h3>
+        As of right now, Contrail pulls pricing data of instances from both AWS and MS Azure.
+
+        <div>
+          <a href="https://aws.amazon.com/ec2/">AWS EC2</a>
+          <ul>
+            <li><a href="https://aws.amazon.com/ec2/pricing/">Pricing</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <a href="https://azure.microsoft.com/en-us/services/virtual-machines/">MS Azure</a>
+          <ul>
+            <li><a href="https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/">Pricing for Linux</a></li>
+            <li><a href="https://azure.microsoft.com/en-us/pricing/details/virtual-machines/windows/">Pricing for Windows</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <br><br><br>
+
+    </div>
 
 
 </div>

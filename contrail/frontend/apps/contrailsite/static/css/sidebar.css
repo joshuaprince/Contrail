@@ -319,6 +319,10 @@ a.article:hover {
     width: 100%;
 }
 
+.links {
+  display: flex;
+  flex-direction: column;
+}
 
 /* ---------------------------------------------------
     MEDIAQUERIES
