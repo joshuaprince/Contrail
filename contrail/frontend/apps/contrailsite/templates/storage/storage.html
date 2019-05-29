@@ -37,6 +37,27 @@
         </tr>
       </tfoot>
     </table>
-
   </div>
+  <br><br><br><br>
+{% endblock %}
+
+{% block script %}
+<script src="//cdn.datatables.net/plug-ins/1.10.19/sorting/currency.js" ></script>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#instances').DataTable( {
+        // "paging":   false,
+        "ordering": true,
+        // "info":     false,
+        "columns": [
+            {"type": "string"},
+            {% for header in headers %}
+            {"type": "currency"},
+            {% endfor %}
+        ]
+    } );
+  } );
+
+</script>
 {% endblock %}
