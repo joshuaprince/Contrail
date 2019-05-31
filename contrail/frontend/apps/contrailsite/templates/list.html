@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
+{% load contrail %}
 
 {% block css %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css"></script>
@@ -211,7 +212,7 @@
               <td>{{ instance.memory }}</td>
               <td>{{ instance.priceType }}</td>
 {#              <td>{% if instance.priceUpfront %}${{ instance.priceUpfront | floatformat:3 }}{% else %}none{% endif %}</td>#}
-              <td>${{ instance.pricePerHour }}</td>
+              <td>{{ instance.pricePerHour|price }}</td>
             </tr>
             {% endfor %}
 

@@ -14,4 +14,7 @@ def hourly_to_monthly(price):
 def price(price):
     if not price:
         return ''
-    return '${:,.2f}'.format(price)
+    if price >= 100:
+        return '${:,.2f}'.format(price)
+    else:
+        return '${:,.3f}'.format(price)
