@@ -69,7 +69,7 @@ class AmazonEC2Spot(BaseProvider):
 
         response = self.client.describe_spot_price_history(
             NextToken=self.next_token,
-            StartTime=datetime.datetime.now()  # TODO: Get all data since the last time the crawler ran
+            StartTime=datetime.datetime.now() - datetime.timedelta(minutes=60)
         )
 
         for instance in response['SpotPriceHistory']:
