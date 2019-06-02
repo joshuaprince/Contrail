@@ -112,6 +112,7 @@ class InstanceData(models.Model):
     transferType = fields.NullableField(fields.StringField())
     usageType = fields.NullableField(fields.StringField())
     volumeType = fields.NullableField(fields.StringField())
+    availabilityZone = fields.NullableField(fields.StringField())
 
     appliesTo = fields.NullableField(fields.StringField())
     description = fields.NullableField(fields.StringField())
