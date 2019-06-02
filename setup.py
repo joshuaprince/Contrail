@@ -5,7 +5,7 @@ with open('README.md', 'r') as readme_file:
 
 setuptools.setup(
     name='contrail',
-    version='0.2.5',
+    version='0.2.7',
     description='Public cloud market price tracker for Amazon EC2 and Azure',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -27,7 +27,7 @@ setuptools.setup(
     install_requires=[
         'boto3',
         'cachetools',
-        'Django',
+        'Django < 3',
         'django-crispy-forms',
         'infi.clickhouse_orm',
         'requests'
