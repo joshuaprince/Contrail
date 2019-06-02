@@ -26,7 +26,7 @@ config['AZURE']['subscription_id'] = ''
 
 config['WEBSITE'] = OrderedDict()
 config['WEBSITE']['secret_key'] = '3_k9to*4cdxdu8d^uuu@xox5gn$2t6va+exit$kwyhob(4klg#'
-config['WEBSITE']['allowed_hosts'] = 'localhost,contrail.tk'
+config['WEBSITE']['allowed_hosts'] = 'localhost,127.0.0.1,contrail.tk'
 config['WEBSITE']['debug'] = 'false'
 # End config defaults ----------------------------------------------------------
 
