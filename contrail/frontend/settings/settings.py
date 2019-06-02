@@ -12,17 +12,16 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-from config import FRONTEND_ALLOWED_HOSTS, FRONTEND_DEBUG, FRONTEND_SECRET_KEY
+from contrail.configuration import config
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = FRONTEND_SECRET_KEY
+SECRET_KEY = config['WEBSITE']['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = FRONTEND_DEBUG
-ALLOWED_HOSTS = FRONTEND_ALLOWED_HOSTS
+DEBUG = bool(config['WEBSITE']['debug'])
+ALLOWED_HOSTS = config['WEBSITE']['allowed_hosts'].split(',')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 

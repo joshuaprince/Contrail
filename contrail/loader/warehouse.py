@@ -4,9 +4,9 @@ from infi.clickhouse_orm import models, fields, engines
 from infi.clickhouse_orm.database import Database
 from infi.clickhouse_orm.fields import Field
 
-from config import CLICKHOUSE_DB_URL, CLICKHOUSE_DB_NAME
+from contrail.configuration import config
 
-db = Database(CLICKHOUSE_DB_NAME, db_url=CLICKHOUSE_DB_URL)
+db = Database(config['CLICKHOUSE']['db_name'], db_url=config['CLICKHOUSE']['db_url'])
 """ClickHouse Database connection object."""
 
 
@@ -221,7 +221,7 @@ def fix_aggregated_data():
     after insertion. It can be fixed by deleting and recreating the materialized view.
     """
     # Default 60-second timeout isn't enough, this operation takes a while
-    db_long = Database(CLICKHOUSE_DB_NAME, db_url=CLICKHOUSE_DB_URL, timeout=99999)
+    db_long = Database(config['CLICKHOUSE']['db_name'], db_url=config['CLICKHOUSE']['db_url'], timeout=99999)
 
     db_long.raw("DROP TABLE IF EXISTS instancedata_last_point_aws")
     db_long.raw("DROP TABLE IF EXISTS instancedata_last_point_aws_all_reserved")

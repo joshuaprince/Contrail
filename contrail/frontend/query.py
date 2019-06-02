@@ -3,10 +3,10 @@ from typing import Dict, List
 from cachetools import cached, TTLCache
 from infi.clickhouse_orm.database import Database
 
-from config import CLICKHOUSE_DB_NAME, CLICKHOUSE_DB_URL
+from contrail.configuration import config
 from contrail.loader.warehouse import InstanceData, InstanceDataLastPointView, InstanceDataLastPointViewAllReserved
 
-db = Database(CLICKHOUSE_DB_NAME, db_url=CLICKHOUSE_DB_URL, readonly=True)
+db = Database(config['CLICKHOUSE']['db_name'], db_url=config['CLICKHOUSE']['db_url'], readonly=True)
 
 
 LIST_QUERY_SIZE = 1000

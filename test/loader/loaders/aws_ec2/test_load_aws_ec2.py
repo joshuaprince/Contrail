@@ -4,14 +4,14 @@ from typing import List
 
 from infi.clickhouse_orm.database import Database
 
-from config import CLICKHOUSE_DB_URL
+from contrail.configuration import config
 from contrail.loader.loaders.aws_ec2 import AmazonEC2Loader
 from contrail.loader.warehouse import InstanceData
 
 
 class LoadAmazonEC2TestCase(unittest.TestCase):
     def setUp(self):
-        self.test_db = Database(db_name='contrail_test', db_url=CLICKHOUSE_DB_URL)
+        self.test_db = Database(db_name='contrail_test', db_url=config['CLICKHOUSE']['db_url'])
 
         # Make sure we have a clean database to test on
         if self.test_db.db_exists:

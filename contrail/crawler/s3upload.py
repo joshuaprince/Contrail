@@ -6,15 +6,15 @@ import urllib.request
 
 import boto3
 
-from config import AWS_ACCESS_KEY_ID, AWS_SECRET, AWS_BUCKET_NAME
+from contrail.configuration import config
 
 logger = logging.getLogger('contrail.crawler')
 
 
 class S3Client:
     _session = boto3.Session(
-        aws_access_key_id=AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=AWS_SECRET
+        aws_access_key_id=config['AWS']['access_key_id'],
+        aws_secret_access_key=config['AWS']['secret']
     )
 
     _client = _session.client('s3')
@@ -39,7 +39,7 @@ class S3Client:
             with gzip.open(zipfile, 'wb') as f_out:
                 shutil.copyfileobj(f_in, f_out)
 
-        self._client.upload_file(zipfile, AWS_BUCKET_NAME, destination + ".gz")
+        self._client.upload_file(zipfile, config['AWS']['bucket_name'], destination + ".gz")
 
     def upload_file_from_variable(self, data: dict, destination: str):
         """
@@ -58,4 +58,4 @@ class S3Client:
         with gzip.open(zipfile, 'wt', encoding='ascii') as f_out:
             json.dump(data, f_out, indent=2)
 
-        self._client.upload_file(zipfile, AWS_BUCKET_NAME, destination + ".gz")
+        self._client.upload_file(zipfile, config['AWS']['bucket_name'], destination + ".gz")

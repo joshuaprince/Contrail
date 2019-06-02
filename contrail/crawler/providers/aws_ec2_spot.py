@@ -6,15 +6,15 @@ from typing import List
 
 import boto3
 
+from contrail.configuration import config
 from contrail.crawler.providers import aws_ec2
 from contrail.crawler.providers import BaseProvider, register_provider
-from config import AWS_ACCESS_KEY_ID, AWS_SECRET
 
 logger_all_regions = logging.getLogger('contrail.crawler.aws_ec2_spot')
 
 _session = boto3.Session(
-    aws_access_key_id=AWS_ACCESS_KEY_ID,
-    aws_secret_access_key=AWS_SECRET
+    aws_access_key_id=config['AWS']['access_key_id'],
+    aws_secret_access_key=config['AWS']['secret']
 )
 
 # AWS Price List retrieval information, used to collect details about instance types.

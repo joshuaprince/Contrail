@@ -3,19 +3,25 @@ import argparse
 import os
 import sys
 
-try:
-    import config
-except ImportError:
-    print("Couldn't load config.py. Make a copy of config_example.py and see the README to configure Contrail.")
-    sys.exit(1)
+from contrail.configuration import config, CFG_FILE
+
+
+def check_config(*required_sections):
+    for section in required_sections:
+        for key in config[section]:
+            if not config[section][key]:
+                print("Couldn't find required configuration setting '{}'. Please set one in {}".format(key, CFG_FILE))
+                exit(1)
 
 
 def run_crawler(args):
+    check_config('AWS', 'AZURE')
     from contrail.crawler import crawler
     crawler.crawl()
 
 
 def run_loader(args):
+    check_config('AWS', 'CLICKHOUSE')
     from contrail.loader import loader
     loader.load()
 
@@ -31,6 +37,7 @@ def run_fixdb(args):
 
 
 def run_frontend(args):
+    check_config('CLICKHOUSE', 'WEBSITE')
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'contrail.frontend.settings.settings')
     try:
         from django.core.management import execute_from_command_line
@@ -50,6 +57,7 @@ def run_tests(args):
 
 
 def main():
+    print("Starting CONTRAIL with configuration file {}".format(CFG_FILE))
     parser = argparse.ArgumentParser(description='Run one of Contrail\'s components.')
 
     subparsers = parser.add_subparsers(dest="component")
