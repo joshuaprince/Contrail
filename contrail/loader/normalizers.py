@@ -228,6 +228,12 @@ def timestampNormalizer(key, value):
     else:
         pass
 
+def availabilityZoneNormalizer(key, value):
+    if key == 'availabilityZone':
+        return (key, value)
+    else:
+        pass
+
 def normalizeData(key, value):
     switcher = {
         'capacitystatus': capacityStatusNormalizer(key, value),
@@ -253,7 +259,8 @@ def normalizeData(key, value):
         'tenancy': tenancyNormalizer(key, value),
         'preInstalledSw': preInstalledSwNormalizer(key, value),
         'productDescription': ProductDescriptionNormalizer(key, value),
-        'timestamp': timestampNormalizer(key, value)  # Spot only
+        'timestamp': timestampNormalizer(key, value),  # Spot only
+        'availabilityZone': availabilityZoneNormalizer(key, value)  # Spot only
     }
     func = switcher.get(key, lambda: (key, str(value)))
     try:
