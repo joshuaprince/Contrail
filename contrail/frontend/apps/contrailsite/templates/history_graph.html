@@ -2,6 +2,18 @@
   <canvas id="canvas" style="display: block; width: 621px; height: 310px;" width="621" height="310" class="chartjs-render-monitor"></canvas>
 </div>
 
+<button id="btn1">
+  Option 1
+</button>
+
+<button id="btn2">
+  Option 2
+</button>
+
+<button id="btn3">
+  Option 3
+</button>
+
 <!-- CHART.JS -->
 <script>
 // https://www.chartjs.org/samples/latest/scales/time/line.html
@@ -16,7 +28,7 @@
     }
 
     var color = Chart.helpers.color;
-    var config = {
+    var config1 = {
         type: 'line',
         data: {
             labels: [ // Date Objects
@@ -58,8 +70,50 @@
                     {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
                     {% endfor %}
                 ],
+            }]
+        },
+        options: {
+            title: {
+                text: 'Chart.js Time Scale'
             },
-            {
+            scales: {
+                xAxes: [{
+                    type: 'time',
+                    time: {
+                        // parser: timeFormat,
+                        // round: 'day'
+                        tooltipFormat: 'll HH:mm'
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Date'
+                    }
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Price per Hour'
+                    },
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+        }
+    };
+    var config2 = {
+        type: 'line',
+        data: {
+            labels: [ // Date Objects
+                /*newDate(0),
+                newDate(1),
+                newDate(2),
+                newDate(3),
+                newDate(4),
+                newDate(5),
+                newDate(6)*/
+            ],
+            datasets: [{
                 label: 'Daily On Demand',
                 backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
                 borderColor: window.chartColors.red,
@@ -89,8 +143,50 @@
                     {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
                     {% endfor %}
                 ],
+            }]
+        },
+        options: {
+            title: {
+                text: 'Chart.js Time Scale'
             },
-            {
+            scales: {
+                xAxes: [{
+                    type: 'time',
+                    time: {
+                        // parser: timeFormat,
+                        // round: 'day'
+                        tooltipFormat: 'll HH:mm'
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Date'
+                    }
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Price per Hour'
+                    },
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+        }
+    };
+    var config3 = {
+        type: 'line',
+        data: {
+            labels: [ // Date Objects
+                /*newDate(0),
+                newDate(1),
+                newDate(2),
+                newDate(3),
+                newDate(4),
+                newDate(5),
+                newDate(6)*/
+            ],
+            datasets: [{
                 label: 'Monthly On Demand',
                 backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
                 borderColor: window.chartColors.red,
@@ -153,6 +249,18 @@
     };
 
 var ctx = document.getElementById('canvas').getContext('2d');
-window.myLine = new Chart(ctx, config);
+window.myLine = new Chart(ctx, config1);
+
+$("#btn1").on("click", function() {
+    new Chart(ctx, config1);
+  });
+
+$("#btn2").on("click", function() {
+    new Chart(ctx, config2);
+  });
+
+$("#btn3").on("click", function() {
+    new Chart(ctx, config3);
+  });
 
 </script>
