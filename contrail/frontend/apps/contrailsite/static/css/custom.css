@@ -23,6 +23,13 @@
 }
 
 
+@media (max-width: 992px) {
+    .h-100 {
+      padding-top: 220px;
+    }
+}
+
+
 
 /* Ion.RangeSlider
 // css version 2.0.3

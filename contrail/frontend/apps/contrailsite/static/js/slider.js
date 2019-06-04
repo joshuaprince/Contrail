@@ -1,6 +1,3 @@
-
-
-
 function logvalues(min, max){
   var i;
   var minp = 0;
@@ -68,26 +65,6 @@ $price_slider.ionRangeSlider({
 });
 
 
-// prettify_enabled: true,
-// prettify_separator: ".",
-// values_separator: " - ",
-// force_edges: true
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function mem_updateInputs (data) {
   console.log(data)
     from = data.from_value;
@@ -128,18 +105,6 @@ $mem_inputTo.on("input", function () {
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 function vcpu_updateInputs (data) {
     from = data.from_value;
     to = data.to_value;
@@ -177,15 +142,6 @@ $vcpu_inputTo.on("input", function () {
         to: val
     });
 });
-
-
-
-
-
-
-
-
-
 
 
 
