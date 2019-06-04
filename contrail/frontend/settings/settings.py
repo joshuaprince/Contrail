@@ -21,7 +21,7 @@ SECRET_KEY = config['WEBSITE']['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(config['WEBSITE']['debug'])
-ALLOWED_HOSTS = config['WEBSITE']['allowed_hosts'].split(',')
+ALLOWED_HOSTS = config['WEBSITE']['allowed_hosts'].split(',').append('127.0.0.1')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
