@@ -1,16 +1,35 @@
-from distutils.core import setup
+import setuptools
 
-setup(
+with open('README.md', 'r') as readme_file:
+    long_description = readme_file.read()
+
+setuptools.setup(
     name='contrail',
-    version='0.1',
+    version='0.3.0',
     description='Public cloud market price tracker for Amazon EC2 and Azure',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     url='https://github.com/joshuaprince/Contrail',
-    py_modules=[
-        'crawler',
-        'frontend',
-        'loader'
+    packages=setuptools.find_packages(),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Development Status :: 4 - Beta",
+        "Framework :: Django :: 2.2",
+        "Intended Audience :: System Administrators",
     ],
-    scripts=[
-        'contrail'
-    ]
+    entry_points={
+        'console_scripts': [
+            'contrail = contrail.main:main'
+        ]
+    },
+    install_requires=[
+        'boto3',
+        'cachetools',
+        'Django < 3',
+        'django-crispy-forms',
+        'infi.clickhouse_orm',
+        'requests'
+    ],
 )

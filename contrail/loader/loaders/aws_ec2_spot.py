@@ -40,7 +40,7 @@ def getSpotData(d, last_modified, region):
             except(KeyError, AttributeError):
                 pass
         k, v = normalizeData('region', region)
-        values += [('priceType', 'Spot'), ('crawlTime', str(last_modified)), (k, v), ['provider', 'AmazonEC2']]
+        values += [('priceType', 'Spot'), (k, v), ['provider', 'AmazonEC2']]
 
         instanceType = [val for val in values if val[0] == 'instanceType'][0][1]
 

@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
+{% load contrail %}
 
 {% block css %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css"></script>
 <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css"/>
+
 {% endblock %}
 
 <!-- SLIDER SOURCE -->
@@ -211,7 +214,7 @@
               <td>{{ instance.memory }}</td>
               <td>{{ instance.priceType }}</td>
 {#              <td>{% if instance.priceUpfront %}${{ instance.priceUpfront | floatformat:3 }}{% else %}none{% endif %}</td>#}
-              <td>${{ instance.pricePerHour }}</td>
+              <td>{{ instance.pricePerHour|price }}</td>
             </tr>
             {% endfor %}
 
@@ -303,11 +306,9 @@
 
 <!-- SLIDER -->
 <!-- https://codepen.io/anon/pen/rbpqME -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.3/jquery.min.js" ></script> -->
-<script src="{% static 'js/priceSlider.js' %}" ></script>
-<script src="{% static 'js/priceHourlySlider.js' %}" ></script>
-<script src="{% static 'js/memorySlider.js' %}" ></script>
-<script src="{% static 'js/vcpuSlider.js' %}" ></script>
+<script src="{% static 'js/slider.js' %}" ></script>
 <script src="//cdn.datatables.net/plug-ins/1.10.19/sorting/currency.js" ></script>
 
 

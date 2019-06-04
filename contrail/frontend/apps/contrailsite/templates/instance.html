@@ -38,7 +38,7 @@
             <div class="card">
               <div class="card-body">
                 <h4 class="card-title">On Demand</h4><hr>
-                <h5 class="card-title"><span style="font-size: 3em;">${{ currentPrices.onDemand.pricePerHour }}</span><br>per hour</h5>
+                <h5 class="card-title"><span style="font-size: 3em;">{{ currentPrices.onDemand.pricePerHour|price }}</span><br>per hour</h5>
                 <p class="card-text">{{ currentPrices.onDemand.pricePerHour|hourly_to_monthly }} per month</p>
               </div>
             </div>
@@ -63,9 +63,9 @@
                       <h5 class="card-title"><span style="font-size: 1.2em;">{{ currentPrices.reserved1yrFullUpfront.priceUpfront|price }}</span> up front</h5>
                       <p class="card-text">Full Upfront</p><hr style="margin-top: 0px;">
                       <h5 class="card-title"><span style="font-size: 1.2em;">{{ currentPrices.reserved1yrPartialUpfront.priceUpfront|price }}</span> up front</h5>
-                      <h5 class="card-title"><span style="font-size: 1.2em;">${{ currentPrices.reserved1yrPartialUpfront.pricePerHour }}</span> per hour</h5>
+                      <h5 class="card-title"><span style="font-size: 1.2em;">{{ currentPrices.reserved1yrPartialUpfront.pricePerHour|price }}</span> per hour</h5>
                       <p class="card-text">Partial Upfront</p><hr style="margin-top: 0px;">
-                      <h5 class="card-title"><span style="font-size: 1.2em;">${{ currentPrices.reserved1yrNoUpfront.pricePerHour }}</span> per hour</h5>
+                      <h5 class="card-title"><span style="font-size: 1.2em;">{{ currentPrices.reserved1yrNoUpfront.pricePerHour|price }}</span> per hour</h5>
                       <p class="card-text">No Upfront</p>
                     </div>
                   </div><br>
@@ -76,9 +76,9 @@
                       <h5 class="card-title"><span style="font-size: 1.2em;">{{ currentPrices.reserved3yrFullUpfront.priceUpfront|price }}</span> up front</h5>
                       <p class="card-text">Full Upfront</p><hr style="margin-top: 0px;">
                       <h5 class="card-title"><span style="font-size: 1.2em;">{{ currentPrices.reserved3yrPartialUpfront.priceUpfront|price }}</span> up front</h5>
-                      <h5 class="card-title"><span style="font-size: 1.2em;">${{ currentPrices.reserved3yrPartialUpfront.pricePerHour }}</span> per hour</h5>
+                      <h5 class="card-title"><span style="font-size: 1.2em;">{{ currentPrices.reserved3yrPartialUpfront.pricePerHour|price }}</span> per hour</h5>
                       <p class="card-text">Partial Upfront</p><hr style="margin-top: 0px;">
-                      <h5 class="card-title"><span style="font-size: 1.2em;">${{ currentPrices.reserved3yrNoUpfront.pricePerHour }}</span> per hour</h5>
+                      <h5 class="card-title"><span style="font-size: 1.2em;">{{ currentPrices.reserved3yrNoUpfront.pricePerHour|price }}</span> per hour</h5>
                       <p class="card-text">No Upfront</p>
                     </div>
                   </div><br>
@@ -98,7 +98,7 @@
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">Spot</h4><hr>
-                  <h5 class="card-title"><span style="font-size: 3em;">${{ currentPrices.spot.pricePerHour }}</span><br>per hour</h5>
+                  <h5 class="card-title"><span style="font-size: 3em;">{{ currentPrices.spot.pricePerHour|price }}</span><br>per hour</h5>
                   <p class="card-text">{{ currentPrices.spot.pricePerHour|hourly_to_monthly }} per month</p>
                 </div>
               </div>

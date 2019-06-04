@@ -4,9 +4,9 @@ from infi.clickhouse_orm import models, fields, engines
 from infi.clickhouse_orm.database import Database
 from infi.clickhouse_orm.fields import Field
 
-from config import CLICKHOUSE_DB_URL, CLICKHOUSE_DB_NAME
+from contrail.configuration import config
 
-db = Database(CLICKHOUSE_DB_NAME, db_url=CLICKHOUSE_DB_URL)
+db = Database(config['CLICKHOUSE']['db_name'], db_url=config['CLICKHOUSE']['db_url'])
 """ClickHouse Database connection object."""
 
 
@@ -112,6 +112,7 @@ class InstanceData(models.Model):
     transferType = fields.NullableField(fields.StringField())
     usageType = fields.NullableField(fields.StringField())
     volumeType = fields.NullableField(fields.StringField())
+    availabilityZone = fields.NullableField(fields.StringField())
 
     appliesTo = fields.NullableField(fields.StringField())
     description = fields.NullableField(fields.StringField())
@@ -190,6 +191,14 @@ class InstanceDataLastPointViewAllReserved(InstanceData):
     # Extends InstanceData. Contains ALL fields of InstanceData, instead queries from the view instancedatalastpointview
     engine = None
 
+class InstanceDataHourlyPriceView(InstanceData):
+    engine = None
+
+class InstanceDataDailyPriceView(InstanceData):
+    engine = None
+
+class InstanceDataMonthlyPriceView(InstanceData):
+    engine = None
 
 def create_contrail_table(recreate=False):
     if db.does_table_exist(InstanceData) and not recreate:
@@ -205,14 +214,27 @@ def create_contrail_table(recreate=False):
     db.raw("DROP TABLE IF EXISTS instancedata_last_point_aws_all_reserved")
     db.raw("DROP TABLE IF EXISTS instancedatalastpointview")
     db.raw("DROP TABLE IF EXISTS instancedatalastpointviewallreserved")
+    
+    db.raw("DROP TABLE IF EXISTS instancedata_hourly_price_mv")
+    db.raw("DROP TABLE IF EXISTS instancedatahourlypriceview")
+    db.raw("DROP TABLE IF EXISTS instancedata_daily_price_mv")
+    db.raw("DROP TABLE IF EXISTS instancedatadailypriceview")
+    db.raw("DROP TABLE IF EXISTS instancedata_monthly_price_mv")
+    db.raw("DROP TABLE IF EXISTS instancedatamonthlypriceview")
 
     db.create_table(InstanceData)
     db.create_table(LoadedFile)
 
-    db.raw(_generate_materialized_view_sql(True))
-    db.raw(_generate_view_sql(True))
-    db.raw(_generate_materialized_view_sql(False))
-    db.raw(_generate_view_sql(False))
+    db.raw(_generate_last_point_materialized_view_sql(True))
+    db.raw(_generate_last_point_view_sql(True))
+    db.raw(_generate_last_point_materialized_view_sql(False))
+    db.raw(_generate_last_point_view_sql(False))
+    db.raw(_generate_hourly_price_materialized_view_sql())
+    db.raw(_generate_hourly_price_view_sql())
+    db.raw(_generate_daily_price_materialized_view_sql())
+    db.raw(_generate_daily_price_view_sql())
+    db.raw(_generate_monthly_price_materialized_view_sql())
+    db.raw(_generate_monthly_view_sql())
 
 
 def fix_aggregated_data():
@@ -221,7 +243,7 @@ def fix_aggregated_data():
     after insertion. It can be fixed by deleting and recreating the materialized view.
     """
     # Default 60-second timeout isn't enough, this operation takes a while
-    db_long = Database(CLICKHOUSE_DB_NAME, db_url=CLICKHOUSE_DB_URL, timeout=99999)
+    db_long = Database(config['CLICKHOUSE']['db_name'], db_url=config['CLICKHOUSE']['db_url'], timeout=99999)
 
     db_long.raw("DROP TABLE IF EXISTS instancedata_last_point_aws")
     db_long.raw("DROP TABLE IF EXISTS instancedata_last_point_aws_all_reserved")
@@ -241,8 +263,223 @@ GROUPED_COLS = ['productFamily', 'provider', 'region', 'operatingSystem', 'price
                 'leaseContractLength', 'purchaseOption', 'offeringClass', 'storageMedia', 'volumeType']
 """InstanceData columns that should be part of the GROUP BY clause in the last point view"""
 
+def _generate_hourly_price_materialized_view_sql():
+    """
+    Generate the SQL used to generate the materialized view used by the last point view
+    :return:
+    """
+    return """
+        CREATE MATERIALIZED VIEW instancedata_hourly_price_mv
+        ENGINE = SummingMergeTree
+        PARTITION BY crawlMonth
+        ORDER BY (provider, instanceType, region, operatingSystem, priceType, crawlTime)
+        AS
+        SELECT
+            provider,
+            instanceType,
+            region,
+            operatingSystem,
+            priceType,
+            offeringClass,
+            leaseContractLength,
+            purchaseOption,
+            toStartOfHour(crawlTime) AS crawlTime,
+            toYYYYMM(crawlTime) AS crawlMonth,
+            avgState(pricePerHour) as pricePerHourState,
+            avgState(priceUpfront) as priceUpfrontState
+        FROM contrail.instancedata
+        GROUP BY
+            provider,
+            instanceType,
+            region,
+            operatingSystem,
+            priceType,
+            offeringClass,
+            leaseContractLength,
+            purchaseOption,
+            crawlTime
+    """
 
-def _generate_materialized_view_sql(limit_reserved: bool):
+def _generate_hourly_price_view_sql():
+    """
+    Generate the SQL query required to create the InstanceDataLastPointView view
+    """
+
+    return """
+        CREATE VIEW instancedatahourlypriceview
+        AS
+        SELECT
+            provider,
+            instanceType,
+            region,
+            operatingSystem,
+            crawlTime,
+            crawlMonth,
+            priceType,
+            offeringClass,
+            leaseContractLength,
+            purchaseOption,
+            avgMerge(pricePerHourState) as pricePerHour,
+            avgMerge(priceUpfrontState) as priceUpfront
+        FROM instancedata_hourly_price_mv
+        GROUP BY
+            provider,
+            instanceType,
+            region,
+            operatingSystem,
+            priceType,
+            offeringClass,
+            leaseContractLength,
+            purchaseOption,
+            crawlMonth,
+            crawlTime
+    """
+
+def _generate_daily_price_materialized_view_sql():
+    """
+    Generate the SQL used to generate the materialized view used by the last point view
+    :return:
+    """
+    return """
+        CREATE MATERIALIZED VIEW instancedata_daily_price_mv
+        ENGINE = SummingMergeTree
+        PARTITION BY crawlMonth
+        ORDER BY (provider, instanceType, region, operatingSystem, priceType, crawlTime)
+        AS
+        SELECT
+            provider,
+            instanceType,
+            region,
+            operatingSystem,
+            priceType,
+            offeringClass,
+            leaseContractLength,
+            purchaseOption,
+            toStartOfDay(crawlTime) AS crawlTime,
+            toYYYYMM(crawlTime) AS crawlMonth,
+            avgState(pricePerHour) as pricePerHourState,
+            avgState(priceUpfront) as priceUpfrontState
+        FROM contrail.instancedata
+        GROUP BY
+            provider,
+            instanceType,
+            region,
+            operatingSystem,
+            priceType,
+            offeringClass,
+            leaseContractLength,
+            purchaseOption,
+            crawlTime
+    """
+
+def _generate_daily_price_view_sql():
+    """
+    Generate the SQL query required to create the InstanceDataLastPointView view
+    """
+
+    return """
+        CREATE VIEW instancedatadailypriceview
+        AS
+        SELECT
+            provider,
+            instanceType,
+            region,
+            operatingSystem,
+            crawlTime,
+            crawlMonth,
+            priceType,
+            offeringClass,
+            leaseContractLength,
+            purchaseOption,
+            avgMerge(pricePerHourState) as pricePerHour,
+            avgMerge(priceUpfrontState) as priceUpfront
+        FROM instancedata_daily_price_mv
+        GROUP BY
+            provider,
+            instanceType,
+            region,
+            operatingSystem,
+            priceType,
+            offeringClass,
+            leaseContractLength,
+            purchaseOption,
+            crawlMonth,
+            crawlTime
+    """
+
+def _generate_monthly_price_materialized_view_sql():
+    """
+    Generate the SQL used to generate the materialized view used by the last point view
+    :return:
+    """
+    return """
+        CREATE MATERIALIZED VIEW instancedata_monthly_price_mv
+        ENGINE = SummingMergeTree
+        PARTITION BY crawlMonth
+        ORDER BY (provider, instanceType, region, operatingSystem, priceType, crawlTime)
+        AS
+        SELECT
+            provider,
+            instanceType,
+            region,
+            operatingSystem,
+            priceType,
+            offeringClass,
+            leaseContractLength,
+            purchaseOption,
+            toStartOfMonth(crawlTime) AS crawlTime,
+            toYYYYMM(crawlTime) AS crawlMonth,
+            avgState(pricePerHour) as pricePerHourState,
+            avgState(priceUpfront) as priceUpfrontState
+        FROM contrail.instancedata
+        GROUP BY
+            provider,
+            instanceType,
+            region,
+            operatingSystem,
+            priceType,
+            offeringClass,
+            leaseContractLength,
+            purchaseOption,
+            crawlTime
+    """
+
+def _generate_monthly_view_sql():
+    """
+    Generate the SQL query required to create the InstanceDataLastPointView view
+    """
+
+    return """
+        CREATE VIEW instancedatamonthlypriceview
+        AS
+        SELECT
+            provider,
+            instanceType,
+            region,
+            operatingSystem,
+            crawlTime,
+            crawlMonth,
+            priceType,
+            offeringClass,
+            leaseContractLength,
+            purchaseOption,
+            avgMerge(pricePerHourState) as pricePerHour,
+            avgMerge(priceUpfrontState) as priceUpfront
+        FROM instancedata_monthly_price_mv
+        GROUP BY
+            provider,
+            instanceType,
+            region,
+            operatingSystem,
+            priceType,
+            offeringClass,
+            leaseContractLength,
+            purchaseOption,
+            crawlMonth,
+            crawlTime
+    """
+
+def _generate_last_point_materialized_view_sql(limit_reserved: bool):
     """
     Generate the SQL used to generate the materialized view used by the last point view
     :return:
@@ -282,7 +519,7 @@ def _generate_materialized_view_sql(limit_reserved: bool):
     )
 
 
-def _generate_view_sql(limit_reserved: bool):
+def _generate_last_point_view_sql(limit_reserved: bool):
     """
     Generate the SQL query required to create the InstanceDataLastPointView view
     """

@@ -1,5 +1,7 @@
 # Contrail
 
+[![PyPI version](https://badge.fury.io/py/contrail.svg)](https://badge.fury.io/py/contrail)
+
 ### Public Cloud Market Price Tracker
 
 ### UC Davis ECS 193, 2019

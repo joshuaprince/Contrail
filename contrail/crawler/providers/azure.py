@@ -8,8 +8,8 @@ import time
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
+from contrail.configuration import config
 from contrail.crawler.providers import BaseProvider, register_provider
-from config import AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID
 
 logger = logging.getLogger('contrail.crawler.azure')
 
@@ -53,7 +53,7 @@ class Azure(BaseProvider):
         return datetime.timedelta(minutes=60)
 
     def request_ratecard(self):
-        url = URL_RATECARD_REQUEST.format(subscriptionId=AZURE_SUBSCRIPTION_ID)
+        url = URL_RATECARD_REQUEST.format(subscriptionId=config['AZURE']['subscription_id'])
         response = requests.get(url, allow_redirects=False,
                                 headers={'Authorization': 'Bearer {}'.format(self.access_token())})
 
@@ -69,7 +69,7 @@ class Azure(BaseProvider):
         """
         Get a mapping from instance sizes to parameters such as vcpus, memory, etc.
         """
-        url = URL_CAPABILITIES_REQUEST.format(subscriptionId=AZURE_SUBSCRIPTION_ID)
+        url = URL_CAPABILITIES_REQUEST.format(subscriptionId=config['AZURE']['subscription_id'])
         response = requests.get(url, allow_redirects=False,
                                 headers={'Authorization': 'Bearer {}'.format(self.access_token())})
 
@@ -103,13 +103,13 @@ class Azure(BaseProvider):
         logger.info("Renewing access token.")
 
         post_data = {
-            'client_id': AZURE_CLIENT_ID,
+            'client_id': config['AZURE']['client_id'],
             'grant_type': 'client_credentials',
-            'client_secret': AZURE_CLIENT_SECRET,
+            'client_secret': config['AZURE']['client_secret'],
             'resource': 'https://management.azure.com/'
         }
 
-        request = Request(URL_TOKEN_REQUEST.format(tenant=AZURE_TENANT_ID), urlencode(post_data).encode())
+        request = Request(URL_TOKEN_REQUEST.format(tenant=config['AZURE']['tenant_id']), urlencode(post_data).encode())
         response = urlopen(request).read().decode()
         resp_json = json.loads(response)
 

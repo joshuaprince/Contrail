@@ -12,22 +12,16 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from contrail.configuration import config
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '3_k9to*4cdxdu8d^uuu@xox5gn$2t6va+exit$kwyhob(4klg#'
+SECRET_KEY = config['WEBSITE']['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
-URL = "http://127.0.0.1:8000"
+DEBUG = bool(config['WEBSITE']['debug'])
+ALLOWED_HOSTS = config['WEBSITE']['allowed_hosts'].split(',').append('127.0.0.1')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -81,10 +75,11 @@ WSGI_APPLICATION = 'contrail.frontend.settings.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    # No need for any databases in Contrail, that's all handled by Clickhouse
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
 }
 
 

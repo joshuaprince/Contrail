@@ -29,32 +29,94 @@
                 newDate(6)*/
             ],
             datasets: [{
-                label: 'On Demand',
+                label: 'Hourly On Demand',
                 backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
                 borderColor: window.chartColors.red,
                 fill: false,
                 data: [
-                    {% for price in priceHistory.onDemand %}
+                    {% for price in priceHistory.hourlyOnDemand %}
                     {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
                     {% endfor %}
                 ],
             }, {
-                label: 'Reserved (1yr, no up front)',
+                label: 'Hourly Reserved (1yr, no up front)',
                 backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
                 borderColor: window.chartColors.blue,
                 fill: false,
                 data: [
-                    {% for price in priceHistory.reserved1yrNoUpfront %}
+                    {% for price in priceHistory.hourlyReserved1yrNoUpfront %}
                     {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
                     {% endfor %}
                 ],
             }, {
-                label: 'Spot',
+                label: 'Hourly Spot',
                 backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
                 borderColor: window.chartColors.green,
                 fill: false,
                 data: [
-                    {% for price in priceHistory.spot %}
+                    {% for price in priceHistory.hourlySpot %}
+                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
+                    {% endfor %}
+                ],
+            },
+            {
+                label: 'Daily On Demand',
+                backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+                borderColor: window.chartColors.red,
+                fill: false,
+                data: [
+                    {% for price in priceHistory.dailyOnDemand %}
+                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
+                    {% endfor %}
+                ],
+            }, {
+                label: 'Daily Reserved (1yr, no up front)',
+                backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+                borderColor: window.chartColors.blue,
+                fill: false,
+                data: [
+                    {% for price in priceHistory.dailyReserved1yrNoUpfront %}
+                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
+                    {% endfor %}
+                ],
+            }, {
+                label: 'Daily Spot',
+                backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
+                borderColor: window.chartColors.green,
+                fill: false,
+                data: [
+                    {% for price in priceHistory.dailySpot %}
+                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
+                    {% endfor %}
+                ],
+            },
+            {
+                label: 'Monthly On Demand',
+                backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+                borderColor: window.chartColors.red,
+                fill: false,
+                data: [
+                    {% for price in priceHistory.monthlyOnDemand %}
+                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
+                    {% endfor %}
+                ],
+            }, {
+                label: 'Monthly Reserved (1yr, no up front)',
+                backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+                borderColor: window.chartColors.blue,
+                fill: false,
+                data: [
+                    {% for price in priceHistory.monthlyReserved1yrNoUpfront %}
+                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
+                    {% endfor %}
+                ],
+            }, {
+                label: 'Monthly Spot',
+                backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
+                borderColor: window.chartColors.green,
+                fill: false,
+                data: [
+                    {% for price in priceHistory.monthlySpot %}
                     {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
                     {% endfor %}
                 ],

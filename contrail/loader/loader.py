@@ -6,9 +6,9 @@ import sys
 
 import boto3
 
+from contrail.configuration import config
 from contrail.loader.loaders import REGISTERED_LOADER_CLASSES, import_loader_directory, LoaderDoesNotExistError
 from contrail.loader.s3iterator import BucketIterator
-from config import AWS_ACCESS_KEY_ID, AWS_SECRET, AWS_BUCKET_NAME
 from contrail.loader.warehouse import create_contrail_table, db, LoadedFile
 
 logger = logging.getLogger('contrail.loader')
@@ -17,8 +17,8 @@ logger = logging.getLogger('contrail.loader')
 class Loader:
     def __init__(self):
         self._session = boto3.Session(
-            aws_access_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET
+            aws_access_key_id=config['AWS']['access_key_id'],
+            aws_secret_access_key=config['AWS']['secret']
         )
 
         self.s3client = self._session.client('s3')
@@ -42,7 +42,7 @@ class Loader:
             raise LoaderDoesNotExistError(loader_name)
 
         logger.info("Downloading file {}".format(filename))
-        self.s3client.download_file(AWS_BUCKET_NAME, filename, 'tmp-loading.json.gz')
+        self.s3client.download_file(config['AWS']['bucket_name'], filename, 'tmp-loading.json.gz')
 
         with gzip.open('tmp-loading.json.gz', 'rt', encoding='ascii') as f_in:
             content = json.load(f_in)
@@ -51,7 +51,7 @@ class Loader:
         self.mark_loaded(filename)
 
     def load_initial_data(self):
-        for file in BucketIterator(self.s3client, AWS_BUCKET_NAME):
+        for file in BucketIterator(self.s3client, config['AWS']['bucket_name']):
             filename = file['Key']
             last_modified = file['LastModified']
 
