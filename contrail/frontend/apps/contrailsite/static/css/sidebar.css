@@ -319,9 +319,93 @@ a.article:hover {
     width: 100%;
 }
 
+#content h2 {
+  padding: 5px;
+}
+
+#content h3 {
+  padding: 5px;
+}
+
+#content h4 {
+  padding: 5px;
+}
+
+#content p {
+  color: #2d2d2d;
+  padding: 0 5px 0 5px;
+}
+
+#content ul, #content ol, #content li{
+  color: #2d2d2d;
+}
+
+#content li a {
+  color: #2d2d2d;
+  font-size: 1.1em;
+  font-weight: 300;
+  line-height: 1.7em;
+}
+
+#content p a {
+  color: #16766f;
+}
+
+#content a:hover {
+  color: #71aaa7;
+}
+
 .links {
   display: flex;
   flex-direction: column;
+}
+
+.section {
+  box-sizing: border-box;
+}
+
+.col {
+  float: left;
+  width: 40%;
+  padding: 5px;
+}
+
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.pics {
+  display: block;
+  width: 40%;
+  height: auto;
+}
+
+.contrailhome {
+  display: block;
+  width: 80%;
+  height: auto;
+  padding: 0 0 0 35px;
+}
+
+.contraildescription {
+  float: left;
+  width: 65%;
+}
+
+#teamimg {
+  display: block;
+  padding-left: 20px;
+  width: 80%;
+  height: auto;
+  border-radius: 50%;
+}
+
+.coldescription {
+  float: left;
+  width: 80%;
+  padding-top: 30px;
 }
 
 /* ---------------------------------------------------
