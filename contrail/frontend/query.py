@@ -4,7 +4,7 @@ from cachetools import cached, TTLCache
 from infi.clickhouse_orm.database import Database
 
 from contrail.configuration import config
-from contrail.loader.warehouse import InstanceData, InstanceDataLastPointView, InstanceDataLastPointViewAllReserved
+from contrail.loader.warehouse import InstanceData, InstanceDataLastPointView, InstanceDataLastPointViewAllReserved, InstanceDataHourlyPriceView, InstanceDataDailyPriceView, InstanceDataMonthlyPriceView 
 
 db = Database(config['CLICKHOUSE']['db_name'], db_url=config['CLICKHOUSE']['db_url'], readonly=True)
 
@@ -165,21 +165,38 @@ def get_instance_price_history(record_count=100, **kwargs) -> Dict[str, List[Dic
              where each history point is a dictionary consisting of crawlTime, priceType, and optionally pricePerHour,
              priceUpfront, and leaseContractLength.
     """
-
-    base_query = InstanceData.objects_in(db).filter(**kwargs).distinct().only(*PRICE_HISTORY_PARAMS).order_by('-crawlTime')
-
+    hourly_base_query = InstanceDataHourlyPriceView.objects_in(db).filter(**kwargs).only(*PRICE_HISTORY_PARAMS).order_by('-crawlTime')
+    daily_base_query = InstanceDataDailyPriceView.objects_in(db).filter(**kwargs).only(*PRICE_HISTORY_PARAMS).order_by('-crawlTime')
+    monthly_base_query = InstanceDataMonthlyPriceView.objects_in(db).filter(**kwargs).only(*PRICE_HISTORY_PARAMS).order_by('-crawlTime')
+    # base_query = InstanceData.objects_in(db).filter(**kwargs).distinct().only(*PRICE_HISTORY_PARAMS).order_by('-crawlTime')
     # Get a time series from the last several entries in the database that match this filter
+    
     price_history = {
-        'onDemand': base_query.filter(priceType='On Demand')[:100],
-        'spot': base_query.filter(priceType='Spot')[:100],
-        'reserved1yrFullUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='All Upfront')[:record_count],
-        'reserved1yrPartialUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='Partial Upfront')[:record_count],
-        'reserved1yrNoUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='No Upfront')[:record_count],
-        'reserved3yrFullUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='All Upfront')[:record_count],
-        'reserved3yrPartialUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='Partial Upfront')[:record_count],
-        'reserved3yrNoUpfront': base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='No Upfront')[:record_count],
+        'hourlyOnDemand': hourly_base_query.filter(priceType='On Demand')[:100],
+        'hourlySpot': hourly_base_query.filter(priceType='Spot')[:100],
+        'hourlyReserved1yrFullUpfront': hourly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='All Upfront')[:record_count],
+        'hourlyReserved1yrPartialUpfront': hourly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='Partial Upfront')[:record_count],
+        'hourlyReserved1yrNoUpfront': hourly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='No Upfront')[:record_count],
+        'hourlyReserved3yrFullUpfront': hourly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='All Upfront')[:record_count],
+        'hourlyReserved3yrPartialUpfront': hourly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='Partial Upfront')[:record_count],
+        'hourlyReserved3yrNoUpfront': hourly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='No Upfront')[:record_count],
+        'dailyOnDemand': daily_base_query.filter(priceType='On Demand')[:100],
+        'dailySpot': daily_base_query.filter(priceType='Spot')[:100],
+        'dailyReserved1yrFullUpfront': daily_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='All Upfront')[:record_count],
+        'dailyReserved1yrPartialUpfront': daily_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='Partial Upfront')[:record_count],
+        'dailyReserved1yrNoUpfront': daily_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='No Upfront')[:record_count],
+        'dailyReserved3yrFullUpfront': daily_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='All Upfront')[:record_count],
+        'dailyReserved3yrPartialUpfront': daily_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='Partial Upfront')[:record_count],
+        'dailyReserved3yrNoUpfront': daily_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='No Upfront')[:record_count],
+        'monthlyOnDemand': monthly_base_query.filter(priceType='On Demand')[:100],
+        'monthlySpot': monthly_base_query.filter(priceType='Spot')[:100],
+        'monthlyReserved1yrFullUpfront': monthly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='All Upfront')[:record_count],
+        'monthlyReserved1yrPartialUpfront': monthly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='Partial Upfront')[:record_count],
+        'monthlyReserved1yrNoUpfront': monthly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='No Upfront')[:record_count],
+        'monthlyReserved3yrFullUpfront': monthly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='All Upfront')[:record_count],
+        'monthlyReserved3yrPartialUpfront': monthly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='Partial Upfront')[:record_count],
+        'monthlyReserved3yrNoUpfront': monthly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='No Upfront')[:record_count],
     }
-
     # Build our own list of "price history point" dicts, since we don't want to include null or zero fields
     price_history_points = {k: [] for k, v in price_history.items() if v}
     for price_mode in price_history.keys():
