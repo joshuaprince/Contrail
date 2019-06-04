@@ -2,16 +2,16 @@
   <canvas id="canvas" style="display: block; width: 621px; height: 310px;" width="621" height="310" class="chartjs-render-monitor"></canvas>
 </div>
 
-<button id="btn1">
-  Option 1
+<button id="hourly_scale">
+  Hourly
 </button>
 
-<button id="btn2">
-  Option 2
+<button id="daily_scale">
+  Daily
 </button>
 
-<button id="btn3">
-  Option 3
+<button id="monthly_scale">
+  Monthly
 </button>
 
 <!-- CHART.JS -->
@@ -251,15 +251,15 @@
 var ctx = document.getElementById('canvas').getContext('2d');
 window.myLine = new Chart(ctx, config1);
 
-$("#btn1").on("click", function() {
+$("#hourly_scale").on("click", function() {
     new Chart(ctx, config1);
   });
 
-$("#btn2").on("click", function() {
+$("#daily_scale").on("click", function() {
     new Chart(ctx, config2);
   });
 
-$("#btn3").on("click", function() {
+$("#monthly_scale").on("click", function() {
     new Chart(ctx, config3);
   });
 
