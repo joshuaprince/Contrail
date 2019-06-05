@@ -207,15 +207,15 @@
           {% for instance in instances %}
             <tr>
               <td><input type="checkbox" /></td>
-              <td><a href="{{ instance.url }}">{{ instance.provider }}</a></td>
-              <td><a href="{{ instance.url }}">{{ instance.instanceType }}</a></td>
+              <td>{{ instance.provider }}</td>
+              <td><a href="{{ instance.url }}" style="color: #64a19d;">{{ instance.instanceType }}</a></td>
               <td>{{ instance.region }}</td>
               <td>{{ instance.operatingSystem }}</td>
               <td>{{ instance.vcpu }}</td>
               <td>{{ instance.memory }}</td>
               <td>{{ instance.priceType }}</td>
 {#              <td>{% if instance.priceUpfront %}${{ instance.priceUpfront | floatformat:3 }}{% else %}none{% endif %}</td>#}
-              <td>{{ instance.pricePerHour|price }}</td>
+              <td><a href="{{ instance.url }}">{{ instance.pricePerHour|price }}</a></td>
             </tr>
             {% endfor %}
 
