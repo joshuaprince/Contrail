@@ -259,19 +259,22 @@ def fix_aggregated_data():
     db.raw("DROP TABLE IF EXISTS instancedatamonthlypriceview")
 
     print("Fixing materialized view data. This will take a while, be patient.")
-    db_long.raw(_generate_materialized_view_sql(True))
-    db_long.raw(_generate_view_sql(True))
-    print("Halfway done....")
-    db_long.raw(_generate_materialized_view_sql(False))
-    db_long.raw(_generate_view_sql(False))
-    print("Done.")
+    db_long.raw(_generate_last_point_materialized_view_sql(True))
+    db_long.raw(_generate_last_point_view_sql(True))
+    print("Done with last point limited...")
+    db_long.raw(_generate_last_point_materialized_view_sql(False))
+    db_long.raw(_generate_last_point_view_sql(False))
+    print("Done with last point all...")
 
     db.raw(_generate_hourly_price_materialized_view_sql())
     db.raw(_generate_hourly_price_view_sql())
+    print("Done with hourly...")
     db.raw(_generate_daily_price_materialized_view_sql())
     db.raw(_generate_daily_price_view_sql())
+    print("Done with daily...")
     db.raw(_generate_monthly_price_materialized_view_sql())
     db.raw(_generate_monthly_view_sql())
+    print("Done.")
 
 
 GROUPED_COLS = ['productFamily', 'provider', 'region', 'operatingSystem', 'priceType', 'instanceType',
