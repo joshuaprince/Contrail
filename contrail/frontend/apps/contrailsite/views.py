@@ -177,3 +177,10 @@ def storage_view(request: HttpRequest):
     }
 
     return render(request, 'storage/storage.html', context)
+
+
+class AboutUs(TemplateView):
+    """
+    Render About Us page
+    """
+    template_name = "about.html"

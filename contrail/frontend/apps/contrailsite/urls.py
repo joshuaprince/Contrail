@@ -9,4 +9,5 @@ urlpatterns = [
     path('historygraph/', history_graph_view, name='historygraph'),
     path('help/', HelpView.as_view(), name='help'),
     path('storage/', storage_view, name='storage'),
+    path('aboutus/', AboutUs.as_view(), name='aboutus')
 ]

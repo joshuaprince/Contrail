@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block css %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css"></script>
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+{% endblock %}
+
+<!-- SLIDER SOURCE -->
+<!-- https://codepen.io/anon/pen/rbpqME -->
+
+{% block content %}
+<div class="wrapper">
+
+    <div id="aboutus" class="section ">
+        <br><br><br>
+
+        <h2>Meet our team!</h2>
+
+        <br>
+
+        <div class="row">
+          <div class="col">
+  					<img src="{% static 'img/rhodges-photo.jpg' %}" id="teamimg">
+  			  </div>
+          <div class="coldescription">
+            <h5> Robert Hodges </h5>
+            <p>
+              Robert Hodges is CEO of Altinity, which is commercializing a new data warehouse named ClickHouse. Robert has been writing code since he was 12 years old and has an extensive background in databases, distributed systems, and cloud computing. Contrail is the second senior design project he has mentored at UC Davis.
+            </p>
+          </div>
+				</div>
+
+        <br>
+
+        <div class="row">
+          <div class="col">
+  					<img src="{% static 'img/jingwen.png' %}" id="teamimg">
+  			  </div>
+          <div class="coldescription">
+            <h5> Jingwen Low </h5>
+            <p>
+              Jingwen is a 4th year UC Davis Computer Science and Engineering student. She is also currently works as a full stack developer at ASUCD Creative Media.
+            </p>
+          </div>
+				</div>
+
+        <br>
+
+        <div class="row">
+          <div class="col">
+  					<img src="{% static 'img/amazon.png' %}" id="teamimg">
+  			  </div>
+          <div class="coldescription">
+            <h5> Joshua Prince </h5>
+            <p>
+              Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.
+            </p>
+          </div>
+				</div>
+
+        <br>
+
+        <div class="row">
+          <div class="col">
+  					<img src="{% static 'img/monisha.png' %}" id="teamimg">
+  			  </div>
+          <div class="coldescription">
+            <h5> Monisha Ravindar </h5>
+            <p>
+              Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.
+            </p>
+          </div>
+				</div>
+
+        <br>
+
+        <div class="row">
+          <div class="col">
+  					<img src="{% static 'img/amazon.png' %}" id="teamimg">
+  			  </div>
+          <div class="coldescription">
+            <h5> Rishi Dutta </h5>
+            <p>
+              Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.
+            </p>
+          </div>
+				</div>
+      </div>
+
+      <br><br><br>
+
+</div>
+
+
+
+
+{% endblock %}
+
+
+{% block script %}
+
+<!-- SIDE BAR -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#sidebar").mCustomScrollbar({
+            theme: "minimal"
+        });
+
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar, #content').toggleClass('active');
+            $('.collapse.in').toggleClass('in');
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        });
+    });
+</script>
+
+
+<!-- DROPDOWN -->
+<script>
+  var dropdown = document.getElementsByClassName("dropdown");
+  var i;
+
+  for (i = 0; i < dropdown.length; i++) {
+    dropdown[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var dropdownContent = this.nextElementSibling;
+      if (dropdownContent.style.display === "block") {
+        dropdownContent.style.display = "none";
+      } else {
+        dropdownContent.style.display = "block";
+      }
+    });
+  }
+</script>
+
+
+{% endblock %}
