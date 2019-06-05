@@ -281,7 +281,6 @@ a.article:hover {
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
-  padding-bottom: 50px;
   border: 1px solid #888;
   width: 70%;
 }
@@ -290,7 +289,7 @@ a.article:hover {
 .close {
   color: #aaaaaa;
   float: right;
-  font-size: 28px;
+  font-size: 20px;
   font-weight: bold;
 }
 
@@ -319,17 +318,29 @@ a.article:hover {
     width: 100%;
 }
 
-#content h2 {
+#content h2, #aboutus h2{
+  font-weight: bold;
   padding: 5px;
+  color: #054269;
 }
 
 #content h3 {
   padding: 5px;
+  font-weight: 600;
+  color: #ed5665;
 }
 
 #content h4 {
   padding: 5px;
+  font-style: oblique;
+  color: #33948f;
 }
+
+#aboutus h5{
+  font-size: 30px;
+  color: #33948f;
+}
+
 
 #content p {
   color: #2d2d2d;
@@ -355,6 +366,11 @@ a.article:hover {
   color: #71aaa7;
 }
 
+.vm {
+  font-weight: 500;
+  font-style: oblique;
+}
+
 .links {
   display: flex;
   flex-direction: column;
@@ -364,6 +380,19 @@ a.article:hover {
   box-sizing: border-box;
 }
 
+#aboutus {
+  width: 90%;
+  padding: 20px;
+  min-height: 100vh;
+  transition: all 0.3s;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#aboutus p {
+  padding-right: 70px;
+}
 .col {
   float: left;
   width: 40%;
@@ -378,25 +407,16 @@ a.article:hover {
 
 .pics {
   display: block;
-  width: 40%;
+  justify-content: center;
+  width: 60%;
   height: auto;
+  padding-left: 10px;
+  padding-bottom: 20px;
 }
 
-.contrailhome {
-  display: block;
-  width: 80%;
-  height: auto;
-  padding: 0 0 0 35px;
-}
-
-.contraildescription {
-  float: left;
-  width: 65%;
-}
 
 #teamimg {
   display: block;
-  padding-left: 20px;
   width: 80%;
   height: auto;
   border-radius: 50%;
@@ -405,7 +425,7 @@ a.article:hover {
 .coldescription {
   float: left;
   width: 80%;
-  padding-top: 30px;
+  padding-top: 20px;
 }
 
 /* ---------------------------------------------------
@@ -428,4 +448,9 @@ a.article:hover {
     #sidebarCollapse span {
         display: none;
     }
+    .pics {
+      width: 80%;
+      height: auto;
+    }
+
 }

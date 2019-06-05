@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block css %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css"></script>
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+{% endblock %}
+
+<!-- SLIDER SOURCE -->
+<!-- https://codepen.io/anon/pen/rbpqME -->
+
+{% block content %}
+<div class="wrapper">
+
+    <div id="aboutus" class="section ">
+        <br><br><br>
+
+        <h2>Meet our team!</h2>
+
+        <br>
+
+        <div class="row">
+          <div class="col">
+  					<img src="{% static 'img/rhodges-photo.jpg' %}" id="teamimg">
+  			  </div>
+          <div class="coldescription">
+            <h5> Robert Hodges </h5>
+            <p>
+              Robert Hodges is CEO of Altinity, which is commercializing a new data warehouse named ClickHouse. Robert has been writing code since he was 12 years old and has an extensive background in databases, distributed systems, and cloud computing. Contrail is the second senior design project he has mentored at UC Davis.
+            </p>
+          </div>
+				</div>
+
+        <br>
+
+        <div class="row">
+          <div class="col">
+  					<img src="{% static 'img/jingwen.png' %}" id="teamimg">
+  			  </div>
+          <div class="coldescription">
+            <h5> Jingwen Low </h5>
+            <p>
+              Jingwen is a 4th year UC Davis Computer Science and Engineering student. She is also currently works as a full stack developer at ASUCD Creative Media.
+            </p>
+          </div>
+				</div>
+
+        <br>
+
+        <div class="row">
+          <div class="col">
+  					<img src="{% static 'img/josh.png' %}" id="teamimg">
+  			  </div>
+          <div class="coldescription">
+            <h5> Joshua Prince </h5>
+            <p>
+              Josh is a graduating senior in computer science and engineering at UC Davis. He’s been interested in web design since elementary school and started programming in middle school and greatly looks forward to creating more projects that he can use to make people’s work easier and more enjoyable.
+            </p>
+          </div>
+				</div>
+
+        <br>
+
+        <div class="row">
+          <div class="col">
+  					<img src="{% static 'img/monisha.png' %}" id="teamimg">
+  			  </div>
+          <div class="coldescription">
+            <h5> Monisha Ravindar </h5>
+            <p>
+              Monisha is a senior at UC Davis, graduating with a major in Computer Science and Engineering and a minor in Psychology. She’s passionate about human-centered design and developing her multidisciplinary skills while coding away at projects aimed towards creating a positive impact on society.
+            </p>
+          </div>
+				</div>
+
+        <br>
+
+        <div class="row">
+          <div class="col">
+  					<img src="{% static 'img/rishi.png' %}" id="teamimg">
+  			  </div>
+          <div class="coldescription">
+            <h5> Rishi Dutta </h5>
+            <p>
+              Rishi is a 4th year UC Davis Computer Science and Engineering student. He has been involved in many extra curricular activities at Davis, such as HackDavis and #include. After graduation he is going to work as a software engineer at Workday.
+            </p>
+          </div>
+				</div>
+      </div>
+
+      <br><br><br>
+
+</div>
+
+
+
+
+{% endblock %}
+
+
+{% block script %}
+
+<!-- SIDE BAR -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#sidebar").mCustomScrollbar({
+            theme: "minimal"
+        });
+
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar, #content').toggleClass('active');
+            $('.collapse.in').toggleClass('in');
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        });
+    });
+</script>
+
+
+<!-- DROPDOWN -->
+<script>
+  var dropdown = document.getElementsByClassName("dropdown");
+  var i;
+
+  for (i = 0; i < dropdown.length; i++) {
+    dropdown[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var dropdownContent = this.nextElementSibling;
+      if (dropdownContent.style.display === "block") {
+        dropdownContent.style.display = "none";
+      } else {
+        dropdownContent.style.display = "block";
+      }
+    });
+  }
+</script>
+
+
+{% endblock %}

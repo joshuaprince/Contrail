@@ -22,6 +22,8 @@
           <a href="#usesidebar" class="col-form-label ">Using the Sidebar</a>
           <a href="#sortprices" class="col-form-label ">Sort Prices</a>
           <a href="#compareprices" class="col-form-label ">Compare Prices</a>
+          <a href="#detailedinstance" class="col-form-label">Detailed Instances</a>
+          <a href="#cloudstorage" class="col-form-label">Cloud Storage</a>
         </div>
         <a href="#providers" class="col-form-label dropdown"> <i class="fa fa-caret-right"></i> Cloud Providers</a>
         <div class="dropdown-content">
@@ -34,38 +36,28 @@
           <a href="#reserved" class="col-form-label ">Reserved</a>
           <a href="#spot" class="col-form-label ">Spot</a>
         </div>
-        <a href="#features" class="col-form-label ">Features</a>
         <a href="#github" class="col-form-label ">GitHub</a>
-        <a href="#aboutus" class="col-form-label ">About Us</a>
       </div>
     </nav>
 
     <div id="content">
 
-      <div id="contrail" class="section">
+      <div id="contrail" class="section ">
         <br><br>
-        <div class="row">
 
-          <div class="contraildescription">
-            <h2>What is Contrail?</h2>
-            <p>
-              Contrail tracks cloud prices by pulling virtual machine pricing data from AWS and MS Azure into a data warehouse to be able to answer common questions about VM pricing. Users can compare VM prices across multiple regions and cloud providers, compare payment options, and track the cost of a particular VM over time. Users can also track the change of pricing when changing a VM’s characteristics, such as increasing network bandwidth, doubling RAM, etc.
-            </p>
-          </div>
-          <div class="col">
-            <br>
-  					<img src="{% static 'img/homepage.png" class="contrailhome">
-  			  </div>
-				</div>
+        <h2>What is Contrail?</h2>
+        <p>
+          Contrail tracks cloud prices by pulling virtual machine pricing data from AWS and MS Azure into a data warehouse to be able to answer common questions about VM pricing. Users can compare VM prices across multiple regions and cloud providers, compare payment options, and track the cost of a particular VM over time. Users can also track the change of pricing when changing a VM’s characteristics, such as increasing network bandwidth, doubling RAM, etc.
+        </p>
 
-        <br><br><br>
+        <br>
 
-        <h3> Now, what is a virtual machine? </h3>
+        <h5 class="vm"> Now, what is a virtual machine? </h5>
         <p>
           A virtual machine (VM) is a computer file that behaves like an actual computer. It gives you the flexibility of virtualization without having to buy and maintain the physical hardware that runs it, while being sandboxed from the rest of your system. This creates an ideal environment for testing other operating systems such as beta releases, accessing virus-infected data, creating backups, running software on operating systems it wasn’t designed for, and running applications that require a greater computing capacity. Each VM has its own virtual hardware, and multiple VMs can run concurrently on the same physical computer.
         </p>
 
-        <br><br><br>
+        <br>
 
         <h3> Quick Start Guides to help you get started </h3>
         <div>
@@ -74,16 +66,18 @@
             <li><a href="#usesidebar" class="links">Using the Sidebar</a></li>
             <li><a href="#sortprices" class="links">Sort Prices</a></li>
             <li><a href="#compareprices" class="links">Compare Prices</a></li>
+            <li><a href="#detailedinstance" class="links">Detailed Instances</a></li>
+            <li><a href="#cloudstorage" class="links">Cloud Storage</a></li>
           </ul>
         </div>
       </div>
 
-      <div id="quickstart">
+      <div id="quickstart" class="section ">
         <br><br><br>
         <h2>Quick Start Guides</h2>
 
-        <div id="getprices">
-          <br><br>
+        <div id="getprices" class="section ">
+          <br>
 
           <h3> Get Prices </h3>
           <ol>
@@ -91,26 +85,21 @@
               <p>
                 Navigate to the tab <a href="list.html">Get Prices</a> or click on the designated Get Prices button on our <a href="home.html">home page</a>.
               </p>
-              <img src="{% static 'img/clickhome.png' %}" class="pics">
             </li>
             <li>
               <p>
                 In the sidebar, set attributes if desired before clicking on the “Submit” button at the bottom of the sidebar to search for an instance with any specifications of your liking to narrow down the results. The sidebar enables users to toggle specifications such as cloud providers, regions, operating system, payment plans, memory, and vCPUs. Click <a href="#usesidebar">here</a> to see how to use the sidebar to its full potential!
               </p>
-
-               *INSERT FULL PIC*
-
-            </li>
+              <img src="{% static 'img/results.png' %}" class="pics"></li>
             <li>
               <p>
-                Click on a particular instance type to be led to a detailed instance page depicting payment plans, pricing over time, and etc.
+                To find out how to view more detailed information about a particular instance type, click <a href="#detailedinstance">here</a>.
               </p>
-              <img src="{% static 'img/clickinstance.png' %}" class="pics">
             </li>
           </ol>
         </div>
 
-        <div id="usesidebar">
+        <div id="usesidebar" class="section ">
           <br><br>
 
           <h3> Using the Sidebar </h3>
@@ -119,21 +108,24 @@
               <p>
                 Click/unclick any of these checkboxes to select/unselect any specifications.
               </p>
+              <img src="{% static 'img/checking.gif' %}" class="pics">
             </li>
             <li>
               <p>
                 Use Shift+click to select multiple regions.
+                <img src="{% static 'img/multiselect.gif' %}" class="pics">
               </p>
             </li>
             <li>
               <p>
                 Shift the slider to adjust the ranges desired for the category or manually enter in values.
+                <img src="{% static 'img/sliders.gif' %}" class="pics">
               </p>
             </li>
           </ol>
         </div>
 
-        <div id="sortprices">
+        <div id="sortprices" class="section ">
           <br><br><br>
 
           <h3> Sort Prices </h3>
@@ -142,8 +134,7 @@
               <p>
                 Click on any of the column heading tabs to sort the results by the chosen category.
               </p>
-              <img src="{% static 'img/sort.png' %}" class="pics">
-              <img src="{% static 'img/sorted.png' %}" class="pics">
+              <img src="{% static 'img/sorting.gif' %}" class="pics">
             </li>
             <li>
               <p>
@@ -154,18 +145,18 @@
               <p>
                 Adjust the number of entries shown per page above the top left corner of the table.
               </p>
-              <img src="{% static 'img/clickentries.png' %}" class="pics">
+              <img src="{% static 'img/clickentry.png' %}" class="pics">
             </li>
             <li>
               <p>
                 Search for a specific VM instance or for any keywords by using the search bar located above the top right side of the table.
               </p>
-              <img src="{% static 'img/clicksearch.png' %}" class="pics">
+              <img src="{% static 'img/clicksearchbox.png' %}" class="pics">
             </li>
           </ol>
         </div>
 
-        <div id="compareprices">
+        <div id="compareprices" class="section ">
           <br><br><br>
 
           <h3> Compare Prices </h3>
@@ -174,25 +165,58 @@
               <p>
                 To compare prices of certain instances, check any of the boxes to the left of the instance rows on the table. You may select up to 3 instances to be compared.
               </p>
-              <img src="{% static 'img/selection.png' %}" class="pics">
+              <img src="{% static 'img/compareselect.png' %}" class="pics">
             </li>
             <li>
               <p>
                 Once you’re satisfied with your selection, click on the “Compare” button to the bottom left corner of the table.
-              </p>
-              <img src="{% static 'img/clickcompare.png' %}" class="pics">
-            </li>
-            <li>
-              <p>
                 This leads to a pop-up of a closer comparison chart of the specified instances.
               </p>
-              <img src="{% static 'img/compareresults.png' %}" class="pics">
+              <img src="{% static 'img/comparing.gif' %}" class="pics">
             </li>
           </ol>
         </div>
+
+        <div id="detailedinstance" class="section ">
+          <br><br><br>
+
+          <h3> Detailed Instances </h3>
+          <ol>
+            <li>
+              <p>
+                To view more detailed information about a particular VM, click on the desired instance!
+              </p>
+              <img src="{% static 'img/clickinst.png' %}" class="pics">
+            </li>
+            <li>
+              <p>
+                 This leads to a detailed page that shows information about the different payment plans available and specifications about the instance such as SKU, clock speed, and instance family.
+              </p>
+              <img src="{% static 'img/detailedinstance.gif' %}" class="pics">
+            </li>
+            <li>
+              <p>
+                The bottom of the page includes a graph showing the pricing trends for the instance with the different payment options. You can toggle the options to view only one to all payment options.
+              </p>
+              <img src="{% static 'img/instancegraph.png' %}" class="pics">
+            </li>
+          </ol>
+        </div>
+
+        <div id="cloudstorage" class="section ">
+          <br><br><br>
+
+          <h3> Cloud Storage </h3>
+          <p>
+            To view cloud storage pricing, navigate to the <a href="/storage.html">Cloud Storage</a> tab. This table has the same sorting and searching properties the instance pricing table has.
+          </p>
+          <img src="{% static 'img/cloudstorage.png' %}" class="pics">
+        </div>
+
       </div>
 
-      <div id="providers">
+
+      <div id="providers" class="section ">
         <br><br><br>
 
         <h2>Cloud Providers</h2>
@@ -201,14 +225,12 @@
         </p>
 
         <div id="aws">
-          <br><br><br>
+          <br>
 
           <h3> AWS </h3>
           <p>
             Amazon Web Services is a subsidiary of Amazon that provides on-demand cloud computing platforms on a pay-as-you-go basis. It’s the world’s most comprehensive and broadly adopted cloud platform, offering over 165 fully featured services (over 40 of which that aren’t available anywhere else) from data centers globally. AWS has the largest, most dynamic ecosystem and is architected to be the most flexible and secure cloud computing environment available today.
           </p>
-
-          <br><br>
 
           <h4> Amazon EC2 </h4>
           <p>
@@ -230,8 +252,6 @@
             Microsoft Azure is an ever-expanding set of cloud computing service created by Microsoft for building, testing, deploying, and managing applications and services through Microsoft-managed data centers. It prides itself on being the only consistent hybrid cloud on the market, and is extremely productive, intelligent, and trusted. MS Azure has the largest portfolio in the industry, with more global regions than any cloud provider and markets their services as the cloud for all that finds answers to any business challenge with a scalable, cost-effective solution.
           </p>
 
-          <br><br>
-
           <h4> Azure VM </h4>
           <p>
             Azure VM is an on-demand, scalable computing resource that gives you the flexibility of virtualization while keeping your budget in check with low-cost, per-second billing where you only pay for the compute time you use. It has the capacity to scale from one to thousands of VM instances in minutes, and provides you with recommendations for high availability, security, performance for all your VMs with other services provided in Azure.
@@ -246,25 +266,23 @@
 
       </div>
 
-      <div id="payment">
+      <div id="payment" class="section ">
         <br><br><br>
 
         <h2>Payment Plans</h2>
 
         <div id="ondemand">
-        <br><br>
+        <br>
           <h3> On Demand Pricing </h3>
           <p>
             On-Demand pricing lets you pay for compute capacity by the hour or second with no long-term commitments or upfront payments. This allows you to increase or decrease your compute capacity depending on the demands of your application and relieves you from the costs and complexities of planning, purchasing, and maintaining hardware. As a result, this transforms the generally large fixed costs into smaller variable costs as you only pay for what you use.
           </p>
 
-          <br>
-
           <p>
             *MS Azure uses the term “Pay-as-you-go” for On-Demand pricing but for standardization purposes, we generalize to On-Demand.
           </p>
 
-          <br><br>
+          <br>
 
           <h4> Recommended for: </h4>
             <ul>
@@ -300,13 +318,11 @@
             Reserved pricing provides you with significant discounts (amount varies by provider) in comparison to On-Demand pricing by pre-paying for either 1-year or 3-year terms of VMs, which allows you to get a discount on the resources you use in both AWS and MS Azure.
           </p>
 
-          <br>
-
           <p>
             Specifically in AWS you have the choice between a Standard or Convertible Reserved pricing. With Standard Reserved pricing, you can receive up to a 75% discount and have the flexibility to alter the Availability Zones, instance sizes, and networking types. Convertible Reserved pricing allows you to have further flexibility, such as having the capacity to use different instance families or operating systems, and provides up to a 54% discount. Additionally with either of those reservations, you can choose to pay with either All Upfront, Partial Upfront, or No Upfront payments. The All Upfront option requires you to pay for the entire Reserved term with one payment, and provides you with the largest discount compared to On-Demand pricing. With Partial Upfront, you are required to pay a low upfront payment and then charged a discounted hourly rate for the VM of your choice for the duration of the Reserved term. With the No Upfront option, no upfront payment is required and a discounted hourly rate is charged for the entire duration of the Reserved term.
           </p>
 
-          <br><br>
+          <br>
 
           <h4> Recommended for: </h4>
             <ul>
@@ -347,13 +363,11 @@
             Spot pricing allows you to bid for unused capacity in a cloud provider’s data center. The prices are set by the cloud provider and adjusted gradually based on long-term trends in supply and demand for Spot VM capacity. You pay the Spot price that’s in effect for the time period your Vs are running, and can save up a significant amount when compared to On-Demand pricing, but if someone else bids higher than you, your VM will be taken away. With AWS Spot VMs can also run for a predefined duration (hourly increments up to 6 hours) with a discount of up to 30 - 50% compared to On-Demand pricing. VMs in MS Azure are billed per-second rounded down to the last minute.
           </p>
 
-          <br>
-
           <p>
             *MS Azure uses the term “low-priority” VMs for Spot pricing but for standardization purposes, we generalize to Spot.
           </p>
 
-          <br><br>
+          <br>
 
           <h4> Recommended for: </h4>
             <ul>
@@ -398,54 +412,7 @@
 
       </div>
 
-      <div id="features">
-        <br><br><br>
-
-        <h2>Features</h2>
-
-        <br><br>
-
-        <h3> Find Prices </h3>
-        <p>
-          To find and sort through prices of VM’s, navigate to the <a href="list.html">Get Prices</a> page. To help you get started on finding the right VM for you, click <a href="#getprices">here</a> for a quick guide!
-          The sidebar enables you to toggle cloud providers, regions, operating system, payment plans, memory, vCPUs, etc to your liking.
-          You can customize the number of entries shown per page of the table.
-          You can also search for a particular instance or any keyword using this search bar.
-          Clicking on any of the column headings will sort the results in according to that category.
-        </p>
-
-        <img src="{% static 'img/resultstable.png' %}" class="pics">
-
-        <br><br>
-
-        <h3> Compare Prices </h3>
-        <p>
-          In order to compare prices of certain VMs in a more readable manner, the compare button allows you to choose up to three VMs of your choice and view them in a separate table.
-        </p>
-
-        <img src="{% static 'img/compareresults.png' %}" class="pics">
-
-        <br><br>
-
-        <h3> Detailed Instance Page </h3>
-        <p>
-          To view more detailed information about a particular VM, click on the instance type to be led to a detailed page that shows information about the different payment plans available and specifications about the instance such as SKU, clock speed, and instance family. The bottom of the page includes a graph showing the pricing trends for the instance with the different payment options. You can toggle the options to view only one to all payment options.
-        </p>
-
-        <img src="{% static 'img/instancedetail.png' %}" class="pics">
-        <img src="{% static 'img/instancepayment.png' %}" class="pics">
-        <img src="{% static 'img/instancegraph.png' %}" class="pics">
-
-        <br><br>
-
-        <h3> Cloud Storage </h3>
-        <p>
-          To view cloud storage pricing, navigate to the “Cloud Storage” tab. This table has the same sorting and searching properties the instance pricing table has.
-        </p>
-
-      </div>
-
-      <div id="github">
+      <div id="github" class="section ">
         <br><br><br>
 
         <h2>Github</h2>
@@ -459,86 +426,6 @@
           We have developed the software to support tracking any number of further cloud providers. While Amazon Web Services and Azure are the two largest cloud providers, we want to include Google Cloud Platform instances in our database and frontend, as well as any smaller providers.
         </p>
       </div>
-
-      <div id="aboutus" class="section">
-        <br><br><br>
-
-        <h2>Meet our team!</h2>
-
-        <br>
-
-        <div class="row">
-          <div class="col">
-  					<img src="{% static 'img/rhodges-photo.jpg' %}" id="teamimg">
-  			  </div>
-          <div class="coldescription">
-            <h4> Robert Hodges </h4>
-            <p>
-              Robert Hodges is CEO of Altinity, which is commercializing a new data warehouse named ClickHouse. Robert has been writing code since he was 12 years old and has an extensive background in databases, distributed systems, and cloud computing. Contrail is the second senior design project he has mentored at UC Davis.
-            </p>
-          </div>
-				</div>
-
-        <br>
-
-        <div class="row">
-          <div class="col">
-  					<img src="{% static 'img/jingwen.png' %}" id="teamimg">
-  			  </div>
-          <div class="coldescription">
-            <h4> Jingwen Low </h4>
-            <p>
-              Jingwen is a 4th year UC Davis Computer Science and Engineering student. She is also currently works as a full stack developer at ASUCD Creative Media.
-            </p>
-          </div>
-				</div>
-
-        <br>
-
-        <div class="row">
-          <div class="col">
-  					<img src="{% static 'img/amazon.png' %}" id="teamimg">
-  			  </div>
-          <div class="coldescription">
-            <h4> Joshua Prince </h4>
-            <p>
-              Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.
-            </p>
-          </div>
-				</div>
-
-        <br>
-
-        <div class="row">
-          <div class="col">
-  					<img src="{% static 'img/monisha.png' %}" id="teamimg">
-  			  </div>
-          <div class="coldescription">
-            <h4> Monisha Ravindar </h4>
-            <p>
-              Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.
-            </p>
-          </div>
-				</div>
-
-        <br>
-
-        <div class="row">
-          <div class="col">
-  					<img src="{% static 'img/amazon.png' %}" id="teamimg">
-  			  </div>
-          <div class="coldescription">
-            <h4> Rishi Dutta </h4>
-            <p>
-              Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.
-            </p>
-          </div>
-				</div>
-      </div>
-
-      <br><br><br>
-
-    </div>
 
 
 </div>
@@ -584,5 +471,6 @@
     });
   }
 </script>
+
 
 {% endblock %}

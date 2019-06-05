@@ -26,18 +26,44 @@
       <div class="form-group">
         <div id="div_id_amazon_web_services" class="form-check">
           <label for="id_amazon_web_services" class="form-check-label">
-            <input type="checkbox" name="amazon_web_services" class="checkboxinput form-check-input" id="id_amazon_web_services" {% if form.amazon_web_services.data %}checked{% endif %}>
+            <input type="checkbox" name="amazon_web_services" class="checkboxinput form-check-input" id="id_amazon_web_services" onclick="regionToggle('id_amazon_web_services', 'div_id_aws_region') "{% if form.amazon_web_services.data %}checked{% endif %}>
             Amazon Web Services
           </label>
+        </div>
+      </div>
+
+      <div id="div_id_aws_region" class="form-group">
+        <!-- <label for="id_aws_region" class="col-form-label ">
+          Select Region(s)
+        </label> -->
+        <div class="">
+          <select name="aws_region" class="select form-control" id="id_aws_region" multiple>
+              {% for r in aws_regions %}
+              <option value="{{ r }}" {% if form.aws_region.data == r %}selected{% endif %}>{{ r }}</option>
+              {% endfor %}
+          </select>
         </div>
       </div>
 
       <div class="form-group">
         <div id="div_id_microsoft_azure" class="form-check">
           <label for="id_microsoft_azure" class="form-check-label">
-            <input type="checkbox" name="microsoft_azure" class="checkboxinput form-check-input" id="id_microsoft_azure" {% if form.microsoft_azure.data %}checked{% endif %}>
+            <input type="checkbox" name="microsoft_azure" class="checkboxinput form-check-input" id="id_microsoft_azure" onclick="regionToggle('id_microsoft_azure', 'div_id_azure_region')" {% if form.microsoft_azure.data %}checked{% endif %}>
             Microsoft Azure
           </label>
+        </div>
+      </div>
+
+      <div id="div_id_azure_region" class="form-group">
+        <!-- <label for="id_azure_region" class="col-form-label ">
+           Select Region(s)
+        </label> -->
+        <div class="">
+          <select name="azure_region" class="select form-control" id="id_azure_region" multiple>
+              {% for r in azure_regions %}
+              <option value="{{ r }}" {% if form.azure_region.data == r %}selected{% endif %}>{{ r }}</option>
+              {% endfor %}
+          </select>
         </div>
       </div>
 
@@ -54,18 +80,7 @@
         </div>
       </div>
 
-      <div id="div_id_region" class="form-group">
-        <label for="id_region" class="col-form-label ">
-           Region
-        </label>
-        <div class="">
-          <select name="region" class="select form-control" id="id_region" multiple>
-              {% for r in regions %}
-              <option value="{{ r }}" {% if form.region.data == r %}selected{% endif %}>{{ r }}</option>
-              {% endfor %}
-          </select>
-        </div>
-      </div>
+
 
       <label class="form-check-label">Price Type</label>
 
@@ -126,20 +141,6 @@
         </div>
       </div><br>
 
-{#      <label for="id_price" class="col-form-label ">#}
-{#          Price Upfront#}
-{#      </label>#}
-{#      <div class="range-slider">#}
-{#          <input type="text" class="price-range-slider" value="" />#}
-{#      </div><br>#}
-{##}
-{#      <div class="extra-controls form-inline">#}
-{#        <div class="form-group">#}
-{#          <input type="text" id="id_price_from" class="price-input-from form-control" name="price_from" value="0" style="width: 80px; margin-right: 30px;" />#}
-{#          <input type="text" id="id_price_to" class="price-input-to form-control" name="price_to" value="0" style="width: 80px;" />#}
-{#        </div>#}
-{#      </div>#}
-{##}
 
       <label for="id_pricehr" class="col-form-label ">
           Price Hourly
@@ -360,6 +361,23 @@
   } );
 </script>
 
+
+<!-- REGIONS -->
+<script type="text/javascript">
+
+  function regionToggle(input, region) {
+    var checkBox = document.getElementById(input);
+    var text = document.getElementById(region);
+    if (checkBox.checked == true){
+      text.style.display = "block";
+    } else {
+       text.style.display = "none";
+    }
+  }
+
+</script>
+
+
 <!-- COMPARISON -->
 <script type="text/javascript">
   var comparePop = document.getElementById('comparepop');
@@ -377,7 +395,6 @@
       alert("Please select more than 1 instance to be compared.");
       document.getElementById("comparepop").style.display = "none";
     }
-
     else {
       selectedRows.forEach(function(row) {
         for (var i = 0; i < numSpecs; i++) {
@@ -415,3 +432,4 @@
 
 
 {% endblock %}
+div_id_microsoft_azure
