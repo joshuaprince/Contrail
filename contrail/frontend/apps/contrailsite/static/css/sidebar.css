@@ -301,10 +301,6 @@ a.article:hover {
   cursor: pointer;
 }
 
-a.active {
-  color: #ed5665;
-}
-
 /* ---------------------------------------------------
     CONTENT STYLE
 ----------------------------------------------------- */
@@ -453,4 +449,9 @@ a.active {
     #sidebarCollapse span {
         display: none;
     }
+    .pics {
+      width: 80%;
+      height: auto;
+    }
+
 }
