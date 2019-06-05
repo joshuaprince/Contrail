@@ -63,7 +63,7 @@ def generate_detail_link_dict(instance: Dict) -> Dict:
     return details
 
 
-@cached(cache=TTLCache(maxsize=1, ttl=86400))
+@cached(cache=TTLCache(maxsize=10, ttl=86400))
 def list_regions(provider) -> List[str]:
     """
     List all regions found in the  `region` column of InstanceDataLastPointView.
