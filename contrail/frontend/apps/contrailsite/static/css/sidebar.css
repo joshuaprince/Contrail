@@ -172,6 +172,10 @@ a.article:hover {
   font-size: inherit;
 }
 
+.small {
+  padding: 0;
+}
+
 /* The container */
 .checkbox-container {
   display: block;
