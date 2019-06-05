@@ -229,6 +229,7 @@ def create_contrail_table(recreate=False):
     db.raw(_generate_last_point_view_sql(True))
     db.raw(_generate_last_point_materialized_view_sql(False))
     db.raw(_generate_last_point_view_sql(False))
+
     db.raw(_generate_hourly_price_materialized_view_sql())
     db.raw(_generate_hourly_price_view_sql())
     db.raw(_generate_daily_price_materialized_view_sql())
@@ -250,6 +251,13 @@ def fix_aggregated_data():
     db_long.raw("DROP TABLE IF EXISTS instancedatalastpointview")
     db_long.raw("DROP TABLE IF EXISTS instancedatalastpointviewallreserved")
 
+    db.raw("DROP TABLE IF EXISTS instancedata_hourly_price_mv")
+    db.raw("DROP TABLE IF EXISTS instancedatahourlypriceview")
+    db.raw("DROP TABLE IF EXISTS instancedata_daily_price_mv")
+    db.raw("DROP TABLE IF EXISTS instancedatadailypriceview")
+    db.raw("DROP TABLE IF EXISTS instancedata_monthly_price_mv")
+    db.raw("DROP TABLE IF EXISTS instancedatamonthlypriceview")
+
     print("Fixing materialized view data. This will take a while, be patient.")
     db_long.raw(_generate_materialized_view_sql(True))
     db_long.raw(_generate_view_sql(True))
@@ -257,6 +265,13 @@ def fix_aggregated_data():
     db_long.raw(_generate_materialized_view_sql(False))
     db_long.raw(_generate_view_sql(False))
     print("Done.")
+
+    db.raw(_generate_hourly_price_materialized_view_sql())
+    db.raw(_generate_hourly_price_view_sql())
+    db.raw(_generate_daily_price_materialized_view_sql())
+    db.raw(_generate_daily_price_view_sql())
+    db.raw(_generate_monthly_price_materialized_view_sql())
+    db.raw(_generate_monthly_view_sql())
 
 
 GROUPED_COLS = ['productFamily', 'provider', 'region', 'operatingSystem', 'priceType', 'instanceType',
