@@ -27,7 +27,8 @@ def price_view(request):
         'on_demand': True,
         'reserved': True,
         'spot': True,
-    }), 'regions': list_regions()}
+    }), 'aws_regions': list_regions('aws'),
+    'azure_regions': list_regions('azure')}
 
     instance_filters = {}
 
@@ -54,8 +55,16 @@ def price_view(request):
             if form.cleaned_data['operating_system']:
                 instance_filters['operatingSystem'] = form.cleaned_data['operating_system']
 
-            if form.cleaned_data['region']:
-                instance_filters['region__in'] = form.cleaned_data['region']
+            regions = []
+
+            if form.cleaned_data['aws_region']:
+                regions.extend(form.cleaned_data['aws_region'])
+
+            if form.cleaned_data['azure_region']:
+                regions.extend(form.cleaned_data['azure_region'])
+
+            if len(regions) > 0:
+                instance_filters['region__in'] = regions
 
             if form.cleaned_data['memory_from']:
                 instance_filters['memory__gte'] = form.cleaned_data['memory_from']

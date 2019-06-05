@@ -4,7 +4,7 @@ from cachetools import cached, TTLCache
 from infi.clickhouse_orm.database import Database
 
 from contrail.configuration import config
-from contrail.loader.warehouse import InstanceData, InstanceDataLastPointView, InstanceDataLastPointViewAllReserved, InstanceDataHourlyPriceView, InstanceDataDailyPriceView, InstanceDataMonthlyPriceView 
+from contrail.loader.warehouse import InstanceData, InstanceDataLastPointView, InstanceDataLastPointViewAllReserved, InstanceDataHourlyPriceView, InstanceDataDailyPriceView, InstanceDataMonthlyPriceView
 
 db = Database(config['CLICKHOUSE']['db_name'], db_url=config['CLICKHOUSE']['db_url'], readonly=True)
 
@@ -64,11 +64,14 @@ def generate_detail_link_dict(instance: Dict) -> Dict:
 
 
 @cached(cache=TTLCache(maxsize=1, ttl=86400))
-def list_regions() -> List[str]:
+def list_regions(provider) -> List[str]:
     """
     List all regions found in the  `region` column of InstanceDataLastPointView.
     """
-    return list(map(lambda i: i.region, InstanceData.objects_in(db).distinct().only('region')))
+    if provider == 'aws':
+        return list(map(lambda i: i.region, InstanceData.objects_in(db).filter(provider='AmazonEC2').distinct().only('region')))
+    else:
+        return list(map(lambda i: i.region, InstanceData.objects_in(db).filter(provider='Azure').distinct().only('region')))
 
 
 def list_instances(page, **kwargs) -> List[Dict]:
@@ -170,7 +173,7 @@ def get_instance_price_history(record_count=100, **kwargs) -> Dict[str, List[Dic
     monthly_base_query = InstanceDataMonthlyPriceView.objects_in(db).filter(**kwargs).only(*PRICE_HISTORY_PARAMS).order_by('-crawlTime')
     # base_query = InstanceData.objects_in(db).filter(**kwargs).distinct().only(*PRICE_HISTORY_PARAMS).order_by('-crawlTime')
     # Get a time series from the last several entries in the database that match this filter
-    
+
     price_history = {
         'hourlyOnDemand': hourly_base_query.filter(priceType='On Demand')[:record_count],
         'hourlySpot': hourly_base_query.filter(priceType='Spot')[:record_count],
