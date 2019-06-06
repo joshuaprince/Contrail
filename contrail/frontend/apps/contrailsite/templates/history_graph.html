@@ -1,16 +1,16 @@
 <div style="text-align: center">
-    <button id="hourly_scale" class="btn btn-primary" style="font-size:10px;padding:10px;">
-      Hourly
-    </button>
-    &nbsp;
-    &nbsp;
+{#    <button id="hourly_scale" class="btn btn-primary" style="font-size:10px;padding:10px;">#}
+{#      Hourly#}
+{#    </button>#}
+{#    &nbsp;#}
+{#    &nbsp;#}
     <button id="daily_scale" class="btn btn-primary" style="font-size:10px;padding:10px;">
-      Daily
+      Short-Term
     </button>
     &nbsp;
     &nbsp;
     <button id="monthly_scale" class="btn btn-primary" style="font-size:10px;padding:10px;">
-      Monthly
+      Long-Term
     </button>
 </div>
 <br><br>
@@ -254,7 +254,7 @@
     };
 
 var ctx = document.getElementById('canvas').getContext('2d');
-window.myLine = new Chart(ctx, config1);
+window.myLine = new Chart(ctx, config2);
 
 $("#hourly_scale").on("click", function() {
     window.myLine.destroy()
