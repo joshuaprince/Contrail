@@ -322,28 +322,82 @@
 
 </script>
 
-<!-- SELECTION -->
+<!-- SELECTION + COMPARISON -->
 <script type="text/javascript">
-  $(document).ready(function() {
-  	 var table = $('#instances').DataTable();
-     table.selectedProducts = 0;
+$(document).ready(function() {
+   var table = $('#instances').DataTable();
 
-    // selecting products
-    $('#instances tbody').on( 'click', 'input[type="checkbox"]', function () {
-      var row = $(this).closest('tr');
-      if (row.hasClass('selected')) {
-        row.removeClass('selected');
-        table.selectedProducts -= 1;
-      } else if (table.selectedProducts < 3 && !row.hasClass('selected')) {
-          row.addClass('selected');
-          table.selectedProducts += 1;
-      } else if (table.selectedProducts >= 3) {
-        alert("Please only select up to 3 instances to be compared.");
-        $(this).prop('checked', false);
-      }
-    } );
+   //clear all checkboxes when the page loads
+   $('#instances input[type=checkbox]').prop("checked", false);
+   table.selectedProducts = 0;
 
+  // selecting products
+  $('#instances tbody').on( 'click', 'input[type="checkbox"]', function () {
+    var row = $(this).closest('tr');
+    if (row.hasClass('selected')) {
+      row.removeClass('selected');
+      table.selectedProducts -= 1;
+    } else if (table.selectedProducts < 3 && !row.hasClass('selected')) {
+        row.addClass('selected');
+        table.selectedProducts += 1;
+    } else if (table.selectedProducts >= 3) {
+      alert("Please only select up to 3 instances to be compared.");
+      $(this).prop('checked', false);
+    }
   } );
+
+  var comparePop = document.getElementById('comparepop');
+  var btn = document.getElementById('comparebutton');
+  var span = document.getElementsByClassName("close")[0];
+  var compareTable = document.getElementById('instancesComp');
+  var numSpecs = (document.getElementById('instances').rows[0].cells.length) - 1;
+
+  //on clicking compare, display selected rows
+  btn.onclick = function() {
+    comparePop.style.display = "block";
+    var selectedRows = table.rows('.selected').data();
+    var numSelected = selectedRows.length;
+
+    if (numSelected <= 1) {
+      alert("Please select more than 1 instance to be compared.");
+      document.getElementById("comparepop").style.display = "none";
+    }
+    else {
+      for (var j = 0; j < numSelected; j++) {
+        for (var i = 0; i < numSpecs; i++) {
+          var newCell = document.createElement('td');
+          newCell.innerHTML = selectedRows[j][i+1];
+          compareTable.rows[i].appendChild(newCell);
+        }
+      }
+    }
+  }
+
+  //close compare window
+  span.onclick = function() {
+    comparePop.style.display = "none";
+    var numCol = compareTable.rows[0].cells.length;
+    for (var i = 0; i < numSpecs; i++) {
+      for (var j = 1; j < numCol; j++) {
+         compareTable.rows[i].deleteCell(1);
+      }
+    }
+  }
+
+  //close compare window
+  window.onclick = function(event) {
+    if (event.target == comparePop) {
+      comparePop.style.display = "none";
+      var numCol = compareTable.rows[0].cells.length;
+      for (var i = 0; i < numSpecs; i++) {
+        for (var j = 1; j < numCol; j++) {
+           compareTable.rows[i].deleteCell(1);
+        }
+      }
+    }
+  }
+
+} );
 </script>
 
 
@@ -364,66 +418,6 @@
   // Initial load
   regionToggle('id_amazon_web_services', 'div_id_aws_region');
   regionToggle('id_microsoft_azure', 'div_id_azure_region');
-
-</script>
-
-
-<!-- COMPARISON -->
-<script type="text/javascript">
-  var comparePop = document.getElementById('comparepop');
-  var btn = document.getElementById('comparebutton');
-  var span = document.getElementsByClassName("close")[0];
-  var compareTable = document.getElementById('instancesComp');
-  var numSpecs = (document.getElementById('instances').rows[0].cells.length) - 1;
-
-  btn.onclick = function() {
-    comparePop.style.display = "block";
-    var selectedRows = document.querySelectorAll(".selected");
-    var numSelected = selectedRows.length;
-
-    if (numSelected <= 1) {
-      alert("Please select more than 1 instance to be compared.");
-      document.getElementById("comparepop").style.display = "none";
-    }
-    else {
-      selectedRows.forEach(function(row) {
-        for (var i = 0; i < numSpecs; i++) {
-          var newCell = document.createElement('td');
-          var cell = row.cells[i+1].innerText
-          if (i == 0) {
-            var link = row.cells[1].getElementsByTagName('a')[0].getAttribute('href');
-            newCell.innerHTML = '<a href="'+link+'">'+cell+'</a>';
-          }
-          else {
-            newCell.innerHTML = cell;
-          }
-          compareTable.rows[i].appendChild(newCell);
-        }
-      });
-    }
-  }
-
-  span.onclick = function() {
-    comparePop.style.display = "none";
-    var numCol = compareTable.rows[0].cells.length;
-    for (var i = 0; i < numSpecs; i++) {
-      for (var j = 1; j < numCol; j++) {
-         compareTable.rows[i].deleteCell(1);
-      }
-    }
-  }
-
-  window.onclick = function(event) {
-    if (event.target == comparePop) {
-      comparePop.style.display = "none";
-      var numCol = compareTable.rows[0].cells.length;
-      for (var i = 0; i < numSpecs; i++) {
-        for (var j = 1; j < numCol; j++) {
-           compareTable.rows[i].deleteCell(1);
-        }
-      }
-    }
-  }
 
 </script>
 
