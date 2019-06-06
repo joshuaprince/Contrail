@@ -158,7 +158,7 @@
 
       <br>
 
-    <button type="submit" class="btn btn-primary getprices">Submit</button>
+    <button id="getprices" type="submit" class="btn btn-primary">Submit</button>
   </form>
 
   </nav>
@@ -208,8 +208,8 @@
           <tfoot>
               <tr>
                 <th></th>
-                <th>Provider <a href="#" class="sort-by"></a></th>
                 <th>Instance Type <a href="#" class="sort-by"></a></th>
+                <th>Provider <a href="#" class="sort-by"></a></th>
                 <th>Region <a href="#" class="sort-by"></a></th>
                 <th>OS <a href="#" class="sort-by"></a></th>
                 <th>vCPUs <a href="#" class="sort-by"></a></th>
@@ -368,6 +368,33 @@
 </script>
 
 
+<!-- Hide submit button on collapse -->
+<script type="text/javascript">
+  // mCustomScrollbar
+  // var sidebar = document.querySelector("#sidebar");
+  // if(sidebar.classList.contains("active")){
+  //     var btn = document.getElementById("getprices");
+  //     console.log("SDF")
+  //     btn.style.display = "none";
+  // }
+  // else {
+  //     btn.style.display = "block";
+  //     console.log("GSF")
+  // }
+
+  // $(document).ready(function(){
+  //
+  //   if ( $('nav#sidebar').hasClass("active") ) {
+  //     console.log("SDFD")
+  //     // $('#main').addClass('woodwork');
+  //   }
+  //   else {
+  //     console.log("SDFDS")
+  //   }
+  // });
+
+</script>
+
 <!-- COMPARISON -->
 <script type="text/javascript">
   var comparePop = document.getElementById('comparepop');
@@ -422,4 +449,3 @@
 
 
 {% endblock %}
-div_id_microsoft_azure

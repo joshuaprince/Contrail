@@ -47,9 +47,10 @@ table#instances {
 }
 
 /* Sidebar space for button */
-.getprices {
+#getprices {
     position: fixed;
-    bottom: 15px;
+    bottom: 25px;
+    left:60px;
     z-index: 99;
 }
 
