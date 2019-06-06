@@ -16,7 +16,7 @@ def check_config(*required_sections):
 
 def run_crawler(args):
     check_config('AWS', 'AZURE')
-    from crawler import crawler
+    from contrail.crawler import crawler
     crawler.crawl()
 
 
