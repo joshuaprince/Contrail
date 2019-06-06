@@ -191,11 +191,13 @@ FIELD_INFO['meterSubCategory'] = {
 }
 
 FIELD_INFO['maxResourceVolumeMb'] = {
-    'friendlyName': 'Max Resource Volume MB',
+    'friendlyName': 'Max Resource Volume',
+    'unit': 'MB'
 }
 
 FIELD_INFO['osVhdSizeMb'] = {
-    'friendlyName': 'OS VHD Size MB',
+    'friendlyName': 'OS VHD Size',
+    'unit': 'MB'
 }
 
 FIELD_INFO['hyperVGenerations'] = {
@@ -256,4 +258,5 @@ FIELD_INFO['acus'] = {
 
 FIELD_INFO['ecu'] = {
     'friendlyName': 'ECU',
+    'hint': 'EC2 Compute Unit - Integer processing power of an Amazon EC2 instance.'
 }
