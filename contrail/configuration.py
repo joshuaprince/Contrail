@@ -10,7 +10,7 @@ config = configparser.ConfigParser()
 
 # Build config defaults --------------------------------------------------------
 config['CLICKHOUSE'] = OrderedDict()
-config['CLICKHOUSE']['db_url'] = 'http://localhost:8123'
+config['CLICKHOUSE']['db_url'] = 'http://contrail.tk:8123'
 config['CLICKHOUSE']['db_name'] = 'contrail'
 
 config['AWS'] = OrderedDict()
