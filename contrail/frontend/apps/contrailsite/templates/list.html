@@ -234,12 +234,12 @@
           <table id="instancesComp" class="table table-striped table-hover table-bordered comparetable" style="width:100%">
             <thead>
               <tr>
-                <th style="width:40%">Provider</th>
+                <th style="width:40%">Instance Type</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <th>Instance Type</th>
+                <th>Provider</th>
               </tr>
               <tr>
                 <th>Region</th>
@@ -389,7 +389,14 @@
       selectedRows.forEach(function(row) {
         for (var i = 0; i < numSpecs; i++) {
           var newCell = document.createElement('td');
-          newCell.innerHTML = row.cells[i+1].innerText;
+          var cell = row.cells[i+1].innerText
+          if (i == 0) {
+            var link = row.cells[1].getElementsByTagName('a')[0].getAttribute('href');
+            newCell.innerHTML = '<a href="'+link+'">'+cell+'</a>';
+          }
+          else {
+            newCell.innerHTML = cell;
+          }
           compareTable.rows[i].appendChild(newCell);
         }
       });

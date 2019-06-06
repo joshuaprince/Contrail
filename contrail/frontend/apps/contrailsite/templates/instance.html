@@ -153,7 +153,13 @@
 
       <h2 style="text-align:center;">Price History</h2>
       <br>
-      <div id="pricehistorygraph">Loading...</div>
+      <div id="pricehistorygraph" style="text-align: center">
+        <div class="spinner-grow text-info" role="status">
+        </div>
+        <div style="color: slategray">
+            Loading
+        </div>
+      </div>
       <br><br><br><br>
 </div>
 
@@ -168,6 +174,8 @@
   $(document).ready(function() {
     $.get('{% url 'historygraph' %}' + location.search,  function (data) {
         $('#pricehistorygraph').html(data);
+    }).catch(function (error) {
+        $('#pricehistorygraph').html("Something went wrong loading the instance data. Try again in a few minutes.");
     });
   });
 </script>
