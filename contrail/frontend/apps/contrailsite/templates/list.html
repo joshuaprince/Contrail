@@ -350,6 +350,7 @@
 <!-- REGIONS -->
 <script type="text/javascript">
 
+  // Onclick
   function regionToggle(input, region) {
     var checkBox = document.getElementById(input);
     var text = document.getElementById(region);
@@ -360,7 +361,9 @@
     }
   }
 
-
+  // Initial load
+  regionToggle('id_amazon_web_services', 'div_id_aws_region');
+  regionToggle('id_microsoft_azure', 'div_id_azure_region');
 
 </script>
 
