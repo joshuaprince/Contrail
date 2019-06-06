@@ -158,7 +158,7 @@
 
       <br>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary getprices">Submit</button>
   </form>
 
 
@@ -192,8 +192,8 @@
           <thead>
               <tr>
                   <th></th>
-                  <th>Provider <a href="#" class="sort-by"></a></th>
                   <th>Instance Type <a href="#" class="sort-by"></a></th>
+                  <th>Provider <a href="#" class="sort-by"></a></th>
                   <th>Region <a href="#" class="sort-by"></a></th>
                   <th>OS <a href="#" class="sort-by"></a></th>
                   <th>vCPUs <a href="#" class="sort-by"></a></th>
@@ -207,8 +207,8 @@
           {% for instance in instances %}
             <tr>
               <td><input type="checkbox" /></td>
-              <td>{{ instance.provider }}</td>
               <td><a href="{{ instance.url }}" style="color: #64a19d;">{{ instance.instanceType }}</a></td>
+              <td>{{ instance.provider }}</td>
               <td>{{ instance.region }}</td>
               <td>{{ instance.operatingSystem }}</td>
               <td>{{ instance.vcpu }}</td>

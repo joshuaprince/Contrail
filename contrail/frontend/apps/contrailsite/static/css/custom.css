@@ -30,6 +30,17 @@
 }
 
 
+/* Sidebar space for button */
+.getprices {
+    position: fixed;
+    bottom: 15px;
+    z-index: 99;
+}
+
+.mCSB_container {
+    padding-bottom: 75px;
+}
+
 
 /* Ion.RangeSlider
 // css version 2.0.3
