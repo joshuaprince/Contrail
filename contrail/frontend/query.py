@@ -177,28 +177,13 @@ def get_instance_price_history(record_count=100, **kwargs) -> Dict[str, List[Dic
     price_history = {
         'hourlyOnDemand': hourly_base_query.filter(priceType='On Demand')[:record_count],
         'hourlySpot': hourly_base_query.filter(priceType='Spot')[:record_count],
-        'hourlyReserved1yrFullUpfront': hourly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='All Upfront')[:record_count],
-        'hourlyReserved1yrPartialUpfront': hourly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='Partial Upfront')[:record_count],
         'hourlyReserved1yrNoUpfront': hourly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='No Upfront')[:record_count],
-        'hourlyReserved3yrFullUpfront': hourly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='All Upfront')[:record_count],
-        'hourlyReserved3yrPartialUpfront': hourly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='Partial Upfront')[:record_count],
-        'hourlyReserved3yrNoUpfront': hourly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='No Upfront')[:record_count],
         'dailyOnDemand': daily_base_query.filter(priceType='On Demand')[:record_count],
         'dailySpot': daily_base_query.filter(priceType='Spot')[:record_count],
-        'dailyReserved1yrFullUpfront': daily_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='All Upfront')[:record_count],
-        'dailyReserved1yrPartialUpfront': daily_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='Partial Upfront')[:record_count],
         'dailyReserved1yrNoUpfront': daily_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='No Upfront')[:record_count],
-        'dailyReserved3yrFullUpfront': daily_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='All Upfront')[:record_count],
-        'dailyReserved3yrPartialUpfront': daily_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='Partial Upfront')[:record_count],
-        'dailyReserved3yrNoUpfront': daily_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='No Upfront')[:record_count],
         'monthlyOnDemand': monthly_base_query.filter(priceType='On Demand')[:record_count],
         'monthlySpot': monthly_base_query.filter(priceType='Spot')[:record_count],
-        'monthlyReserved1yrFullUpfront': monthly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='All Upfront')[:record_count],
-        'monthlyReserved1yrPartialUpfront': monthly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='Partial Upfront')[:record_count],
         'monthlyReserved1yrNoUpfront': monthly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='No Upfront')[:record_count],
-        'monthlyReserved3yrFullUpfront': monthly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='All Upfront')[:record_count],
-        'monthlyReserved3yrPartialUpfront': monthly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='Partial Upfront')[:record_count],
-        'monthlyReserved3yrNoUpfront': monthly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='3yr', purchaseOption='No Upfront')[:record_count],
     }
     # Build our own list of "price history point" dicts, since we don't want to include null or zero fields
     price_history_points = {k: [] for k, v in price_history.items() if v}
