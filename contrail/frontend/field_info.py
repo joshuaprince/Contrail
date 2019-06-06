@@ -69,15 +69,15 @@ FIELD_INFO['currentGeneration'] = {
 }
 
 FIELD_INFO['dedicatedEbsThroughputIsUpTo'] = {
-    'friendlyName': 'Dedicated Ebs Throughput Is Up To',
+    'friendlyName': 'Dedicated EBS Throughput Is Up To',
 }
 
 FIELD_INFO['dedicatedEbsThroughput'] = {
-    'friendlyName': 'Dedicated Ebs Throughput',
+    'friendlyName': 'Dedicated EBS Throughput',
 }
 
 FIELD_INFO['ecu Is Variable'] = {
-    'friendlyName': 'ecu Is Variable',
+    'friendlyName': 'ECU Is Variable',
 }
 
 FIELD_INFO['licenseModel'] = {
@@ -110,7 +110,7 @@ FIELD_INFO['physicalProcessor'] = {
 }
 
 FIELD_INFO['preInstalledSw'] = {
-    'friendlyName': 'Preinstalled SW',
+    'friendlyName': 'Preinstalled Software',
 }
 
 FIELD_INFO['processorArchitecture'] = {
@@ -126,7 +126,7 @@ FIELD_INFO['serviceName'] = {
 }
 
 FIELD_INFO['storageIsEbsOnly'] = {
-    'friendlyName': 'Storage Is Ebs Only',
+    'friendlyName': 'Storage Is EBS Only',
 }
 
 FIELD_INFO['usageType'] = {
@@ -191,11 +191,11 @@ FIELD_INFO['meterSubCategory'] = {
 }
 
 FIELD_INFO['maxResourceVolumeMb'] = {
-    'friendlyName': 'Max Resource Volume Mb',
+    'friendlyName': 'Max Resource Volume MB',
 }
 
 FIELD_INFO['osVhdSizeMb'] = {
-    'friendlyName': 'OS Vhd Size Mb',
+    'friendlyName': 'OS VHD Size MB',
 }
 
 FIELD_INFO['hyperVGenerations'] = {
@@ -244,4 +244,16 @@ FIELD_INFO['cachedDiskBytes'] = {
 
 FIELD_INFO['maxWriteAcceleratorDisksAllowed'] = {
     'friendlyName': 'Max Write Accelerator Disks Allowed',
+}
+
+FIELD_INFO['availabilityZone'] = {
+    'friendlyName': 'Available Zone',
+}
+
+FIELD_INFO['acus'] = {
+    'friendlyName': 'ACUs',
+}
+
+FIELD_INFO['ecu'] = {
+    'friendlyName': 'ECU',
 }
