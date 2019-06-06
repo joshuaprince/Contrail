@@ -15,8 +15,8 @@ class PriceForm(forms.Form):
     )
 
     # REGION_CHOICES = ((x, x) for x in map(lambda i: i.region, InstanceData.objects_in(db).distinct().only('region')))
-    AWS_REGION_CHOICES = ((x, x) for x in map(lambda i: i.region, InstanceData.objects_in(db).filter(provider='AmazonEC2').distinct().only('region')))
-    AZURE_REGION_CHOICES = ((x, x) for x in map(lambda i: i.region, InstanceData.objects_in(db).filter(provider='Azure').distinct().only('region')))
+    AWS_REGION_CHOICES = ((x, x) for x in map(lambda i: i.region, InstanceData.objects_in(db).filter(provider='AmazonEC2').distinct().only('region').order_by('region')))
+    AZURE_REGION_CHOICES = ((x, x) for x in map(lambda i: i.region, InstanceData.objects_in(db).filter(provider='Azure').distinct().only('region').order_by('region')))
 
     amazon_web_services = forms.BooleanField(required=False, initial=True)
     microsoft_azure = forms.BooleanField(required=False, initial=True)

@@ -29,6 +29,7 @@
     }
 }
 
+/* Fix font color of table */
 table#instances {
     color: black;
 }

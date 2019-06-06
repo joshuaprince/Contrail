@@ -118,10 +118,10 @@
       <div class="range-slider">
           <input type="text" class="memory-range-slider" value="" />
       </div>
-
+      {{form.memory_from.data}}
       <div class="extra-controls form-inline">
         <div class="form-group">
-          <input type="text" id="id_memory_from" class="memory-input-from form-control" name="memory_from" value="0" style="width: 80px; margin-right: 30px;" />
+          <input type="text" id="id_memory_from" class="memory-input-from form-control" name="memory_from" style="width: 80px; margin-right: 30px;"/>
           <input type="text" id="id_memory_to" class="memory-input-to form-control" name="memory_to" value="0" style="width: 80px;" />
         </div>
       </div><br>
@@ -161,22 +161,7 @@
     <button type="submit" class="btn btn-primary getprices">Submit</button>
   </form>
 
-
-
-      <!--
-        <select name="{{ form.operating_system.name }}" class="form-control" id="{{ form.operating_system.id_for_label }}">
-          {% for x,y in form.fields.operating_system.choices %}
-              <option value="{{ x }}"{% if form.fields.operating_system.value == x %}selected{% endif %}>{{ y }}</option>
-          {% endfor %}
-        </select>
-
-        <select name="{{ form.region.name }}" class="form-control" id="{{ form.region.id_for_label }}">
-          {% for x,y in form.fields.region.choices %}
-              <option value="{{ x }}"{% if form.fields.region.value == x %}selected{% endif %}>{{ y }}</option>
-          {% endfor %}
-        </select>
-      -->
-    </nav>
+  </nav>
 
     <!-- Page Content  -->
     <div id="content">
@@ -374,6 +359,8 @@
        text.style.display = "none";
     }
   }
+
+
 
 </script>
 
