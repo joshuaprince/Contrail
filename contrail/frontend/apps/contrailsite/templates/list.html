@@ -19,7 +19,7 @@
   <nav id="sidebar">
     <form method="POST">
       {% csrf_token %}
-      <h4><strong>Set Attributes</strong></h4><br>
+      <h4><strong>Filter</strong></h4><br>
 
       <label class="form-check-label">Provider</label>
 
@@ -158,7 +158,7 @@
 
       <br>
 
-    <button id="getprices" type="submit" class="btn btn-primary">Submit</button>
+    <button id="getprices" type="submit" class="btn btn-primary">Search</button>
   </form>
 
   </nav>
@@ -367,33 +367,6 @@
 
 </script>
 
-
-<!-- Hide submit button on collapse -->
-<script type="text/javascript">
-  // mCustomScrollbar
-  // var sidebar = document.querySelector("#sidebar");
-  // if(sidebar.classList.contains("active")){
-  //     var btn = document.getElementById("getprices");
-  //     console.log("SDF")
-  //     btn.style.display = "none";
-  // }
-  // else {
-  //     btn.style.display = "block";
-  //     console.log("GSF")
-  // }
-
-  // $(document).ready(function(){
-  //
-  //   if ( $('nav#sidebar').hasClass("active") ) {
-  //     console.log("SDFD")
-  //     // $('#main').addClass('woodwork');
-  //   }
-  //   else {
-  //     console.log("SDFDS")
-  //   }
-  // });
-
-</script>
 
 <!-- COMPARISON -->
 <script type="text/javascript">

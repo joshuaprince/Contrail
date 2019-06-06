@@ -46,18 +46,6 @@ table#instances {
     color: black;
 }
 
-/* Sidebar space for button */
-#getprices {
-    position: fixed;
-    bottom: 25px;
-    left:60px;
-    z-index: 99;
-}
-
-.mCSB_container {
-    padding-bottom: 75px;
-}
-
 
 /* Ion.RangeSlider
 // css version 2.0.3
