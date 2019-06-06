@@ -168,22 +168,22 @@ def get_instance_price_history(record_count=100, **kwargs) -> Dict[str, List[Dic
              where each history point is a dictionary consisting of crawlTime, priceType, and optionally pricePerHour,
              priceUpfront, and leaseContractLength.
     """
-    hourly_base_query = InstanceDataHourlyPriceView.objects_in(db).filter(**kwargs).only(*PRICE_HISTORY_PARAMS).order_by('-crawlTime')
+    # hourly_base_query = InstanceDataHourlyPriceView.objects_in(db).filter(**kwargs).only(*PRICE_HISTORY_PARAMS).order_by('-crawlTime')
     daily_base_query = InstanceDataDailyPriceView.objects_in(db).filter(**kwargs).only(*PRICE_HISTORY_PARAMS).order_by('-crawlTime')
     monthly_base_query = InstanceDataMonthlyPriceView.objects_in(db).filter(**kwargs).only(*PRICE_HISTORY_PARAMS).order_by('-crawlTime')
     # base_query = InstanceData.objects_in(db).filter(**kwargs).distinct().only(*PRICE_HISTORY_PARAMS).order_by('-crawlTime')
     # Get a time series from the last several entries in the database that match this filter
 
     price_history = {
-        'hourlyOnDemand': hourly_base_query.filter(priceType='On Demand')[:record_count],
-        'hourlySpot': hourly_base_query.filter(priceType='Spot')[:record_count],
-        'hourlyReserved1yrNoUpfront': hourly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='No Upfront')[:record_count],
-        'dailyOnDemand': daily_base_query.filter(priceType='On Demand')[:record_count],
-        'dailySpot': daily_base_query.filter(priceType='Spot')[:record_count],
-        'dailyReserved1yrNoUpfront': daily_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='No Upfront')[:record_count],
-        'monthlyOnDemand': monthly_base_query.filter(priceType='On Demand')[:record_count],
-        'monthlySpot': monthly_base_query.filter(priceType='Spot')[:record_count],
-        'monthlyReserved1yrNoUpfront': monthly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='No Upfront')[:record_count],
+        # 'hourlyOnDemand': list(hourly_base_query.filter(priceType='On Demand')[:record_count]),
+        # 'hourlySpot': list(hourly_base_query.filter(priceType='Spot')[:record_count]),
+        # 'hourlyReserved1yrNoUpfront': list(hourly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='No Upfront')[:record_count]),
+        'dailyOnDemand': list(daily_base_query.filter(priceType='On Demand')[:record_count]),
+        'dailySpot': list(daily_base_query.filter(priceType='Spot')[:record_count]),
+        'dailyReserved1yrNoUpfront': list(daily_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='No Upfront')[:record_count]),
+        'monthlyOnDemand': list(monthly_base_query.filter(priceType='On Demand')[:record_count]),
+        'monthlySpot': list(monthly_base_query.filter(priceType='Spot')[:record_count]),
+        'monthlyReserved1yrNoUpfront': list(monthly_base_query.filter(priceType='Reserved', offeringClass='standard', leaseContractLength='1yr', purchaseOption='No Upfront')[:record_count]),
     }
     # Build our own list of "price history point" dicts, since we don't want to include null or zero fields
     price_history_points = {k: [] for k, v in price_history.items() if v}
