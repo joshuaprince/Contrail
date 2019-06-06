@@ -69,9 +69,9 @@ def list_regions(provider) -> List[str]:
     List all regions found in the  `region` column of InstanceDataLastPointView.
     """
     if provider == 'aws':
-        return list(map(lambda i: i.region, InstanceData.objects_in(db).filter(provider='AmazonEC2').distinct().only('region')))
+        return list(map(lambda i: i.region, InstanceData.objects_in(db).filter(provider='AmazonEC2').distinct().only('region').order_by('region')))
     else:
-        return list(map(lambda i: i.region, InstanceData.objects_in(db).filter(provider='Azure').distinct().only('region')))
+        return list(map(lambda i: i.region, InstanceData.objects_in(db).filter(provider='Azure').distinct().only('region').order_by('region')))
 
 
 def list_instances(page, **kwargs) -> List[Dict]:

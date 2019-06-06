@@ -29,6 +29,33 @@
     }
 }
 
+/* Fix font color of table */
+table#instances {
+    color: black;
+}
+
+.dataTables_length {
+    color: black;
+}
+
+.dataTables_filter {
+    color: black;
+}
+
+.dataTables_info {
+    color: black;
+}
+
+/* Sidebar space for button */
+.getprices {
+    position: fixed;
+    bottom: 15px;
+    z-index: 99;
+}
+
+.mCSB_container {
+    padding-bottom: 75px;
+}
 
 
 /* Ion.RangeSlider
