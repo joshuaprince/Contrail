@@ -52,7 +52,7 @@
                 fill: false,
                 data: [
                     {% for price in priceHistory.hourlyOnDemand %}
-                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
+                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour|floatformat:3}}},
                     {% endfor %}
                 ],
             }, {
@@ -62,7 +62,7 @@
                 fill: false,
                 data: [
                     {% for price in priceHistory.hourlyReserved1yrNoUpfront %}
-                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
+                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour|floatformat:3}}},
                     {% endfor %}
                 ],
             }, {
@@ -72,7 +72,7 @@
                 fill: false,
                 data: [
                     {% for price in priceHistory.hourlySpot %}
-                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
+                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour|floatformat:3}}},
                     {% endfor %}
                 ],
             }]
@@ -125,7 +125,7 @@
                 fill: false,
                 data: [
                     {% for price in priceHistory.dailyOnDemand %}
-                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
+                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour|floatformat:3}}},
                     {% endfor %}
                 ],
             }, {
@@ -135,7 +135,7 @@
                 fill: false,
                 data: [
                     {% for price in priceHistory.dailyReserved1yrNoUpfront %}
-                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
+                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour|floatformat:3}}},
                     {% endfor %}
                 ],
             }, {
@@ -145,7 +145,7 @@
                 fill: false,
                 data: [
                     {% for price in priceHistory.dailySpot %}
-                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
+                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour|floatformat:3}}},
                     {% endfor %}
                 ],
             }]
@@ -170,7 +170,7 @@
                 yAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'Price per Hour'
+                        labelString: 'Price per Hour ($USD)'
                     },
                     ticks: {
                         beginAtZero: true
@@ -198,7 +198,7 @@
                 fill: false,
                 data: [
                     {% for price in priceHistory.monthlyOnDemand %}
-                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
+                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour|floatformat:3}}},
                     {% endfor %}
                 ],
             }, {
@@ -208,7 +208,7 @@
                 fill: false,
                 data: [
                     {% for price in priceHistory.monthlyReserved1yrNoUpfront %}
-                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
+                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour|floatformat:3}}},
                     {% endfor %}
                 ],
             }, {
@@ -218,7 +218,7 @@
                 fill: false,
                 data: [
                     {% for price in priceHistory.monthlySpot %}
-                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour}}},
+                    {x: "{{price.crawlTime|date:"c"}}", y: {{price.pricePerHour|floatformat:3}}},
                     {% endfor %}
                 ],
             }]
