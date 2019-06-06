@@ -29,6 +29,21 @@
     }
 }
 
+table#instances {
+    color: black;
+}
+
+.dataTables_length {
+    color: black;
+}
+
+.dataTables_filter {
+    color: black;
+}
+
+.dataTables_info {
+    color: black;
+}
 
 /* Sidebar space for button */
 .getprices {
