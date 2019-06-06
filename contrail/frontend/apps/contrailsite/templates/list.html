@@ -416,7 +416,15 @@
       selectedRows.forEach(function(row) {
         for (var i = 0; i < numSpecs; i++) {
           var newCell = document.createElement('td');
-          newCell.innerHTML = row.cells[i+1].innerText;
+          var cell = row.cells[i+1].innerText
+          if (i == 0) {
+            var link = row.cells[1].getElementsByTagName('a')[0].getAttribute('href');
+            newCell.innerHTML = '<a href="'+link+'">'+cell+'</a>';
+            newCell.style.color = #71aaa7;
+          }
+          else {
+            newCell.innerHTML = cell;
+          }
           compareTable.rows[i].appendChild(newCell);
         }
       });
