@@ -295,12 +295,30 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.3/jquery.min.js" ></script> -->
 <script src="{% static 'js/slider.js' %}" ></script>
-<script src="//cdn.datatables.net/plug-ins/1.10.19/sorting/currency.js" ></script>
 
 
 
 <!-- BOOTSTRAP TABLE -->
 <script type="text/javascript">
+  jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "currencylink-pre": function ( a ) {
+        var num = a.match(/<.*>\$(.*)<\/.*>/);
+        if (!num) {
+            return a;
+        }
+        a = (a==="-") ? 0 : num[1].replace( /[^\d\-\.]/g, "" );
+        return parseFloat( a );
+    },
+
+    "currencylink-asc": function ( a, b ) {
+        return a - b;
+    },
+
+    "currencylink-desc": function ( a, b ) {
+        return b - a;
+    }
+  } );
+
   $(document).ready(function() {
     $('#instances').DataTable( {
         // "paging":   false,
@@ -315,7 +333,7 @@
             {"type": "num"},
             {"type": "num"},
             {"type": "string"},
-            {"type": "currency"},
+            {"type": "currencylink"},
         ]
     } );
   } );

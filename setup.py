@@ -5,7 +5,7 @@ with open('README.md', 'r') as readme_file:
 
 setuptools.setup(
     name='contrail',
-    version='1.0.1',
+    version='1.0.2',
     description='Public cloud market price tracker for Amazon EC2 and Azure',
     long_description=long_description,
     long_description_content_type='text/markdown',
